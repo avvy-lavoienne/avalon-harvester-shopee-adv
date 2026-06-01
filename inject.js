@@ -1,24 +1,73 @@
 (function () {
   "use strict";
 
-  // Function to extract product URLs from JSON data
-  function extractProductUrls(data) {
+  function getSearchQuery(url) {
     try {
-      const urls = [];
+      const match = url.match(/[?&]keyword=([^&]+)/);
+      return match ? decodeURIComponent(match[1]) : '';
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function extractProductsData(data) {
+    try {
+      const products = [];
+      const seen = new Set();
+      let invalidCount = 0;
+
       function traverse(obj) {
         if (obj && typeof obj === 'object') {
-          if (obj.shopid && obj.itemid) {
-            urls.push(`https://shopee.co.id/product/${obj.shopid}/${obj.itemid}`);
+          // Validasi wajib: harus punya itemid, shopid, dan name
+          if (
+            obj.itemid &&
+            obj.shopid &&
+            obj.name &&
+            typeof obj.name === 'string' &&
+            obj.name.trim() !== '' &&
+            !seen.has(obj.itemid)
+          ) {
+            seen.add(obj.itemid);
+
+            // Hitung total rating_count jika berbentuk array
+            const ratingCount = obj.item_rating && Array.isArray(obj.item_rating.rating_count)
+              ? obj.item_rating.rating_count.reduce((a, b) => a + b, 0)
+              : (obj.rating_count || 0);
+
+            products.push({
+              itemid: obj.itemid,
+              shopid: obj.shopid,
+              name: obj.name.trim(),
+              price: obj.price || 0,
+              price_min: obj.price_min || 0,
+              price_max: obj.price_max || 0,
+              historical_sold: obj.historical_sold || 0,
+              sold: obj.sold || obj.historical_sold || 0,
+              rating_star: obj.item_rating ? (obj.item_rating.rating_star || 0) : 0,
+              rating_count: ratingCount,
+              shop_name: obj.shop_name || null,
+              is_official_shop: obj.is_official_shop === true,
+              location: obj.shop_location || obj.location || null,
+              discount: obj.discount || null,
+              image: obj.image || null,
+            });
+          } else if (obj.itemid && obj.shopid && !obj.name) {
+            invalidCount++; // Hitung produk yang tidak valid
           }
+
           for (const key in obj) {
             traverse(obj[key]);
           }
         }
       }
+
       traverse(data);
-      return urls;
+
+      console.log(`[Avalon Harvester] Extracted ${products.length} valid products. Invalid skipped: ${invalidCount}`);
+      return products;
+
     } catch (e) {
-      console.error('[Avalon Harvester] Error extracting product URLs:', e);
+      console.error('[Avalon Harvester] Error extracting product data:', e);
       return [];
     }
   }
@@ -63,30 +112,33 @@
                       fetchUrl,
                     );
                     // New harvest logic
-                    if (
-                      fetchUrl &&
-                      (fetchUrl.includes("/api/v4/shop/get_shop_items") ||
-                        fetchUrl.includes("/api/v4/search/search_items") ||
-                        fetchUrl.includes("/api/v4/recommend/recommend"))
-                    ) {
-                      const urls = extractProductUrls(data);
-                      console.log('[Avalon Harvester] Extracted URLs:', urls.length, 'from API:', fetchUrl);
-                      if (urls.length > 0) {
-                        console.log('[Avalon Harvester] Dispatching harvest event with', urls.length, 'URLs');
-                        document.dispatchEvent(
-                          new CustomEvent("Avalon_Harvest_Links", {
-                            detail: {
-                              type: "harvest",
-                              urls: urls,
-                            },
-                          }),
-                        );
+                      if (
+                        fetchUrl &&
+                        (fetchUrl.includes("/api/v4/shop/get_shop_items") ||
+                          fetchUrl.includes("/api/v4/search/search_items") ||
+                          fetchUrl.includes("/api/v4/recommend/recommend"))
+                      ) {
+                        console.log('[Avalon Harvester] Extracting product data from:', fetchUrl);
+                        const products = extractProductsData(data);
+                        console.log('[Avalon Harvester] Extracted ' + products.length + ' products from API:', fetchUrl);
+                        if (products.length > 0) {
+                          const searchQuery = getSearchQuery(fetchUrl);
+                          console.log('[Avalon Harvester] Dispatching harvest event with', products.length, 'products, query:', searchQuery);
+                          document.dispatchEvent(
+                            new CustomEvent("Avalon_Harvest_Data", {
+                              detail: {
+                                type: "harvest",
+                                products: products,
+                                search_query: searchQuery,
+                              },
+                            }),
+                          );
+                        } else {
+                          console.log('[Avalon Harvester] No products extracted from:', fetchUrl);
+                        }
                       } else {
-                        console.log('[Avalon Harvester] No URLs extracted from:', fetchUrl);
+                        console.log('[Avalon Harvester] Skipping non-harvest API:', fetchUrl);
                       }
-                    } else {
-                      console.log('[Avalon Harvester] Skipping non-harvest API:', fetchUrl);
-                    }
                   } catch (e) {}
                 })
                 .catch((e) => {});
@@ -130,20 +182,23 @@
                   this._intercepted_url.includes("/api/v4/search/search_items") ||
                   this._intercepted_url.includes("/api/v4/recommend/recommend"))
               ) {
-                const urls = extractProductUrls(parsedData);
-                console.log('[Avalon Harvester] Extracted URLs from XHR:', urls.length, 'from API:', this._intercepted_url);
-                if (urls.length > 0) {
-                  console.log('[Avalon Harvester] Dispatching harvest event from XHR with', urls.length, 'URLs');
+                console.log('[Avalon Harvester] Extracting product data from XHR:', this._intercepted_url);
+                const products = extractProductsData(parsedData);
+                console.log('[Avalon Harvester] Extracted ' + products.length + ' products from XHR API:', this._intercepted_url);
+                if (products.length > 0) {
+                  const searchQuery = getSearchQuery(this._intercepted_url);
+                  console.log('[Avalon Harvester] Dispatching harvest event from XHR with', products.length, 'products, query:', searchQuery);
                   document.dispatchEvent(
-                    new CustomEvent("Avalon_Harvest_Links", {
+                    new CustomEvent("Avalon_Harvest_Data", {
                       detail: {
                         type: "harvest",
-                        urls: urls,
+                        products: products,
+                        search_query: searchQuery,
                       },
                     }),
                   );
                 } else {
-                  console.log('[Avalon Harvester] No URLs extracted from XHR:', this._intercepted_url);
+                  console.log('[Avalon Harvester] No products extracted from XHR:', this._intercepted_url);
                 }
               } else {
                 console.log('[Avalon Harvester] Skipping non-harvest XHR API:', this._intercepted_url);

@@ -62,18 +62,17 @@ const randomDelay = (min, max) => {
   return Math.floor(Math.random() * (Math.min(8000, max * 0.6) - Math.max(3000, min * 0.6) + 1)) + Math.max(3000, min * 0.6);
 };
 
-// Listen for CustomEvent from inject.js
-document.addEventListener('Avalon_Harvest_Links', (event) => {
+document.addEventListener('Avalon_Harvest_Data', (event) => {
   console.log('[Avalon Harvester] Content.js received harvest event:', event.detail);
-  const urls = event.detail.urls;
-  updateStatus(`Harvested ${urls.length} URLs from this page`);
-  console.log('[Avalon Harvester] Sending harvested URLs to background:', urls.length, 'with keyword:', currentKeyword);
-  chrome.runtime.sendMessage({ 
-    action: 'STORE_HARVESTED_LINKS', 
-    urls, 
+  const products = event.detail.products || [];
+  updateStatus(`Harvested ${products.length} products with full data`);
+  console.log('[Avalon Harvester] Sending harvested products to background:', products.length, 'with query:', currentKeyword);
+  chrome.runtime.sendMessage({
+    action: 'STORE_HARVESTED_DATA',
+    products: products,
+    search_query: currentKeyword,
     project_id: currentProjectId,
     category_group: currentCategoryGroup,
-    search_query: currentKeyword
   }, (response) => {
     if (chrome.runtime.lastError) {
       console.error('[Avalon Harvester] Error sending message to background:', chrome.runtime.lastError);

@@ -6,7 +6,7 @@ console.log("[Avalon Harvester] Enterprise Background script loaded");
 // =========================================================================
 const SUPABASE_URL = "https://fzomsxxbqdhgeafhygkp.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6b21zeHhicWRoZ2VhZmh5Z2twIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjc4MTAsImV4cCI6MjA5NDk0MzgxMH0.1jgnNpGYavTM2zUbWZkKbhnXqTMUovcjUEtKEaP4zvk";
-const SUPABASE_API_ENDPOINT = `${SUPABASE_URL}/rest/v1/task_queue`;
+const SUPABASE_API_ENDPOINT = `${SUPABASE_URL}/rest/v1/shopee_search_products`;
 
 // Inisialisasi Worker ID permanen untuk profil Chrome ini
 chrome.runtime.onInstalled.addListener(() => {
@@ -101,98 +101,94 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     });
   } else if (message.action === "STOP_SWEEP") {
     chrome.storage.local.set({ isAutoSweep: false });
-  } else if (message.action === "STORE_HARVESTED_LINKS") {
-    const urls = message.urls;
-    const batchSize = 10;
+  } else if (message.action === "STORE_HARVESTED_DATA") {
+    const products = message.products || [];
+    const searchQuery = message.search_query || "unknown";
+    const projectId = message.project_id || "PRJ-UNASSIGNED";
+    const categoryGroup = message.category_group || "General";
     let savedCount = 0;
 
-    // 👇 KITA TAMBAHKAN "keyword" DI DALAM ARRAY STRORAGE GET AGAR DI-PULL LANGSUNG OLEH BACKGROUND
-    chrome.storage.local.get(
-      ["worker_id", "batch_id", "project_id", "category_group", "keyword"],
-      (storageData) => {
-        const workerId = storageData.worker_id || "avalon-node-fallback";
-        const batchId = storageData.batch_id || "batch_unknown";
-        const projectId = storageData.project_id || "PRJ-UNASSIGNED";
-        const categoryGroup = storageData.category_group || "General";
+    const insertProducts = async () => {
+      for (const product of products) {
+        const uniqueId = `p_${product.shopid}_${product.itemid}`;
 
-        // 👇 JIKA MESSAGE.KEYWORD KOSONG, KITA AMBIL DARI MEMORI STORAGE INTERNAL YANG SUDAH PASTI VALID
-        const keyword = storageData.keyword || message.keyword || "unknown";
+        const requestData = {
+          // === Identifier ===
+          unique_id: uniqueId,
+          item_id: String(product.itemid),
+          shop_id: String(product.shopid),
 
-        const uploadBatch = async (batch) => {
-          for (const urlString of batch) {
-            const match = urlString.match(/product\/(\d+)\/(\d+)/);
-            const productId = match ? `p_${match[1]}_${match[2]}` : null;
+          // === Informasi Produk ===
+          product_name: product.name || "Unknown Product",
+          price: product.price || 0,
+          price_min: product.price_min || 0,
+          price_max: product.price_max || 0,
+          discount: product.discount || null,
 
-            if (!productId) continue;
+          // === Data Penjualan & Rating ===
+          historical_sold: product.historical_sold || 0,
+          sold: product.sold || product.historical_sold || 0,
+          rating_star: product.rating_star || 0,
+          rating_count: product.rating_count || 0,
 
-            // Siapkan payload data yang strukturnya cocok 100% dengan kolom baru PostgreSQL kita
-            const requestData = {
-              id: productId,
-              product_id: productId,
-              url: urlString,
-              keyword: keyword,
-              region: "id",
-              status: "pending",
-              priority: 0,
-              retry_count: 0,
-              batch_id: batchId,
-              worker_id: workerId,
-              project_id: projectId, // 👈 SUNTIKAN BARU UNTUK MULTI-CLIENT
-              category_group: categoryGroup, // 👈 SUNTIKAN BARU UNTUK FILTER KATEGORI
-            };
+          // === Informasi Toko ===
+          shop_name: product.shop_name || null,
+          is_official_shop: product.is_official_shop === true,
+          shop_location: product.location || null,
 
-            try {
-              // Tembak langsung ke REST API Supabase via Fetch
-              const res = await fetch(SUPABASE_API_ENDPOINT, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  apikey: SUPABASE_ANON_KEY,
-                  Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-                  // PENTING: Header ini memerintahkan PostgreSQL untuk melakukan UPSERT jika ID duplikat ditemukan
-                  Prefer: "resolution=merge-duplicates",
-                },
-                body: JSON.stringify(requestData),
-              });
+          // === Media ===
+          image_url: product.image || null,
 
-              if (!res.ok) {
-                const text = await res.text();
-                console.error(
-                  `[Avalon Harvester] Supabase API Error ${res.status}: ${text}`,
-                );
-              } else {
-                savedCount++;
-              }
+          // === Metadata ===
+          search_query: searchQuery,
+          project_id: projectId,
+          category_group: categoryGroup,
+          source_platform: "shopee",
 
-              // JEDA MIKRO (ANTI-DDOS PROTECTION)
-              // Berikan nafas bagi server selama 100ms - 300ms sebelum menembak produk selanjutnya
-              const microDelay = 100 + Math.random() * 200;
-              await new Promise((resolve) => setTimeout(resolve, microDelay));
-            } catch (e) {
-              console.error(
-                "[Avalon Harvester] Gagal mengunggah ke Supabase:",
-                urlString,
-                e.message,
-              );
-            }
-          }
+          // === Timestamp ===
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         };
 
-        const processBatches = async () => {
-          for (let i = 0; i < urls.length; i += batchSize) {
-            const batch = urls.slice(i, i + batchSize);
-            await uploadBatch(batch);
+        try {
+          const res = await fetch(SUPABASE_API_ENDPOINT, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+              Prefer: "resolution=merge-duplicates",
+            },
+            body: JSON.stringify(requestData),
+          });
+
+          if (!res.ok) {
+            const text = await res.text();
+            console.error(
+              `[Avalon Harvester] Supabase API Error ${res.status}: ${text}`,
+            );
+          } else {
+            savedCount++;
           }
-          console.log(
-            `[Avalon Harvester] Misi Selesai. Sukses simpan ke Supabase: ${savedCount} item`,
+
+          const microDelay = 100 + Math.random() * 200;
+          await new Promise((resolve) => setTimeout(resolve, microDelay));
+        } catch (e) {
+          console.error(
+            "[Avalon Harvester] Gagal mengunggah ke Supabase:",
+            uniqueId,
+            e.message,
           );
-          sendResponse({ status: "success", total_saved: savedCount });
-        };
+        }
+      }
 
-        processBatches();
-      },
-    );
+      console.log(
+        `[Avalon Harvester] Insert selesai. ${savedCount}/${products.length} produk tersimpan ke shopee_search_products`,
+      );
+      sendResponse({ status: "success", total_saved: savedCount });
+    };
 
-    return true; // Menandakan bahwa sendResponse akan dipanggil secara asynchronous
+    insertProducts();
+    return true;
   }
 });
