@@ -195,6 +195,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const mapPayload = (product) => {
       const itemId = String(product.itemid);
       const shopId = String(product.shopid);
+
+      let discountPercentage = null;
+      if (product.discount) {
+        const cleaned = String(product.discount).replace('%', '').trim();
+        const num = parseFloat(cleaned);
+        if (!isNaN(num)) {
+          discountPercentage = num;
+        }
+      }
+
       return {
         item_id: itemId,
         product_name: product.name || "Unknown Product",
@@ -202,7 +212,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         model: null,
         price: product.price || 0,
         original_price: product.original_price || null,
-        discount_percentage: product.discount || null,
+        discount_percentage: discountPercentage,
         historical_sold: product.historical_sold || 0,
         sold: product.sold || product.historical_sold || 0,
         rating_star: product.rating_star || 0,
