@@ -82,6 +82,19 @@ document.addEventListener('Avalon_Harvest_Data', (event) => {
   });
 });
 
+document.addEventListener('Avalon_Shop_Data', (event) => {
+  const shops = event.detail.shops || [];
+  console.log('[Avalon Harvester] Content.js received shop data:', shops.length);
+  chrome.runtime.sendMessage({
+    action: 'STORE_SHOP_DATA',
+    shops: shops,
+  }, (response) => {
+    if (chrome.runtime.lastError) {
+      console.error('[Avalon Harvester] Error sending shop data to background:', chrome.runtime.lastError);
+    }
+  });
+});
+
 // Sweeper loop
 let isSweeping = false;
 let pageCount = 0;

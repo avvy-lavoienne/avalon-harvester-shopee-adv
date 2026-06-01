@@ -267,5 +267,50 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     processBatches();
     return true;
+  } else if (message.action === "STORE_SHOP_DATA") {
+    const shops = message.shops || [];
+    const batchTimestamp = new Date().toISOString();
+
+    const sendShops = async () => {
+      for (const shop of shops) {
+        try {
+          const payload = {
+            shop_id: String(shop.shopid),
+            shop_name: shop.shop_name || null,
+            shop_rating: shop.shop_rating || 0,
+            shop_rating_count: shop.shop_rating_count || 0,
+            response_rate: shop.response_rate || null,
+            follower_count: shop.follower_count || 0,
+            is_official_shop: shop.is_official_shop === true,
+            shop_location: shop.shop_location || null,
+            scraped_at: shop.scraped_at || batchTimestamp,
+            updated_at: batchTimestamp,
+          };
+
+          const res = await fetch(`${SUPABASE_URL}/rest/v1/shopee_shop_info`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+              Prefer: "resolution=merge-duplicates",
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (!res.ok) {
+            const text = await res.text();
+            console.error(`[Avalon Harvester] Supabase shop error ${res.status}: ${text}`);
+          }
+
+          await new Promise((r) => setTimeout(r, 80 + Math.random() * 120));
+        } catch (e) {
+          console.error("[Avalon Harvester] Failed to store shop:", shop.shopid, e.message);
+        }
+      }
+    };
+
+    sendShops().then(() => sendResponse({ status: "success", count: shops.length }));
+    return true;
   }
 });

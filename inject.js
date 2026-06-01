@@ -10,6 +10,53 @@
     }
   }
 
+  function isShopApi(url) {
+    return url && (
+      url.includes('/api/v2/shop/get_shop_info') ||
+      url.includes('/api/v2/shop/get')
+    );
+  }
+
+  function extractShopData(data) {
+    try {
+      const seenShops = new Set();
+      const shops = [];
+      function traverse(obj) {
+        if (obj && typeof obj === 'object') {
+          if (obj.shopid && !seenShops.has(obj.shopid)) {
+            const hasRating = obj.rating_star != null;
+            if (hasRating) {
+              seenShops.add(obj.shopid);
+              const ratingCount = obj.rating_count && Array.isArray(obj.rating_count)
+                ? obj.rating_count.reduce((a, b) => a + b, 0)
+                : (obj.rating_count || 0);
+              shops.push({
+                shopid: obj.shopid,
+                shop_name: obj.name || obj.shop_name || null,
+                shop_rating: obj.rating_star || 0,
+                shop_rating_count: ratingCount,
+                response_rate: obj.response_rate || null,
+                follower_count: obj.follower_count || 0,
+                is_official_shop: obj.is_official_shop === true,
+                shop_location: obj.shop_location || obj.location || null,
+                scraped_at: new Date().toISOString(),
+              });
+            }
+          }
+          for (const key in obj) {
+            traverse(obj[key]);
+          }
+        }
+      }
+      traverse(data);
+      console.log('[Avalon Harvester] Extracted shop data:', shops.length);
+      return shops;
+    } catch (e) {
+      console.error('[Avalon Harvester] Error extracting shop data:', e);
+      return [];
+    }
+  }
+
   function parsePrice(raw) {
     if (raw == null || raw === 0) return 0;
     const num = typeof raw === 'string' ? parseFloat(raw) : raw;
@@ -146,6 +193,16 @@
                         } else {
                           console.log('[Avalon Harvester] No products extracted from:', fetchUrl);
                         }
+                      } else if (isShopApi(fetchUrl)) {
+                        console.log('[Avalon Harvester] Extracting shop data from:', fetchUrl);
+                        const shops = extractShopData(data);
+                        if (shops.length > 0) {
+                          document.dispatchEvent(
+                            new CustomEvent("Avalon_Shop_Data", {
+                              detail: { shops: shops },
+                            }),
+                          );
+                        }
                       } else {
                         console.log('[Avalon Harvester] Skipping non-harvest API:', fetchUrl);
                       }
@@ -209,6 +266,16 @@
                   );
                 } else {
                   console.log('[Avalon Harvester] No products extracted from XHR:', this._intercepted_url);
+                }
+              } else if (isShopApi(this._intercepted_url)) {
+                console.log('[Avalon Harvester] Extracting shop data from XHR:', this._intercepted_url);
+                const shops = extractShopData(parsedData);
+                if (shops.length > 0) {
+                  document.dispatchEvent(
+                    new CustomEvent("Avalon_Shop_Data", {
+                      detail: { shops: shops },
+                    }),
+                  );
                 }
               } else {
                 console.log('[Avalon Harvester] Skipping non-harvest XHR API:', this._intercepted_url);
