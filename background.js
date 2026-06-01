@@ -186,93 +186,86 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const searchQuery = message.search_query || "unknown";
     const projectId = message.project_id || "PRJ-UNASSIGNED";
     const categoryGroup = message.category_group || "General";
+
+    const batchTimestamp = new Date().toISOString();
+    const batchSize = 40;
     let savedCount = 0;
+    let errorCount = 0;
 
-    const insertProducts = async () => {
-      for (const product of products) {
-        const uniqueId = `p_${product.shopid}_${product.itemid}`;
+    const mapPayload = (product) => {
+      const uniqueId = `p_${product.shopid}_${product.itemid}`;
+      return {
+        unique_id: uniqueId,
+        item_id: String(product.itemid),
+        shop_id: String(product.shopid),
+        product_name: product.name || "Unknown Product",
+        price: product.price || 0,
+        price_min: product.price_min || 0,
+        price_max: product.price_max || 0,
+        original_price: product.original_price || null,
+        discount: product.discount || null,
+        stock: product.stock || 0,
+        product_url: product.product_url || null,
+        historical_sold: product.historical_sold || 0,
+        sold: product.sold || product.historical_sold || 0,
+        rating_star: product.rating_star || 0,
+        rating_count: product.rating_count || 0,
+        shop_name: product.shop_name || null,
+        is_official_shop: product.is_official_shop === true,
+        shop_location: product.location || null,
+        image_url: product.image || null,
+        search_query: searchQuery,
+        project_id: projectId,
+        category_group: categoryGroup,
+        source_platform: "shopee",
+        created_at: batchTimestamp,
+        updated_at: batchTimestamp,
+        scraped_at: product.scraped_at || batchTimestamp,
+      };
+    };
 
-        const requestData = {
-          // === Identifier ===
-          unique_id: uniqueId,
-          item_id: String(product.itemid),
-          shop_id: String(product.shopid),
+    const sendBatch = async (batch) => {
+      try {
+        const res = await fetch(SUPABASE_API_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: SUPABASE_ANON_KEY,
+            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+            Prefer: "resolution=merge-duplicates",
+          },
+          body: JSON.stringify(batch),
+        });
 
-          // === Informasi Produk ===
-          product_name: product.name || "Unknown Product",
-          price: product.price || 0,
-          price_min: product.price_min || 0,
-          price_max: product.price_max || 0,
-          original_price: product.original_price || null,
-          discount: product.discount || null,
-          stock: product.stock || 0,
-          product_url: product.product_url || null,
+        if (!res.ok) {
+          const text = await res.text();
+          console.error(`[Avalon Harvester] Supabase batch error ${res.status}: ${text}`);
+          errorCount += batch.length;
+        } else {
+          savedCount += batch.length;
+        }
+      } catch (e) {
+        console.error("[Avalon Harvester] Supabase batch fetch failed:", e.message);
+        errorCount += batch.length;
+      }
+    };
 
-          // === Data Penjualan & Rating ===
-          historical_sold: product.historical_sold || 0,
-          sold: product.sold || product.historical_sold || 0,
-          rating_star: product.rating_star || 0,
-          rating_count: product.rating_count || 0,
-
-          // === Informasi Toko ===
-          shop_name: product.shop_name || null,
-          is_official_shop: product.is_official_shop === true,
-          shop_location: product.location || null,
-
-          // === Media ===
-          image_url: product.image || null,
-
-          // === Metadata ===
-          search_query: searchQuery,
-          project_id: projectId,
-          category_group: categoryGroup,
-          source_platform: "shopee",
-
-          // === Timestamp ===
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          scraped_at: product.scraped_at || new Date().toISOString(),
-        };
-
-        try {
-          const res = await fetch(SUPABASE_API_ENDPOINT, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              apikey: SUPABASE_ANON_KEY,
-              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-              Prefer: "resolution=merge-duplicates",
-            },
-            body: JSON.stringify(requestData),
-          });
-
-          if (!res.ok) {
-            const text = await res.text();
-            console.error(
-              `[Avalon Harvester] Supabase API Error ${res.status}: ${text}`,
-            );
-          } else {
-            savedCount++;
-          }
-
-          const microDelay = 100 + Math.random() * 200;
-          await new Promise((resolve) => setTimeout(resolve, microDelay));
-        } catch (e) {
-          console.error(
-            "[Avalon Harvester] Gagal mengunggah ke Supabase:",
-            uniqueId,
-            e.message,
-          );
+    const processBatches = async () => {
+      for (let i = 0; i < products.length; i += batchSize) {
+        const batch = products.slice(i, i + batchSize).map(mapPayload);
+        await sendBatch(batch);
+        if (i + batchSize < products.length) {
+          await new Promise((r) => setTimeout(r, 400 + Math.random() * 600));
         }
       }
 
       console.log(
-        `[Avalon Harvester] Insert selesai. ${savedCount}/${products.length} produk tersimpan ke shopee_search_products`,
+        `[Avalon Harvester] Batch done: ${savedCount} saved, ${errorCount} errors of ${products.length} products`,
       );
-      sendResponse({ status: "success", total_saved: savedCount });
+      sendResponse({ status: "success", total_saved: savedCount, total_errors: errorCount });
     };
 
-    insertProducts();
+    processBatches();
     return true;
   }
 });
