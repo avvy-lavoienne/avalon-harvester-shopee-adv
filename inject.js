@@ -60,11 +60,10 @@
   function parsePrice(raw) {
     if (raw == null || raw === 0) return 0;
     const num = typeof raw === 'string' ? parseFloat(raw) : raw;
-    let price = Math.round(num / 1000000);
-    if (price > 100000000) {
-      price = Math.round(num / 100000);
-    }
-    return price;
+    if (num <= 0) return 0;
+    if (num > 1000000000) return Math.round(num / 1000000);
+    if (num > 1000000) return Math.round(num / 100000);
+    return Math.round(num);
   }
 
   function extractBrandAndModel(productName) {
@@ -73,7 +72,7 @@
     }
     let name = productName.trim();
     let brand = null;
-    const brandList = ['ASUS', 'Acer', 'Lenovo', 'HP', 'Dell', 'MSI', 'Apple', 'Samsung'];
+    const brandList = ['ASUS', 'Acer', 'Lenovo', 'HP', 'Dell', 'MSI', 'Apple', 'Samsung', 'Xiaomi', 'Huawei', 'Advans', 'Axioo', 'Microsoft', 'Toshiba', 'Fujitsu', 'LG', 'Realme', 'Infinix', 'Poco'];
     for (const b of brandList) {
       if (name.toUpperCase().includes(b.toUpperCase())) {
         brand = b;
@@ -83,10 +82,19 @@
     let model = null;
     if (brand) {
       let remaining = name.replace(new RegExp(brand, 'i'), '').trim();
-      const words = remaining.split(/\s+/).slice(0, 6);
-      model = words.join(' ').replace(/[-–—].*$/, '').trim();
+      let words = remaining.split(/\s+/);
+      let collected = [];
+      for (const w of words) {
+        if (/^[-–—\-]/.test(w)) break;
+        collected.push(w);
+        if (collected.length >= 8) break;
+      }
+      model = collected.join(' ').replace(/["""]/g, '').trim();
     } else {
       model = name.split(/\s+/).slice(0, 5).join(' ');
+    }
+    if (model && model.length > 80) {
+      model = model.substring(0, 80);
     }
     return { brand, model };
   }

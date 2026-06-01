@@ -264,16 +264,27 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     };
 
     const processBatches = async () => {
+      const validBatches = [];
+      let skipped = 0;
       for (let i = 0; i < products.length; i += batchSize) {
-        const batch = products.slice(i, i + batchSize).map(mapPayload);
+        const batch = products.slice(i, i + batchSize).map(mapPayload).filter((p) => {
+          if (!p.item_id || p.price == null) {
+            skipped++;
+            return false;
+          }
+          return true;
+        });
+        if (batch.length === 0) continue;
+        validBatches.push(batch);
+      }
+
+      for (const batch of validBatches) {
         await sendBatch(batch);
-        if (i + batchSize < products.length) {
-          await new Promise((r) => setTimeout(r, 400 + Math.random() * 600));
-        }
+        await new Promise((r) => setTimeout(r, 400 + Math.random() * 600));
       }
 
       console.log(
-        `[Avalon Harvester] Batch done: ${savedCount} saved, ${errorCount} errors of ${products.length} products`,
+        `[Avalon Harvester] Batch done: ${savedCount} saved, ${errorCount} errors, ${skipped} skipped (no item_id/price) of ${products.length} total`,
       );
       sendResponse({ status: "success", total_saved: savedCount, total_errors: errorCount });
     };
