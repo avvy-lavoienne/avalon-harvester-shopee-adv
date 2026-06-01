@@ -10,6 +10,12 @@
     }
   }
 
+  function parsePrice(raw) {
+    if (raw == null || raw === 0) return 0;
+    const num = typeof raw === 'string' ? parseFloat(raw) : raw;
+    return Math.round(num / 100);
+  }
+
   function extractProductsData(data) {
     try {
       const products = [];
@@ -38,10 +44,10 @@
               itemid: obj.itemid,
               shopid: obj.shopid,
               name: obj.name.trim(),
-              price: obj.price || 0,
-              price_min: obj.price_min || 0,
-              price_max: obj.price_max || 0,
-              original_price: obj.price_before_discount || null,
+              price: parsePrice(obj.price),
+              price_min: parsePrice(obj.price_min),
+              price_max: parsePrice(obj.price_max),
+              original_price: obj.price_before_discount ? parsePrice(obj.price_before_discount) : null,
               stock: obj.stock || 0,
               product_url: 'https://shopee.co.id/product/' + obj.shopid + '/' + obj.itemid,
               historical_sold: obj.historical_sold || 0,
