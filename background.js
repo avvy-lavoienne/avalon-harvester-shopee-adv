@@ -37,22 +37,75 @@ fetch(SUPABASE_API_ENDPOINT + "?select=*", {
 
 const AntiDetection = {
   _cachedHeaders: null,
+  _lastHeaderRefresh: 0,
+  _headerRefreshInterval: 25 * 60 * 1000,
+
+  // ==================== CIRCUIT BREAKER ====================
+  circuitBreaker: {
+    failureCount: 0,
+    lastFailureTime: 0,
+    isOpen: false,
+    threshold: 3,
+    cooldownMin: 10 * 60 * 1000,
+    cooldownMax: 20 * 60 * 1000,
+
+    recordFailure: function () {
+      this.failureCount++;
+      this.lastFailureTime = Date.now();
+      if (this.failureCount >= this.threshold && !this.isOpen) {
+        this.isOpen = true;
+        const cooldown = this.cooldownMin + Math.random() * (this.cooldownMax - this.cooldownMin);
+        chrome.storage.local.set({
+          circuitBreakerOpen: true,
+          circuitBreakerUntil: Date.now() + cooldown,
+        });
+      }
+    },
+
+    recordSuccess: function () {
+      this.failureCount = 0;
+      this.isOpen = false;
+      chrome.storage.local.remove(["circuitBreakerOpen", "circuitBreakerUntil"]);
+    },
+
+    shouldAllowRequest: async function () {
+      if (!this.isOpen) return true;
+      const data = await chrome.storage.local.get(["circuitBreakerUntil"]);
+      if (Date.now() > (data.circuitBreakerUntil || 0)) {
+        this.isOpen = false;
+        return true;
+      }
+      return false;
+    },
+
+    getStatus: function () {
+      return {
+        isOpen: this.isOpen,
+        failureCount: this.failureCount,
+        threshold: this.threshold,
+      };
+    },
+  },
+
   getRandomHeaders: () => {
-    if (AntiDetection._cachedHeaders) return AntiDetection._cachedHeaders;
+    const now = Date.now();
+    if (AntiDetection._cachedHeaders && now - AntiDetection._lastHeaderRefresh < AntiDetection._headerRefreshInterval) {
+      return AntiDetection._cachedHeaders;
+    }
     const userAgents = [
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     ];
     AntiDetection._cachedHeaders = {
       "User-Agent": userAgents[Math.floor(Math.random() * userAgents.length)],
-      Accept:
-        "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-      "Accept-Language": "id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7",
+      Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+      "Accept-Language": ["en-US,en;q=0.9", "id-ID,id;q=0.9"][Math.floor(Math.random() * 2)],
       "Accept-Encoding": "gzip, deflate, br",
       "Sec-Fetch-Dest": "document",
       "Sec-Fetch-Mode": "navigate",
     };
+    AntiDetection._lastHeaderRefresh = now;
     return AntiDetection._cachedHeaders;
   },
   applyStickyHeadersRule: async function () {
@@ -114,6 +167,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       sendResponse({ status: "stopped" });
     });
 
+    return true;
+  } else if (message.action === "GET_CIRCUIT_BREAKER_STATUS") {
+    const cb = AntiDetection.circuitBreaker;
+    chrome.storage.local.get(["circuitBreakerUntil"], (data) => {
+      const until = data.circuitBreakerUntil || 0;
+      const remainingMs = until > Date.now() ? until - Date.now() : 0;
+      sendResponse({
+        isOpen: cb.isOpen,
+        failureCount: cb.failureCount,
+        threshold: cb.threshold,
+        remainingMinutes: Math.ceil(remainingMs / 1000 / 60),
+      });
+    });
     return true;
   } else if (message.action === "STORE_HARVESTED_DATA") {
     const products = message.products || [];

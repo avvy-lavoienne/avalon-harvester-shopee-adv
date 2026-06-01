@@ -12,7 +12,7 @@
       margin: 0;
       padding: 15px;
       width: 310px;
-      height: 340px; /* Dipertinggi agar semua form input muat dengan sempurna */
+      height: 400px;
     }
     h3 {
       margin-top: 0;
@@ -90,6 +90,25 @@
       color: #a1a1aa;
       font-weight: bold;
     }
+    #errorMsg {
+      display: none;
+      margin-top: 8px;
+      padding: 6px 10px;
+      background-color: #3b1f1f;
+      border: 1px solid #dc2626;
+      border-radius: 4px;
+      color: #fca5a5;
+      font-size: 12px;
+      text-align: center;
+    }
+    #circuitBreakerStatus {
+      display: none;
+      margin-top: 8px;
+      padding: 8px;
+      border: 1px solid;
+      border-radius: 4px;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
@@ -117,7 +136,10 @@
 
   <button id="btnStart">Start Auto-Sweep</button>
   <button id="btnStop">Stop</button>
+
   <p id="status">Status: Idle</p>
+  <div id="errorMsg"></div>
+  <div id="circuitBreakerStatus"></div>
 
   <script src="popup.js"></script>
 </body>
