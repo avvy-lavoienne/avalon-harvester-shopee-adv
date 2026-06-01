@@ -203,7 +203,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           price: product.price || 0,
           price_min: product.price_min || 0,
           price_max: product.price_max || 0,
+          original_price: product.original_price || null,
           discount: product.discount || null,
+          stock: product.stock || 0,
+          product_url: product.product_url || null,
 
           // === Data Penjualan & Rating ===
           historical_sold: product.historical_sold || 0,
@@ -228,6 +231,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           // === Timestamp ===
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
+          scraped_at: product.scraped_at || new Date().toISOString(),
         };
 
         try {

@@ -41,6 +41,9 @@
               price: obj.price || 0,
               price_min: obj.price_min || 0,
               price_max: obj.price_max || 0,
+              original_price: obj.price_before_discount || null,
+              stock: obj.stock || 0,
+              product_url: 'https://shopee.co.id/product/' + obj.shopid + '/' + obj.itemid,
               historical_sold: obj.historical_sold || 0,
               sold: obj.sold || obj.historical_sold || 0,
               rating_star: obj.item_rating ? (obj.item_rating.rating_star || 0) : 0,
@@ -50,6 +53,7 @@
               location: obj.shop_location || obj.location || null,
               discount: obj.discount || null,
               image: obj.image || null,
+              scraped_at: new Date().toISOString(),
             });
           } else if (obj.itemid && obj.shopid && !obj.name) {
             invalidCount++; // Hitung produk yang tidak valid
