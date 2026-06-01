@@ -6,7 +6,7 @@ console.log("[Avalon Harvester] Enterprise Background script loaded");
 // =========================================================================
 const SUPABASE_URL = "https://fzomsxxbqdhgeafhygkp.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6b21zeHhicWRoZ2VhZmh5Z2twIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjc4MTAsImV4cCI6MjA5NDk0MzgxMH0.1jgnNpGYavTM2zUbWZkKbhnXqTMUovcjUEtKEaP4zvk";
-const SUPABASE_API_ENDPOINT = `${SUPABASE_URL}/rest/v1/shopee_search_products`;
+const SUPABASE_API_ENDPOINT = `${SUPABASE_URL}/rest/v1/shopee_products`;
 
 // Inisialisasi Worker ID permanen untuk profil Chrome ini
 chrome.runtime.onInstalled.addListener(() => {
@@ -193,34 +193,37 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     let errorCount = 0;
 
     const mapPayload = (product) => {
-      const uniqueId = `p_${product.shopid}_${product.itemid}`;
+      const itemId = String(product.itemid);
+      const shopId = String(product.shopid);
       return {
-        unique_id: uniqueId,
-        item_id: String(product.itemid),
-        shop_id: String(product.shopid),
+        item_id: itemId,
         product_name: product.name || "Unknown Product",
+        brand: null,
+        model: null,
         price: product.price || 0,
-        price_min: product.price_min || 0,
-        price_max: product.price_max || 0,
         original_price: product.original_price || null,
-        discount: product.discount || null,
-        stock: product.stock || 0,
-        product_url: product.product_url || null,
+        discount_percentage: product.discount || null,
         historical_sold: product.historical_sold || 0,
         sold: product.sold || product.historical_sold || 0,
         rating_star: product.rating_star || 0,
         rating_count: product.rating_count || 0,
+        review_count: product.rating_count || 0,
+        stock: product.stock || 0,
+        shop_id: shopId,
         shop_name: product.shop_name || null,
         is_official_shop: product.is_official_shop === true,
         shop_location: product.location || null,
-        image_url: product.image || null,
+        shop_rating: null,
+        response_rate: null,
         search_query: searchQuery,
         project_id: projectId,
         category_group: categoryGroup,
+        product_url: product.product_url || 'https://shopee.co.id/product/' + shopId + '/' + itemId,
+        image_url: product.image || null,
         source_platform: "shopee",
+        scraped_at: product.scraped_at || batchTimestamp,
         created_at: batchTimestamp,
         updated_at: batchTimestamp,
-        scraped_at: product.scraped_at || batchTimestamp,
       };
     };
 
