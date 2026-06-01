@@ -60,7 +60,35 @@
   function parsePrice(raw) {
     if (raw == null || raw === 0) return 0;
     const num = typeof raw === 'string' ? parseFloat(raw) : raw;
-    return Math.round(num / 100);
+    let price = Math.round(num / 1000000);
+    if (price > 100000000) {
+      price = Math.round(num / 100000);
+    }
+    return price;
+  }
+
+  function extractBrandAndModel(productName) {
+    if (!productName || typeof productName !== 'string') {
+      return { brand: null, model: null };
+    }
+    let name = productName.trim();
+    let brand = null;
+    const brandList = ['ASUS', 'Acer', 'Lenovo', 'HP', 'Dell', 'MSI', 'Apple', 'Samsung'];
+    for (const b of brandList) {
+      if (name.toUpperCase().includes(b.toUpperCase())) {
+        brand = b;
+        break;
+      }
+    }
+    let model = null;
+    if (brand) {
+      let remaining = name.replace(new RegExp(brand, 'i'), '').trim();
+      const words = remaining.split(/\s+/).slice(0, 6);
+      model = words.join(' ').replace(/[-–—].*$/, '').trim();
+    } else {
+      model = name.split(/\s+/).slice(0, 5).join(' ');
+    }
+    return { brand, model };
   }
 
   function extractProductsData(data) {
@@ -87,10 +115,14 @@
               ? obj.item_rating.rating_count.reduce((a, b) => a + b, 0)
               : (obj.rating_count || 0);
 
+            const { brand, model } = extractBrandAndModel(obj.name);
+
             products.push({
               itemid: obj.itemid,
               shopid: obj.shopid,
               name: obj.name.trim(),
+              brand: brand,
+              model: model,
               price: parsePrice(obj.price),
               price_min: parsePrice(obj.price_min),
               price_max: parsePrice(obj.price_max),

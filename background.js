@@ -208,8 +208,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return {
         item_id: itemId,
         product_name: product.name || "Unknown Product",
-        brand: null,
-        model: null,
+        brand: product.brand || null,
+        model: product.model || null,
         price: product.price || 0,
         original_price: product.original_price || null,
         discount_percentage: discountPercentage,
