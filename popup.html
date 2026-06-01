@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avalon Harvester</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #18181b; /* Zinc Dark Mode */
+      color: #d4d4d8; /* Light zinc text */
+      margin: 0;
+      padding: 15px;
+      width: 310px;
+      height: 340px; /* Dipertinggi agar semua form input muat dengan sempurna */
+    }
+    h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #3f3f46;
+      padding-bottom: 6px;
+      color: #f4f4f5;
+      font-size: 15px;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 10px;
+    }
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: bold;
+      color: #a1a1aa; /* Muted label */
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input, select {
+      padding: 8px;
+      width: 100%;
+      box-sizing: border-box;
+      background-color: #27272a; /* Input background matching layout */
+      border: 1px solid #3f3f46;
+      color: #d4d4d8;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #71717a; /* Highlight border saat diklik */
+    }
+    button {
+      margin-top: 8px;
+      padding: 9px;
+      width: 100%;
+      box-sizing: border-box;
+      background-color: #065f46; /* Emerald Green */
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    button:hover {
+      background-color: #047857;
+    }
+    button:disabled {
+      background-color: #27272a;
+      color: #71717a;
+      cursor: not-allowed;
+      border: 1px solid #3f3f46;
+    }
+    #btnStop {
+      background-color: #dc2626; /* Red for stop */
+      margin-top: 4px;
+    }
+    #btnStop:hover {
+      background-color: #b91c1c;
+    }
+    #btnStop:disabled {
+      background-color: #27272a;
+      color: #71717a;
+      border: 1px solid #3f3f46;
+    }
+    p {
+      margin: 12px 0 0 0;
+      font-size: 12px;
+      text-align: center;
+      color: #a1a1aa;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h3>Avalon Harvester Platform</h3>
+  
+  <div class="form-group">
+    <label for="keywordInput">Keyword Shopee</label>
+    <input type="text" id="keywordInput" placeholder="Contoh: Laptop Thinkpad">
+  </div>
+
+  <div class="form-group">
+    <label for="projectIdInput">Project / Client ID</label>
+    <input type="text" id="projectIdInput" placeholder="Contoh: PRJ-LAPTOP-01">
+  </div>
+
+  <div class="form-group">
+    <label for="categoryGroupSelect">Category Group</label>
+    <select id="categoryGroupSelect">
+      <option value="Electronics">Electronics (Laptop/PC)</option>
+      <option value="Cosmetics">Cosmetics (Skincare/Makeup)</option>
+      <option value="Fashion">Fashion (Pakaian/Sepatu)</option>
+      <option value="General">General / Others</option>
+    </select>
+  </div>
+
+  <button id="btnStart">Start Auto-Sweep</button>
+  <button id="btnStop">Stop</button>
+  <p id="status">Status: Idle</p>
+
+  <script src="popup.js"></script>
+</body>
+</html>

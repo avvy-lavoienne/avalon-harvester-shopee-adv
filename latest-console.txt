@@ -1,0 +1,1494 @@
+[Avalon Harvester] Starting auto-sweep...
+content.js:35 [Avalon Harvester] Processing page 1 - Scrolling to load content...
+content.js:35 [Avalon Harvester] Processing page 1 - Scroll 1/5
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at fetchInfo (bundle.366c08edb89603c8.2023.js:5:64287)
+    at InformationBlockID.f245ded28e40b2d8.2023.js:1:15204
+    at entry-modules.0e48ae7de7b4bcfe.2023.js:10:14992
+    at entry-modules.0e48ae7de7b4bcfe.2023.js:5:30094
+    at InformationBlockID.f245ded28e40b2d8.2023.js:1:15132
+    at bundle.366c08edb89603c8.2023.js:3:113385
+    at ni (18.3.1.js:1:174367)
+    at ws (18.3.1.js:1:194489)
+    at 18.3.1.js:1:191093
+    at S (18.3.1.js:1:350113)
+    at z (18.3.1.js:1:350645)
+    at entry-modules.0e48ae7de7b4bcfe.2023.js:52:3154
+    at R (entry-modules.0e48ae7de7b4bcfe.2023.js:52:2923)
+    at MessagePort.k (entry-modules.0e48ae7de7b4bcfe.2023.js:52:2982)
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+    at async O (sfu-latest.1b17eeecc1c6cc92.2023.js:34:26782)
+    at async Object.V [as post] (sfu-latest.1b17eeecc1c6cc92.2023.js:34:28536)
+    at async bundle.366c08edb89603c8.2023.js:16:1652
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+    at async O (sfu-latest.1b17eeecc1c6cc92.2023.js:34:26782)
+    at async Object.V [as post] (sfu-latest.1b17eeecc1c6cc92.2023.js:34:28536)
+    at async 785.f643219ab891b60cdcfe.2023.js:1:32679
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+    at async O (sfu-latest.1b17eeecc1c6cc92.2023.js:34:26782)
+    at async Object.V [as post] (sfu-latest.1b17eeecc1c6cc92.2023.js:34:28536)
+    at async bundle.366c08edb89603c8.2023.js:5:51737
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+    at async O (sfu-latest.1b17eeecc1c6cc92.2023.js:34:26782)
+    at async Object.W [as get] (sfu-latest.1b17eeecc1c6cc92.2023.js:34:27790)
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+    at async O (sfu-latest.1b17eeecc1c6cc92.2023.js:34:26782)
+    at async Object.W [as get] (sfu-latest.1b17eeecc1c6cc92.2023.js:34:27790)
+    at async bundle.366c08edb89603c8.2023.js:4:16214
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 Error
+6Canvas2D: Multiple readback operations using getImageData are faster with the willReadFrequently attribute set to true. See: <URL>Understand this warning
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://analytics.google.com/g/collect?v=2&tid=G-SW6D8G0HXK&gtm=45je64g0h2v869755528za20gzb77691473zd77691473&_p=1776596772893&gcs=G1--&gcd=13l3l3l3l5l1&npa=0&dma=0&ecid=1222503270&_eu=AEAECGQ&ae=a&are=1&cid=1351385811.1772213449&frm=0&gclgs=1&gcllp=19484154&gclst=4476630&pscdl=noapi&rcb=4&sr=1280x800&uaa=x86&uab=64&uafvl=Google%2520Chrome%3B147.0.7727.56%7CNot.A%252FBrand%3B8.0.0.0%7CChromium%3B147.0.7727.56&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=en-us&_s=1&tag_exp=0~115616985~115938465~115938468~117266401~117512543&uid=d98bfaa92b55abd13348042de7cd73d6bd0319380f1ef3c0251178e4978e77e6&dl=https%3A%2F%2Fshopee.co.id%2Fsearch%3Fkeyword%3DLaptop&sid=1776592300&sct=22&seg=1&dt=Jual%20Laptop%20Harga%20Terbaik%20%26%20Termurah%20April%202026%20%7C%20Shopee%20Indonesia&en=view_search_results&_c=1&ep.useAmpClientId=true&ep.location=https%3A%2F%2Fshopee.co.id%2Fsearch%3Fkeyword%3DLaptop&ep.page=%2Fsearch%3Fkeyword%3DLaptop&ep.content_group=Search%20Keyword%20(with%20Tag)&ep.ai_overview_text=undefined&ep.search_term=Laptop&tfd=2041
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://analytics.google.com/g/collect?v=2&tid=G-SW6D8G0HXK&gtm=45je64g0h2v869755528z877691473za20gzb77691473zd77691473&_p=1776596772893&gcs=G1--&gcd=13l3l3l3l5l1&npa=0&dma=0&ecid=1222503270&_eu=AAAAAGQ&are=1&cid=1351385811.1772213449&frm=0&gclgs=1&gcllp=19484154&gclst=4476640&pscdl=noapi&rcb=4&sr=1280x800&uaa=x86&uab=64&uafvl=Google%2520Chrome%3B147.0.7727.56%7CNot.A%252FBrand%3B8.0.0.0%7CChromium%3B147.0.7727.56&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=en-us&_s=2&tag_exp=0~115616985~115938465~115938468~117266401~117512543&uid=d98bfaa92b55abd13348042de7cd73d6bd0319380f1ef3c0251178e4978e77e6&dl=https%3A%2F%2Fshopee.co.id%2Fsearch%3Fkeyword%3DLaptop&sid=1776592300&sct=22&seg=1&dt=Jual%20Laptop%20Harga%20Terbaik%20%26%20Termurah%20April%202026%20%7C%20Shopee%20Indonesia&en=page_view&_c=1&ep.useAmpClientId=true&ep.location=https%3A%2F%2Fshopee.co.id%2Fsearch%3Fkeyword%3DLaptop&ep.page=%2Fsearch%3Fkeyword%3DLaptop&ep.content_group=Search%20Keyword%20(with%20Tag)&ep.ai_overview_text=undefined&tfd=2050
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://www.google.com/ccm/collect?rcb=8&frm=0&ae=g&en=user_id_update&dl=https%3A%2F%2Fshopee.co.id%2Fsearch&scrsrc=www.googletagmanager.com&rnd=790790032.1776596773&dt=Jual%20Laptop%20Harga%20Terbaik%20%26%20Termurah%20April%202026%20%7C%20Shopee%20Indonesia&auid=1646837376.1772213447&gclaw=Cj0KCQjw-pHPBhCdARIsAHXYWP80gDlwb2hyYwIENou7NRO--KYS9eoOpHyO-qG98snOH3jAIgXidwkaAmIVEALw_wcB&navt=n&npa=0&ep.ads_data_redaction=0&ga_uid=G-SW6D8G0HXK.d98bfaa92b55abd13348042de7cd73d6bd0319380f1ef3c0251178e4978e77e6&gtm=45He64g0h2v77691473za200zd77691473xea&gcs=G1--&gcd=13l3l3l3l5l1&dma=0&tag_exp=0~115938465~115938468~117266401~117384405&apve=1&apvf=f&apvc=1&tft=1776596774645&tfd=2053
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Meta Pixel] - Removed URL query parameters due to potential violations.
+(anonymous) @ entry-modules.0e48ae7de7b4bcfe.2023.js:4
+S @ fbevents.js:182
+E @ fbevents.js:182
+F @ fbevents.js:182
+(anonymous) @ fbevents.js:406
+(anonymous) @ fbevents.js:58
+b @ fbevents.js:334
+value @ fbevents.js:58
+Je @ fbevents.js:440
+He @ fbevents.js:440
+Ve @ fbevents.js:440
+Oe @ fbevents.js:440
+Ze @ fbevents.js:440
+(anonymous) @ fbevents.js:440
+(anonymous) @ fbevents.js:140
+b @ fbevents.js:334
+each @ fbevents.js:334
+value @ fbevents.js:140
+value @ fbevents.js:140
+value @ fbevents.js:128
+plugin @ 466924370133774?v=2.9.300&r=stable&domain=shopee.co.id&hme=c048e760b3fdc0fbdc117d7607b2c36e13eff2660c515ac72e86dac5ba060bb9&ex_m=104%2C205%2C154%2C22%2C72%2C73%2C145%2C68%2C67%2C11%2C162%2C90%2C16%2C138%2C127%2C39%2C75%2C78%2C134%2C159%2C164%2C8%2C4%2C5%2C7%2C6%2C3%2C91%2C101%2C165%2C170%2C219%2C62%2C186%2C187%2C55%2C277%2C30%2C74%2C231%2C230%2C229%2C23%2C33%2C103%2C61%2C10%2C63%2C97%2C98%2C99%2C105%2C130%2C31%2C29%2C132%2C133%2C129%2C128%2C155%2C76%2C158%2C156%2C157%2C50%2C60%2C123%2C15%2C161%2C45%2C264%2C265%2C263%2C26%2C27%2C28%2C48%2C146%2C77%2C112%2C18%2C20%2C44%2C40%2C42%2C41%2C83%2C92%2C96%2C110%2C144%2C147%2C46%2C111%2C24%2C21%2C119%2C69%2C36%2C149%2C148%2C150%2C141%2C139%2C25%2C35%2C59%2C109%2C160%2C70%2C17%2C152%2C114%2C81%2C66%2C19%2C85%2C86%2C116%2C84%2C136%2C135%2C34%2C279%2C294%2C212%2C201%2C202%2C200%2C297%2C289%2C52%2C213%2C107%2C131%2C80%2C121%2C54%2C47%2C49%2C113%2C120%2C126%2C58%2C64%2C151%2C115%2C37%2C32%2C53%2C56%2C100%2C163%2C1%2C124%2C14%2C122%2C12%2C2%2C57%2C93%2C65%2C118%2C89%2C88%2C166%2C167%2C94%2C95%2C9%2C125%2C102%2C51%2C142%2C87%2C79%2C71%2C117%2C106%2C43%2C143%2C0%2C82%2C137%2C140%2C153%2C38%2C108%2C13%2C168:281
+value @ fbevents.js:238
+(anonymous) @ fbevents.js:440
+(anonymous) @ 466924370133774?v=2.9.300&r=stable&domain=shopee.co.id&hme=c048e760b3fdc0fbdc117d7607b2c36e13eff2660c515ac72e86dac5ba060bb9&ex_m=104%2C205%2C154%2C22%2C72%2C73%2C145%2C68%2C67%2C11%2C162%2C90%2C16%2C138%2C127%2C39%2C75%2C78%2C134%2C159%2C164%2C8%2C4%2C5%2C7%2C6%2C3%2C91%2C101%2C165%2C170%2C219%2C62%2C186%2C187%2C55%2C277%2C30%2C74%2C231%2C230%2C229%2C23%2C33%2C103%2C61%2C10%2C63%2C97%2C98%2C99%2C105%2C130%2C31%2C29%2C132%2C133%2C129%2C128%2C155%2C76%2C158%2C156%2C157%2C50%2C60%2C123%2C15%2C161%2C45%2C264%2C265%2C263%2C26%2C27%2C28%2C48%2C146%2C77%2C112%2C18%2C20%2C44%2C40%2C42%2C41%2C83%2C92%2C96%2C110%2C144%2C147%2C46%2C111%2C24%2C21%2C119%2C69%2C36%2C149%2C148%2C150%2C141%2C139%2C25%2C35%2C59%2C109%2C160%2C70%2C17%2C152%2C114%2C81%2C66%2C19%2C85%2C86%2C116%2C84%2C136%2C135%2C34%2C279%2C294%2C212%2C201%2C202%2C200%2C297%2C289%2C52%2C213%2C107%2C131%2C80%2C121%2C54%2C47%2C49%2C113%2C120%2C126%2C58%2C64%2C151%2C115%2C37%2C32%2C53%2C56%2C100%2C163%2C1%2C124%2C14%2C122%2C12%2C2%2C57%2C93%2C65%2C118%2C89%2C88%2C166%2C167%2C94%2C95%2C9%2C125%2C102%2C51%2C142%2C87%2C79%2C71%2C117%2C106%2C43%2C143%2C0%2C82%2C137%2C140%2C153%2C38%2C108%2C13%2C168:211
+PendingScript
+u @ fbevents.js:176
+j @ fbevents.js:128
+value @ fbevents.js:128
+We @ fbevents.js:440
+Oe @ fbevents.js:440
+Ze @ fbevents.js:440
+(anonymous) @ fbevents.js:440
+(anonymous) @ fbevents.js:140
+b @ fbevents.js:334
+each @ fbevents.js:334
+value @ fbevents.js:140
+value @ fbevents.js:140
+value @ fbevents.js:128
+plugin @ fbevents.js:452
+value @ fbevents.js:238
+(anonymous) @ fbevents.js:440
+(anonymous) @ fbevents.js:443
+PendingScript
+(anonymous) @ VM895600:1
+(anonymous) @ VM895600:1
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:975
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:976
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+PendingScript
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:975
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:976
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+tR @ gtm.js?id=GTM-WJZQSJF:974
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:365
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:291
+fb @ gtm.js?id=GTM-WJZQSJF:254
+eb @ gtm.js?id=GTM-WJZQSJF:254
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:315
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:291
+fb @ gtm.js?id=GTM-WJZQSJF:254
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:254
+sf @ gtm.js?id=GTM-WJZQSJF:326
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:802
+Rz @ gtm.js?id=GTM-WJZQSJF:724
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:728
+e @ gtm.js?id=GTM-WJZQSJF:746
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:259
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:747
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:747
+nB @ gtm.js?id=GTM-WJZQSJF:747
+rB @ gtm.js?id=GTM-WJZQSJF:751
+JC @ gtm.js?id=GTM-WJZQSJF:777
+LC @ gtm.js?id=GTM-WJZQSJF:778
+setTimeout
+fd @ gtm.js?id=GTM-WJZQSJF:275
+MC @ gtm.js?id=GTM-WJZQSJF:781
+Dm @ gtm.js?id=GTM-WJZQSJF:1079
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:1083
+c @ gtm.js?id=GTM-WJZQSJF:1081
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:1083
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:1083
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:1085
+PendingScript
+(anonymous) @ search?keyword=Laptop:46
+setTimeout
+y @ search?keyword=Laptop:46
+(anonymous) @ search?keyword=Laptop:46
+(anonymous) @ search?keyword=Laptop:46Understand this warning
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Meta Pixel] - Duplicate Pixel ID: 466924370133774.
+(anonymous) @ entry-modules.0e48ae7de7b4bcfe.2023.js:4
+S @ fbevents.js:182
+E @ fbevents.js:182
+F @ fbevents.js:182
+We @ fbevents.js:440
+Oe @ fbevents.js:440
+Ze @ fbevents.js:440
+(anonymous) @ fbevents.js:440
+(anonymous) @ fbevents.js:140
+b @ fbevents.js:334
+each @ fbevents.js:334
+value @ fbevents.js:140
+value @ fbevents.js:140
+value @ fbevents.js:128
+plugin @ 466924370133774?v=2.9.300&r=stable&domain=shopee.co.id&hme=c048e760b3fdc0fbdc117d7607b2c36e13eff2660c515ac72e86dac5ba060bb9&ex_m=104%2C205%2C154%2C22%2C72%2C73%2C145%2C68%2C67%2C11%2C162%2C90%2C16%2C138%2C127%2C39%2C75%2C78%2C134%2C159%2C164%2C8%2C4%2C5%2C7%2C6%2C3%2C91%2C101%2C165%2C170%2C219%2C62%2C186%2C187%2C55%2C277%2C30%2C74%2C231%2C230%2C229%2C23%2C33%2C103%2C61%2C10%2C63%2C97%2C98%2C99%2C105%2C130%2C31%2C29%2C132%2C133%2C129%2C128%2C155%2C76%2C158%2C156%2C157%2C50%2C60%2C123%2C15%2C161%2C45%2C264%2C265%2C263%2C26%2C27%2C28%2C48%2C146%2C77%2C112%2C18%2C20%2C44%2C40%2C42%2C41%2C83%2C92%2C96%2C110%2C144%2C147%2C46%2C111%2C24%2C21%2C119%2C69%2C36%2C149%2C148%2C150%2C141%2C139%2C25%2C35%2C59%2C109%2C160%2C70%2C17%2C152%2C114%2C81%2C66%2C19%2C85%2C86%2C116%2C84%2C136%2C135%2C34%2C279%2C294%2C212%2C201%2C202%2C200%2C297%2C289%2C52%2C213%2C107%2C131%2C80%2C121%2C54%2C47%2C49%2C113%2C120%2C126%2C58%2C64%2C151%2C115%2C37%2C32%2C53%2C56%2C100%2C163%2C1%2C124%2C14%2C122%2C12%2C2%2C57%2C93%2C65%2C118%2C89%2C88%2C166%2C167%2C94%2C95%2C9%2C125%2C102%2C51%2C142%2C87%2C79%2C71%2C117%2C106%2C43%2C143%2C0%2C82%2C137%2C140%2C153%2C38%2C108%2C13%2C168:281
+value @ fbevents.js:238
+(anonymous) @ fbevents.js:440
+(anonymous) @ 466924370133774?v=2.9.300&r=stable&domain=shopee.co.id&hme=c048e760b3fdc0fbdc117d7607b2c36e13eff2660c515ac72e86dac5ba060bb9&ex_m=104%2C205%2C154%2C22%2C72%2C73%2C145%2C68%2C67%2C11%2C162%2C90%2C16%2C138%2C127%2C39%2C75%2C78%2C134%2C159%2C164%2C8%2C4%2C5%2C7%2C6%2C3%2C91%2C101%2C165%2C170%2C219%2C62%2C186%2C187%2C55%2C277%2C30%2C74%2C231%2C230%2C229%2C23%2C33%2C103%2C61%2C10%2C63%2C97%2C98%2C99%2C105%2C130%2C31%2C29%2C132%2C133%2C129%2C128%2C155%2C76%2C158%2C156%2C157%2C50%2C60%2C123%2C15%2C161%2C45%2C264%2C265%2C263%2C26%2C27%2C28%2C48%2C146%2C77%2C112%2C18%2C20%2C44%2C40%2C42%2C41%2C83%2C92%2C96%2C110%2C144%2C147%2C46%2C111%2C24%2C21%2C119%2C69%2C36%2C149%2C148%2C150%2C141%2C139%2C25%2C35%2C59%2C109%2C160%2C70%2C17%2C152%2C114%2C81%2C66%2C19%2C85%2C86%2C116%2C84%2C136%2C135%2C34%2C279%2C294%2C212%2C201%2C202%2C200%2C297%2C289%2C52%2C213%2C107%2C131%2C80%2C121%2C54%2C47%2C49%2C113%2C120%2C126%2C58%2C64%2C151%2C115%2C37%2C32%2C53%2C56%2C100%2C163%2C1%2C124%2C14%2C122%2C12%2C2%2C57%2C93%2C65%2C118%2C89%2C88%2C166%2C167%2C94%2C95%2C9%2C125%2C102%2C51%2C142%2C87%2C79%2C71%2C117%2C106%2C43%2C143%2C0%2C82%2C137%2C140%2C153%2C38%2C108%2C13%2C168:211
+PendingScript
+u @ fbevents.js:176
+j @ fbevents.js:128
+value @ fbevents.js:128
+We @ fbevents.js:440
+Oe @ fbevents.js:440
+Ze @ fbevents.js:440
+(anonymous) @ fbevents.js:440
+(anonymous) @ fbevents.js:140
+b @ fbevents.js:334
+each @ fbevents.js:334
+value @ fbevents.js:140
+value @ fbevents.js:140
+value @ fbevents.js:128
+plugin @ fbevents.js:452
+value @ fbevents.js:238
+(anonymous) @ fbevents.js:440
+(anonymous) @ fbevents.js:443
+PendingScript
+(anonymous) @ VM895600:1
+(anonymous) @ VM895600:1
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:975
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:976
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+PendingScript
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:975
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:976
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:977
+setTimeout
+uR @ gtm.js?id=GTM-WJZQSJF:977
+tR @ gtm.js?id=GTM-WJZQSJF:974
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:365
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:291
+fb @ gtm.js?id=GTM-WJZQSJF:254
+eb @ gtm.js?id=GTM-WJZQSJF:254
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:315
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:291
+fb @ gtm.js?id=GTM-WJZQSJF:254
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:254
+sf @ gtm.js?id=GTM-WJZQSJF:326
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:802
+Rz @ gtm.js?id=GTM-WJZQSJF:724
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:728
+e @ gtm.js?id=GTM-WJZQSJF:746
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:259
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:747
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:747
+nB @ gtm.js?id=GTM-WJZQSJF:747
+rB @ gtm.js?id=GTM-WJZQSJF:751
+JC @ gtm.js?id=GTM-WJZQSJF:777
+LC @ gtm.js?id=GTM-WJZQSJF:778
+setTimeout
+fd @ gtm.js?id=GTM-WJZQSJF:275
+MC @ gtm.js?id=GTM-WJZQSJF:781
+Dm @ gtm.js?id=GTM-WJZQSJF:1079
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:1083
+c @ gtm.js?id=GTM-WJZQSJF:1081
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:1083
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:1083
+(anonymous) @ gtm.js?id=GTM-WJZQSJF:1085
+PendingScript
+(anonymous) @ search?keyword=Laptop:46
+setTimeout
+y @ search?keyword=Laptop:46
+(anonymous) @ search?keyword=Laptop:46
+(anonymous) @ search?keyword=Laptop:46Understand this warning
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: null for URL: https://analytics.google.com/g/collect?v=2&tid=G-SW6D8G0HXK&gtm=45je64g0h2v869755528za20gzb77691473zd77691473&_p=1776596772893&gcs=G1--&gcd=13l3l3l3l5l1&npa=0&dma=0&ecid=1222503270&_eu=AEAECGQ&ae=a&are=1&cid=1351385811.1772213449&frm=0&gclgs=1&gcllp=19484154&gclst=4476630&pscdl=noapi&rcb=4&sr=1280x800&uaa=x86&uab=64&uafvl=Google%2520Chrome%3B147.0.7727.56%7CNot.A%252FBrand%3B8.0.0.0%7CChromium%3B147.0.7727.56&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=en-us&_s=1&tag_exp=0~115616985~115938465~115938468~117266401~117512543&uid=d98bfaa92b55abd13348042de7cd73d6bd0319380f1ef3c0251178e4978e77e6&dl=https%3A%2F%2Fshopee.co.id%2Fsearch%3Fkeyword%3DLaptop&sid=1776592300&sct=22&seg=1&dt=Jual%20Laptop%20Harga%20Terbaik%20%26%20Termurah%20April%202026%20%7C%20Shopee%20Indonesia&en=view_search_results&_c=1&ep.useAmpClientId=true&ep.location=https%3A%2F%2Fshopee.co.id%2Fsearch%3Fkeyword%3DLaptop&ep.page=%2Fsearch%3Fkeyword%3DLaptop&ep.content_group=Search%20Keyword%20(with%20Tag)&ep.ai_overview_text=undefined&ep.search_term=Laptop&tfd=2041
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: null for URL: https://analytics.google.com/g/collect?v=2&tid=G-SW6D8G0HXK&gtm=45je64g0h2v869755528z877691473za20gzb77691473zd77691473&_p=1776596772893&gcs=G1--&gcd=13l3l3l3l5l1&npa=0&dma=0&ecid=1222503270&_eu=AAAAAGQ&are=1&cid=1351385811.1772213449&frm=0&gclgs=1&gcllp=19484154&gclst=4476640&pscdl=noapi&rcb=4&sr=1280x800&uaa=x86&uab=64&uafvl=Google%2520Chrome%3B147.0.7727.56%7CNot.A%252FBrand%3B8.0.0.0%7CChromium%3B147.0.7727.56&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=en-us&_s=2&tag_exp=0~115616985~115938465~115938468~117266401~117512543&uid=d98bfaa92b55abd13348042de7cd73d6bd0319380f1ef3c0251178e4978e77e6&dl=https%3A%2F%2Fshopee.co.id%2Fsearch%3Fkeyword%3DLaptop&sid=1776592300&sct=22&seg=1&dt=Jual%20Laptop%20Harga%20Terbaik%20%26%20Termurah%20April%202026%20%7C%20Shopee%20Indonesia&en=page_view&_c=1&ep.useAmpClientId=true&ep.location=https%3A%2F%2Fshopee.co.id%2Fsearch%3Fkeyword%3DLaptop&ep.page=%2Fsearch%3Fkeyword%3DLaptop&ep.content_group=Search%20Keyword%20(with%20Tag)&ep.ai_overview_text=undefined&tfd=2050
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: null for URL: https://www.google.com/ccm/collect?rcb=8&frm=0&ae=g&en=user_id_update&dl=https%3A%2F%2Fshopee.co.id%2Fsearch&scrsrc=www.googletagmanager.com&rnd=790790032.1776596773&dt=Jual%20Laptop%20Harga%20Terbaik%20%26%20Termurah%20April%202026%20%7C%20Shopee%20Indonesia&auid=1646837376.1772213447&gclaw=Cj0KCQjw-pHPBhCdARIsAHXYWP80gDlwb2hyYwIENou7NRO--KYS9eoOpHyO-qG98snOH3jAIgXidwkaAmIVEALw_wcB&navt=n&npa=0&ep.ads_data_redaction=0&ga_uid=G-SW6D8G0HXK.d98bfaa92b55abd13348042de7cd73d6bd0319380f1ef3c0251178e4978e77e6&gtm=45He64g0h2v77691473za200zd77691473xea&gcs=G1--&gcd=13l3l3l3l5l1&dma=0&tag_exp=0~115938465~115938468~117266401~117384405&apve=1&apvf=f&apvc=1&tft=1776596774645&tfd=2053
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://ad.doubleclick.net/activity;src=9469210;type=eng;cat=id-w-pg;rcb=6;ord=1138596367559;npa=0;auiddc=1646837376.1772213447;gclgs=1;gclst=4476785;gcllp=19484154;gclaw=Cj0KCQjw-pHPBhCdARIsAHXYWP80gDlwb2hyYwIENou7NRO--KYS9eoOpHyO-qG98snOH3jAIgXidwkaAmIVEALw_wcB;gac=UA-61904553-8%3ACjwKCAiAnoXNBhAZEiwAnItcG7BIzx3jNeGEFGZHNMim1HuTckLeN45mwmiUHO2CXnFttOXHpVXj0BoC2FUQAvD_BwE;u28=%2Fsearch%3Fkeyword%3DLaptop;u29=Jual%20Laptop%20Harga%20Terbaik%20%26%20Termurah%20April%202026%20%7C%20Shopee%20Indonesia;uaa=x86;uab=64;uafvl=Google%2520Chrome%3B147.0.7727.56%7CNot.A%252FBrand%3B8.0.0.0%7CChromium%3B147.0.7727.56;uamb=0;uam=;uap=Windows;uapv=19.0.0;uaw=0;pscdl=noapi;frm=0;_tu=KFA;gtm=45fe64g0h2v9190621570z877691473za20gzb77691473zd77691473xea;gcs=G1--;gcd=13l3l3l3l5l1;dma=0;dc_fmt=3;tag_exp=0~115616985~115938465~115938469~117266400;epver=2;dc_random=1776596774_kzIUUR2JQuo1Nq2UZ7Z6nIkkSNDYxLmpuw;~oref=https%3A%2F%2Fshopee.co.id%2Fsearch%3Fkeyword%3DLaptop?
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://dem.shopee.com/dem/entrance/v1/apps/pc-platform/tags/web-performance/event/json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /api/v4/notification/get_activities?limit=5
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /api/v4/notification/get_notifications?limit=5
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json; charset=utf-8 for URL: https://dem.shopee.com/dem/entrance/v1/apps/pc-platform/tags/web-performance/event/json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: https://dem.shopee.com/dem/entrance/v1/apps/pc-platform/tags/web-performance/event/json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /api/v4/search/search_user?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop&limit=1&offset=0&with_search_cover=true
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /api/v4/search/curated_search?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /api/v4/search/search_items?by=relevancy&extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop&limit=60&newest=0&order=desc&page_type=search&scenario=PAGE_GLOBAL_SEARCH&source=SRP&version=2&view_session_id=b3a2fbbe-7d9e-47fe-94e6-b370fdc4846c
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /api/v4/search/search_prefills?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /api/v4/search/search_suggestion?bundle=popsearch&extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&limit=8&offset=0
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: null for URL: https://ad.doubleclick.net/activity;src=9469210;type=eng;cat=id-w-pg;rcb=6;ord=1138596367559;npa=0;auiddc=1646837376.1772213447;gclgs=1;gclst=4476785;gcllp=19484154;gclaw=Cj0KCQjw-pHPBhCdARIsAHXYWP80gDlwb2hyYwIENou7NRO--KYS9eoOpHyO-qG98snOH3jAIgXidwkaAmIVEALw_wcB;gac=UA-61904553-8%3ACjwKCAiAnoXNBhAZEiwAnItcG7BIzx3jNeGEFGZHNMim1HuTckLeN45mwmiUHO2CXnFttOXHpVXj0BoC2FUQAvD_BwE;u28=%2Fsearch%3Fkeyword%3DLaptop;u29=Jual%20Laptop%20Harga%20Terbaik%20%26%20Termurah%20April%202026%20%7C%20Shopee%20Indonesia;uaa=x86;uab=64;uafvl=Google%2520Chrome%3B147.0.7727.56%7CNot.A%252FBrand%3B8.0.0.0%7CChromium%3B147.0.7727.56;uamb=0;uam=;uap=Windows;uapv=19.0.0;uaw=0;pscdl=noapi;frm=0;_tu=KFA;gtm=45fe64g0h2v9190621570z877691473za20gzb77691473zd77691473xea;gcs=G1--;gcd=13l3l3l3l5l1;dma=0;dc_fmt=3;tag_exp=0~115616985~115938465~115938469~117266400;epver=2;dc_random=1776596774_kzIUUR2JQuo1Nq2UZ7Z6nIkkSNDYxLmpuw;~oref=https%3A%2F%2Fshopee.co.id%2Fsearch%3Fkeyword%3DLaptop?
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: ['event_id'] from: https://dem.shopee.com/dem/entrance/v1/apps/pc-platform/tags/web-performance/event/json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: https://dem.shopee.com/dem/entrance/v1/apps/pc-platform/tags/web-performance/event/json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json for URL: /api/v4/notification/get_activities?limit=5
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: /api/v4/notification/get_activities?limit=5
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (4) ['bff_meta', 'error', 'error_msg', 'data'] from: /api/v4/notification/get_activities?limit=5
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: /api/v4/notification/get_activities?limit=5
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json for URL: /api/v4/notification/get_notifications?limit=5
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: /api/v4/notification/get_notifications?limit=5
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json for URL: /api/v4/search/curated_search?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: /api/v4/search/curated_search?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json for URL: /api/v4/search/search_prefills?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: /api/v4/search/search_prefills?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (4) ['bff_meta', 'error', 'error_msg', 'data'] from: /api/v4/notification/get_notifications?limit=5
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: /api/v4/notification/get_notifications?limit=5
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (4) ['bff_meta', 'error', 'error_msg', 'data'] from: /api/v4/search/curated_search?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: /api/v4/search/curated_search?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (7) ['bff_meta', 'error', 'error_msg', 'be_error', 'data', 'search_response_info', 'bff_response_info'] from: /api/v4/search/search_prefills?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: /api/v4/search/search_prefills?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 MiniChat Build Time:  Thu Apr 16 2026 18:50:28 GMT+0800 (Singapore Standard Time)
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] XHR response content-type: application/json for URL: https://df.infra.sz.shopee.co.id/v2/shpsec/web/report
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing XHR JSON response from: https://df.infra.sz.shopee.co.id/v2/shpsec/web/report
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Error in XHR interception: InvalidStateError: Failed to read the 'responseText' property from 'XMLHttpRequest': The value is only accessible if the object's 'responseType' is '' or 'text' (was 'json').
+    at XMLHttpRequest.<anonymous> (inject.js:124:50)
+(anonymous) @ entry-modules.0e48ae7de7b4bcfe.2023.js:4
+(anonymous) @ inject.js:153
+XMLHttpRequest.send
+(anonymous) @ 2.40.108.js:1
+(anonymous) @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+Q @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+ﱞ52 @ VM896688:1
+eval @ VM896687:1
+(anonymous) @ sfu-latest.1b17eeecc1c6cc92.2023.js:36
+(anonymous) @ sfu-latest.1b17eeecc1c6cc92.2023.js:36
+n @ sfu-latest.1b17eeecc1c6cc92.2023.js:36
+Q @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+ﱞ52 @ VM896688:1
+eval @ VM896687:1
+apply @ inject.js:157
+(anonymous) @ sfu-latest.1b17eeecc1c6cc92.2023.js:36
+t.default @ sfu-latest.1b17eeecc1c6cc92.2023.js:36
+Q @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+ﱞ52 @ VM896688:1
+eval @ VM896687:1
+Q @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+ﱞ52 @ VM896688:1
+eval @ VM896687:1
+Q @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+ﱞ52 @ VM896688:1
+eval @ VM896687:1
+Promise.then
+Q @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+eval @ VM896696:1
+eval @ VM896695:1
+Q @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+ﱞ52 @ VM896688:1
+eval @ VM896687:1
+Q @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+ﱞ52 @ VM896688:1
+eval @ VM896687:1
+t.<computed>.<computed> @ sfu-latest.1b17eeecc1c6cc92.2023.js:36
+Q @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+t.A.c.<computed> @ sfu-latest.1b17eeecc1c6cc92.2023.js:36
+G @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+await in G
+X @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+(anonymous) @ bundle.366c08edb89603c8.2023.js:3
+Promise.then
+initSecuritySdk @ bundle.366c08edb89603c8.2023.js:3
+(anonymous) @ bundle.366c08edb89603c8.2023.js:4
+ni @ 18.3.1.js:1
+ws @ 18.3.1.js:1
+(anonymous) @ 18.3.1.js:1
+S @ 18.3.1.js:1
+z @ 18.3.1.js:1
+(anonymous) @ entry-modules.0e48ae7de7b4bcfe.2023.js:52
+R @ entry-modules.0e48ae7de7b4bcfe.2023.js:52
+k @ entry-modules.0e48ae7de7b4bcfe.2023.js:52
+postMessage
+setImmediate @ entry-modules.0e48ae7de7b4bcfe.2023.js:52
+x @ 18.3.1.js:1
+z @ 18.3.1.js:1
+(anonymous) @ entry-modules.0e48ae7de7b4bcfe.2023.js:52
+R @ entry-modules.0e48ae7de7b4bcfe.2023.js:52
+k @ entry-modules.0e48ae7de7b4bcfe.2023.js:52
+postMessage
+setImmediate @ entry-modules.0e48ae7de7b4bcfe.2023.js:52
+x @ 18.3.1.js:1
+R @ 18.3.1.js:1
+t.unstable_scheduleCallback @ 18.3.1.js:1
+Ts @ 18.3.1.js:1
+ns @ 18.3.1.js:1
+Vs @ 18.3.1.js:1
+t.hydrateRoot @ 18.3.1.js:1
+px @ bundle.366c08edb89603c8.2023.js:4
+pC @ bundle.366c08edb89603c8.2023.js:4
+(anonymous) @ bundle.366c08edb89603c8.2023.js:5
+await in (anonymous)
+(anonymous) @ bundle.366c08edb89603c8.2023.js:5
+Promise.then
+(anonymous) @ bundle.366c08edb89603c8.2023.js:4
+(anonymous) @ webpack-runtime.fefe6cbb3a35d893.2023.js:1
+54360 @ bundle.366c08edb89603c8.2023.js:4
+i @ webpack-runtime.fefe6cbb3a35d893.2023.js:1
+t @ bundle.366c08edb89603c8.2023.js:16
+(anonymous) @ bundle.366c08edb89603c8.2023.js:16
+(anonymous) @ webpack-runtime.fefe6cbb3a35d893.2023.js:1
+(anonymous) @ bundle.366c08edb89603c8.2023.js:16
+o @ webpack-runtime.fefe6cbb3a35d893.2023.js:3
+(anonymous) @ bundle.366c08edb89603c8.2023.js:1
+PendingScript
+loadScripts @ search?keyword=Laptop:58
+(anonymous) @ search?keyword=Laptop:58Understand this error
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/login?source=pcmall&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] XHR response content-type: application/json; charset=utf-8 for URL: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/login?csrf_token=&source=pcmall&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing XHR JSON response from: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/login?csrf_token=&source=pcmall&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed XHR JSON data keys: (8) ['token', 'p_token', 'user', 'version', 'shop', 'is_ccu_grey', 'show_chatbot_entrance', 'use_top_region_ui'] from: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/login?csrf_token=&source=pcmall&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest XHR API: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/login?csrf_token=&source=pcmall&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] XHR response content-type: application/json for URL: https://seller.shopee.sg/api/tsp/init?language=id&collections=202%3B215
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing XHR JSON response from: https://seller.shopee.sg/api/tsp/init?language=id&collections=202%3B215
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed XHR JSON data keys: (3) ['config', 'hashes', 'translations'] from: https://seller.shopee.sg/api/tsp/init?language=id&collections=202%3B215
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest XHR API: https://seller.shopee.sg/api/tsp/init?language=id&collections=202%3B215
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json for URL: /api/v4/search/search_user?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop&limit=1&offset=0&with_search_cover=true
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: /api/v4/search/search_user?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop&limit=1&offset=0&with_search_cover=true
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (6) ['bff_meta', 'error', 'error_msg', 'data', 'creator_response', 'request_id'] from: /api/v4/search/search_user?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop&limit=1&offset=0&with_search_cover=true
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: /api/v4/search/search_user?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop&limit=1&offset=0&with_search_cover=true
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://deo.shopeemobile.com/shopee/stm-sg-live/shopee-pcmall-live-sg/id.col34.1755192885.json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://deo.shopeemobile.com/shopee/stm-sg-live/shopee-pcmall-live-sg/id.col664.1755192942.json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /api/v4/itemcard/set/elements?set_ids=2
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json for URL: https://deo.shopeemobile.com/shopee/stm-sg-live/shopee-pcmall-live-sg/id.col34.1755192885.json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: https://deo.shopeemobile.com/shopee/stm-sg-live/shopee-pcmall-live-sg/id.col34.1755192885.json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json for URL: https://deo.shopeemobile.com/shopee/stm-sg-live/shopee-pcmall-live-sg/id.col664.1755192942.json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: https://deo.shopeemobile.com/shopee/stm-sg-live/shopee-pcmall-live-sg/id.col664.1755192942.json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json; charset=utf-8 for URL: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/login?source=pcmall&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/login?source=pcmall&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json for URL: /api/v4/search/search_suggestion?bundle=popsearch&extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&limit=8&offset=0
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: /api/v4/search/search_suggestion?bundle=popsearch&extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&limit=8&offset=0
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (49) ['badge_label_off', 'badge_label_out', 'badge_label_sold', 'item_card_bought_times', 'item_card_bought_times_plural', 'item_card_bought_times__few', 'item_card_bought_times__many', 'item_card_bought_times__other', 'item_card_current_price_webfe_accessibility', 'item_card_from_location_webfe_accessibility', 'item_card_label_group_buy_badge', 'item_card_label_group_buy_badge_long', 'item_card_label_sold_out', 'item_card_placeholder_add_to_cart', 'item_card_placeholder_name', 'item_card_placeholder_sold_out', 'item_card_promotion_label_webfe_accessibility', 'label_ad_card', 'label_dp_get_now', 'label_flash_sale', 'label_flash_sale_card', 'label_free_gift_badge', 'label_group_deal', 'label_historical_sold_n', 'label_installment_title__SG', 'label_item_card_buy_now_button', 'label_item_card_just_added_to_cart', 'label_item_card_just_bought', 'label_live_streaming_price', 'label_new_arrival', 'label_n_sold_month', 'label_relationship_following_shop', 'label_relationship_friend_following_shop', 'label_relationship_friend_like_item', 'label_relationship_friend_like_item_from_same_shop', 'label_relationship_good_item_rating', 'label_relationship_good_shop_rating', 'label_relationship_liked_item', 'label_relationship_purchased_before', 'label_relationship_purchased_from_shop', 'label_sneak_peak', 'new_user_zone_price_item_label', 'product_card_label_add_to_cart', 'product_card_label_find_similar', 'product_card_label_ok', 'product_card_label_preferred_plus', 'product_card_label_wholesale', 'product_card_voucher_wallet_label_cashback', 'text_please_check_group_buy_detail_on_pdp'] from: https://deo.shopeemobile.com/shopee/stm-sg-live/shopee-pcmall-live-sg/id.col34.1755192885.json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: https://deo.shopeemobile.com/shopee/stm-sg-live/shopee-pcmall-live-sg/id.col34.1755192885.json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (18) ['promo_label_compatible', 'vehicle_btn_clear_all', 'vehicle_btn_save', 'vehicle_btn_search', 'vehicle_fill_subtitle', 'vehicle_fill_title', 'vehicle_invalid_vehicle', 'vehicle_label_brand', 'vehicle_label_details', 'vehicle_label_edit', 'vehicle_label_model', 'vehicle_label_version', 'vehicle_label_year', 'vehicle_no_match_text', 'vehicle_search', 'vehicle_search_hint', 'vehicle_select', 'vehicle_showing_compatible_vehicle'] from: https://deo.shopeemobile.com/shopee/stm-sg-live/shopee-pcmall-live-sg/id.col664.1755192942.json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: https://deo.shopeemobile.com/shopee/stm-sg-live/shopee-pcmall-live-sg/id.col664.1755192942.json
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (6) ['bff_meta', 'error', 'error_msg', 'data', 'search_response_info', 'bff_response_info'] from: /api/v4/search/search_suggestion?bundle=popsearch&extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&limit=8&offset=0
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: /api/v4/search/search_suggestion?bundle=popsearch&extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&limit=8&offset=0
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://dem.shopee.com/dem/kose/v1/apps/minichat/configs/_fetch
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (8) ['token', 'p_token', 'user', 'version', 'shop', 'is_ccu_grey', 'show_chatbot_entrance', 'use_top_region_ui'] from: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/login?source=pcmall&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/login?source=pcmall&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json for URL: /api/v4/itemcard/set/elements?set_ids=2
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: /api/v4/itemcard/set/elements?set_ids=2
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (3) ['error', 'error_msg', 'data'] from: /api/v4/itemcard/set/elements?set_ids=2
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: /api/v4/itemcard/set/elements?set_ids=2
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/user/global_config?entry_point=pc_mall&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json; charset=utf-8 for URL: https://dem.shopee.com/dem/kose/v1/apps/minichat/configs/_fetch
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: https://dem.shopee.com/dem/kose/v1/apps/minichat/configs/_fetch
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (8) ['configs', 'log_config', 'sdk_spec', 'sdk_spec_checksum', 'public_key', 'key_version', 'ntp_t2', 'ntp_t3'] from: https://dem.shopee.com/dem/kose/v1/apps/minichat/configs/_fetch
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: https://dem.shopee.com/dem/kose/v1/apps/minichat/configs/_fetch
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 |-- 新加上报点上报阶段:  LOAD_RESOURCE , 耗时为: 0, 数据： {}
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 |-- 新加上报点上报阶段:  RENDER_HOME_PAGE , 耗时为: 0, 数据： {isSidebar: false}
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://ubta.tracking.shopee.co.id/v4/event_batch
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: image/gif for URL: https://ubta.tracking.shopee.co.id/v4/event_batch
+content.js:35 [Avalon Harvester] Processing page 1 - Scroll 2/5
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json; charset=utf-8 for URL: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/user/global_config?entry_point=pc_mall&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/user/global_config?entry_point=pc_mall&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://seller.shopee.co.id/webchat/api/v1.2/mini/user/on_user_online?_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (47) ['ab_test_info', 'ams_toggle_status', 'block_input_box', 'bot_config', 'br_site_close', 'buyer_feedback_reason', 'chat_list_revamp', 'chatbot_toggle', 'chatbot_toggle_open', 'delete_msg', 'disappear_chatbot_loading_time', 'exist_close_distribute_shop', 'hide_block_entrance', 'hide_feedback', 'hit_chatbot_whitelist', 'item_card_toggle', 'msg_status', 'onboarding_newbie_complete', 'onboarding_whitelist', 'privacy', 'rcmd_whitelist', 'reply', 'seller_buyer_split', 'seller_driver_whitelist', 'sender_feedback_bot_msg', 'sender_feedback_reason', 'show_bot_banner', 'show_chat_serving_feature', 'show_chatbot_loading_time', 'show_confirm_banner', 'show_crr_due', 'show_monitor_mode', 'show_order_invitation_optimize', 'show_recall_banner', 'show_report', 'show_serving_tab', 'show_source_banner', 'show_top_banner', 'show_unreplied_alert', 'subaccount_guide_config', 'support_subaccount_unreplied', 'text_max_input_len', 'toggle_info', 'typing_status', 'video', 'waiting_time_filter', 'webchat_tab_config'] from: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/user/global_config?entry_point=pc_mall&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: https://seller.shopee.co.id/webchat/api/coreapi/v1.2/mini/user/global_config?entry_point=pc_mall&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://seller.shopee.co.id/webchat/api/workbenchapi/v1.2/mini/shop/setting?shop_id=1751069122&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://seller.shopee.co.id/webchat/api/v1.2/mini/newbie/uncompleted?chat_types=%5B1%2C4%5D&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 Error
+sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1 div
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: null for URL: https://seller.shopee.co.id/webchat/api/v1.2/mini/user/on_user_online?_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json; charset=utf-8 for URL: https://seller.shopee.co.id/webchat/api/v1.2/mini/newbie/uncompleted?chat_types=%5B1%2C4%5D&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: https://seller.shopee.co.id/webchat/api/v1.2/mini/newbie/uncompleted?chat_types=%5B1%2C4%5D&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json; charset=utf-8 for URL: https://seller.shopee.co.id/webchat/api/workbenchapi/v1.2/mini/shop/setting?shop_id=1751069122&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: https://seller.shopee.co.id/webchat/api/workbenchapi/v1.2/mini/shop/setting?shop_id=1751069122&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (6) ['0', '1', '2', '3', '4', '5'] from: https://seller.shopee.co.id/webchat/api/v1.2/mini/newbie/uncompleted?chat_types=%5B1%2C4%5D&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: https://seller.shopee.co.id/webchat/api/v1.2/mini/newbie/uncompleted?chat_types=%5B1%2C4%5D&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (10) ['shop_id', 'auto_translation_status', 'source', 'translation_preference', 'in_translation_feedback_whitelist', 'user_is_frozen', 'user_status', 'show_chat_serving_feature', 'can_send_cs_entrance', 'hide_for_mart_seller'] from: https://seller.shopee.co.id/webchat/api/workbenchapi/v1.2/mini/shop/setting?shop_id=1751069122&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: https://seller.shopee.co.id/webchat/api/workbenchapi/v1.2/mini/shop/setting?shop_id=1751069122&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json for URL: /api/v4/search/search_items?by=relevancy&extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop&limit=60&newest=0&order=desc&page_type=search&scenario=PAGE_GLOBAL_SEARCH&source=SRP&version=2&view_session_id=b3a2fbbe-7d9e-47fe-94e6-b370fdc4846c
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: /api/v4/search/search_items?by=relevancy&extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop&limit=60&newest=0&order=desc&page_type=search&scenario=PAGE_GLOBAL_SEARCH&source=SRP&version=2&view_session_id=b3a2fbbe-7d9e-47fe-94e6-b370fdc4846c
+sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1 [Violation] 'setTimeout' handler took 286ms
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://seller.shopee.co.id/webchat/api/v1.2/mini/conversation/unread-count?_s=1&biz_id=0&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (49) ['bff_meta', 'error', 'error_msg', 'reserved_keyword', 'suggestion_algorithm', 'algorithm', 'total_count', 'nomore', 'items', 'price_adjust', 'adjust', 'total_ads_count', 'hint_keywords', 'show_disclaimer', 'json_data', 'query_rewrite', 'disclaimer_infos', 'need_next_search', 'low_result', 'autoplay_info', 'food_item_info', 'search_tracking', 'search_sessionid', 'batch_size', 'search_item_bff_tracking', 'user_info', 'request_id', 'cached_result', 'experiments', 'item_extra_config', 'config', 'live_stream', 'ymal_items', 'uff_cat_ids', 'is_auto_part_intention', 'card_set', 'ads_data_tms', 'srp_component_info', 'user_address', 'performance', 'ui_info', 'union_experiment_info', 'landing_page_info', 'shop_aggregated_info', 'hide_instant_filter', 'hidden_edt_filters', 'user_query_intentions', 'multimodal_ac_info', 'debug_info'] from: /api/v4/search/search_items?by=relevancy&extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop&limit=60&newest=0&order=desc&page_type=search&scenario=PAGE_GLOBAL_SEARCH&source=SRP&version=2&view_session_id=b3a2fbbe-7d9e-47fe-94e6-b370fdc4846c
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Extracted URLs: 120 from API: /api/v4/search/search_items?by=relevancy&extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&keyword=Laptop&limit=60&newest=0&order=desc&page_type=search&scenario=PAGE_GLOBAL_SEARCH&source=SRP&version=2&view_session_id=b3a2fbbe-7d9e-47fe-94e6-b370fdc4846c
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Dispatching harvest event with 120 URLs
+inject.js:76 [Avalon Harvester] Content.js received harvest event: {type: 'harvest', urls: Array(120)}
+inject.js:76 [Avalon Harvester] Harvested 120 URLs from this page
+inject.js:76 [Avalon Harvester] Sending harvested URLs to background: 120 with keyword: Laptop
+entry-modules.0e48ae7de7b4bcfe.2023.js:52 [Violation] 'message' handler took 477ms
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /api/v4/search/search_filter_config?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&filter_version=v3&ignore_old_filter_data=true&keyword=Laptop&page_type=search&scenario=PAGE_GLOBAL_SEARCH&use_new_filter_group=true&use_new_filter_shortcut=true
+2.40.108.js:1 Error
+    at Aa (2.40.108.js:1:239922)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Object.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Object.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at eval (eval at Aa (2.40.108.js:1:251691), <anonymous>:1:96)
+    at eval (eval at Aa (2.40.108.js:1:251608), <anonymous>:1:38)
+    at Aa (2.40.108.js:1:234178)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at Aa (2.40.108.js:1:249335)
+    at Function.ﱞ12 (eval at Aa (2.40.108.js:1:252107), <anonymous>:1:159)
+    at Function.eval (eval at Aa (2.40.108.js:1:252024), <anonymous>:1:65)
+    at 2.40.108.js:1:333103
+    at sfu-latest.1b17eeecc1c6cc92.2023.js:34:12640
+2.40.108.js:1 TypeError: Cannot read properties of null (reading '9')
+[Violation] Forced reflow while executing JavaScript took 79ms
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json; charset=utf-8 for URL: https://seller.shopee.co.id/webchat/api/v1.2/mini/conversation/unread-count?_s=1&biz_id=0&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: https://seller.shopee.co.id/webchat/api/v1.2/mini/conversation/unread-count?_s=1&biz_id=0&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (3) ['total_unread_count', 'shop_id', 'region_unread_count'] from: https://seller.shopee.co.id/webchat/api/v1.2/mini/conversation/unread-count?_s=1&biz_id=0&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: https://seller.shopee.co.id/webchat/api/v1.2/mini/conversation/unread-count?_s=1&biz_id=0&_uid=0-6203014250&_v=9.1.15&SPC_CDS_CHAT=a0a44c6f-b5c6-4c7d-ab56-2adf6b3e8e02&x-shop-region=ID&_api_source=pcmall
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: application/json for URL: /api/v4/search/search_filter_config?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&filter_version=v3&ignore_old_filter_data=true&keyword=Laptop&page_type=search&scenario=PAGE_GLOBAL_SEARCH&use_new_filter_group=true&use_new_filter_shortcut=true
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing JSON response from: /api/v4/search/search_filter_config?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&filter_version=v3&ignore_old_filter_data=true&keyword=Laptop&page_type=search&scenario=PAGE_GLOBAL_SEARCH&use_new_filter_group=true&use_new_filter_shortcut=true
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsed JSON data keys: (4) ['bff_meta', 'error', 'error_msg', 'data'] from: /api/v4/search/search_filter_config?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&filter_version=v3&ignore_old_filter_data=true&keyword=Laptop&page_type=search&scenario=PAGE_GLOBAL_SEARCH&use_new_filter_group=true&use_new_filter_shortcut=true
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Skipping non-harvest API: /api/v4/search/search_filter_config?extra_params=%7B%22global_search_session_id%22%3A%22gs-82a6f961-6214-4bb6-b816-6299d53d094a%22%2C%22search_session_id%22%3A%22ss-b7d110e4-f3d8-401e-b38d-43d4e51d182c%22%7D&filter_version=v3&ignore_old_filter_data=true&keyword=Laptop&page_type=search&scenario=PAGE_GLOBAL_SEARCH&use_new_filter_group=true&use_new_filter_shortcut=true
+0.0.0-snapshot-20260127094600.js:1 [Violation] 'setTimeout' handler took 472ms
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /__t__
+0.0.0-snapshot-20260127094600.js:1 [Violation] 'setTimeout' handler took 56ms
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /__t__
+content.js:35 [Avalon Harvester] Processing page 1 - Scroll 3/5
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] XHR response content-type: application/json for URL: https://df.infra.sz.shopee.co.id/v2/shpsec/web/report
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Parsing XHR JSON response from: https://df.infra.sz.shopee.co.id/v2/shpsec/web/report
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Error in XHR interception: InvalidStateError: Failed to read the 'responseText' property from 'XMLHttpRequest': The value is only accessible if the object's 'responseType' is '' or 'text' (was 'json').
+    at XMLHttpRequest.<anonymous> (inject.js:124:50)
+(anonymous) @ entry-modules.0e48ae7de7b4bcfe.2023.js:4
+(anonymous) @ inject.js:153
+XMLHttpRequest.send
+(anonymous) @ 2.40.108.js:1
+(anonymous) @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+Q @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+ﱞ52 @ VM896688:1
+eval @ VM896687:1
+(anonymous) @ sfu-latest.1b17eeecc1c6cc92.2023.js:36
+(anonymous) @ sfu-latest.1b17eeecc1c6cc92.2023.js:36
+n @ sfu-latest.1b17eeecc1c6cc92.2023.js:36
+Q @ sfu-latest.1b17eeecc1c6cc92.2023.js:34
+ﱞ52 @ VM896688:1
+eval @ VM896687:1
+apply @ inject.js:157
+o @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+ﱞ6 @ VM916135:1
+eval @ VM916134:1
+(anonymous) @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+(anonymous) @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+a @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+o @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+ﱞ6 @ VM916135:1
+eval @ VM916134:1
+(anonymous) @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+n.default @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+o @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+ﱞ6 @ VM916135:1
+eval @ VM916134:1
+o @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+ﱞ6 @ VM916135:1
+eval @ VM916134:1
+o @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+ﱞ6 @ VM916135:1
+eval @ VM916134:1
+Promise.then
+o @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+eval @ VM916142:1
+eval @ VM916141:1
+o @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+ﱞ6 @ VM916135:1
+eval @ VM916134:1
+o @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+ﱞ6 @ VM916135:1
+eval @ VM916134:1
+n.<computed>.<computed> @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+o @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+n.<computed>.t.<computed> @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+(anonymous) @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+(anonymous) @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+(anonymous) @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+h @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+i @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+Promise.then
+h @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+i @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+(anonymous) @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+(anonymous) @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+R @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+F @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+e.<computed> @ sandbox-indirect-eval-secure.9da278d2.28a211b89b275651db21.js:1
+(anonymous) @ socket.077785ae8b14eb7aa907.js:2
+B @ socket.077785ae8b14eb7aa907.js:2
+s @ socket.077785ae8b14eb7aa907.js:2
+(anonymous) @ socket.077785ae8b14eb7aa907.js:2
+(anonymous) @ socket.077785ae8b14eb7aa907.js:2
+K @ socket.077785ae8b14eb7aa907.js:2
+W @ socket.077785ae8b14eb7aa907.js:2
+(anonymous) @ service.3954b626286d8b66fed4.js:1
+b @ service.3954b626286d8b66fed4.js:1
+s @ service.3954b626286d8b66fed4.js:1
+(anonymous) @ service.3954b626286d8b66fed4.js:1
+(anonymous) @ service.3954b626286d8b66fed4.js:1
+(anonymous) @ service.3954b626286d8b66fed4.js:1
+(anonymous) @ service.3954b626286d8b66fed4.js:1
+b @ service.3954b626286d8b66fed4.js:1
+s @ service.3954b626286d8b66fed4.js:1
+(anonymous) @ service.3954b626286d8b66fed4.js:1
+(anonymous) @ service.3954b626286d8b66fed4.js:1
+Fe @ service.3954b626286d8b66fed4.js:1
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+V @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+V @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+c @ base.1b50958158dd11ebd61c.js:2
+O.e.put @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+d @ base.1b50958158dd11ebd61c.js:2
+y @ base.1b50958158dd11ebd61c.js:2
+p @ base.1b50958158dd11ebd61c.js:2
+M.e.put @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ vendors.27545368.2ed826608703063acef5.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+c @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+add @ base.1b50958158dd11ebd61c.js:2
+u.add @ base.1b50958158dd11ebd61c.js:2
+x @ base.1b50958158dd11ebd61c.js:2
+_ @ base.1b50958158dd11ebd61c.js:2
+r @ vendors.27545368.2ed826608703063acef5.js:2
+t @ vendors.27545368.2ed826608703063acef5.js:2
+u @ vendors.27545368.2ed826608703063acef5.js:2
+Promise.then
+t @ vendors.27545368.2ed826608703063acef5.js:2
+u @ vendors.27545368.2ed826608703063acef5.js:2
+(anonymous) @ vendors.27545368.2ed826608703063acef5.js:2
+n @ vendors.27545368.2ed826608703063acef5.js:2
+(anonymous) @ vendors.27545368.2ed826608703063acef5.js:2
+w @ vendors.27545368.2ed826608703063acef5.js:2
+_ @ vendors.27545368.2ed826608703063acef5.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+V @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+d @ base.1b50958158dd11ebd61c.js:2
+y @ base.1b50958158dd11ebd61c.js:2
+p @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+Promise.then
+N @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+V @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+d @ base.1b50958158dd11ebd61c.js:2
+y @ base.1b50958158dd11ebd61c.js:2
+p @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+Promise.then
+N @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+d @ base.1b50958158dd11ebd61c.js:2
+y @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+V @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+V @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+g @ base.1b50958158dd11ebd61c.js:2
+n.cont @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+i @ base.1b50958158dd11ebd61c.js:2
+Promise.then
+N @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+V @ base.1b50958158dd11ebd61c.js:2
+T.<computed> @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+v @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+V @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+h @ base.1b50958158dd11ebd61c.js:2
+H @ base.1b50958158dd11ebd61c.js:2
+Q.f.run @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+add @ base.1b50958158dd11ebd61c.js:2
+u.add @ base.1b50958158dd11ebd61c.js:2
+onModuleAdded @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+(anonymous) @ base.1b50958158dd11ebd61c.js:2
+add @ base.1b50958158dd11ebd61c.js:2
+u.add @ base.1b50958158dd11ebd61c.js:2
+x @ base.1b50958158dd11ebd61c.js:2
+n.createStore @ base.1b50958158dd11ebd61c.js:2
+44900 @ app.f138fdabe4642b0c4037.js:1
+i @ runtime.b9c29447b818cc208843.js:1
+63407 @ app.f138fdabe4642b0c4037.js:1
+i @ runtime.b9c29447b818cc208843.js:1
+t @ app.f138fdabe4642b0c4037.js:1
+(anonymous) @ app.f138fdabe4642b0c4037.js:1
+i.O @ runtime.b9c29447b818cc208843.js:1
+t @ runtime.b9c29447b818cc208843.js:1
+(anonymous) @ x1.97d6716d.ab03e58196d3587a1b77.js:2
+PendingScript
+createAssetScriptTags @ minichat.js?_=29609946:1
+(anonymous) @ minichat.js?_=29609946:1
+PendingScript
+(anonymous) @ bundle.366c08edb89603c8.2023.js:16
+setTimeout
+(anonymous) @ bundle.366c08edb89603c8.2023.js:16
+c @ bundle.366c08edb89603c8.2023.js:16
+(anonymous) @ bundle.366c08edb89603c8.2023.js:5
+await in (anonymous)
+(anonymous) @ bundle.366c08edb89603c8.2023.js:5
+Promise.then
+(anonymous) @ bundle.366c08edb89603c8.2023.js:4
+(anonymous) @ webpack-runtime.fefe6cbb3a35d893.2023.js:1
+54360 @ bundle.366c08edb89603c8.2023.js:4
+i @ webpack-runtime.fefe6cbb3a35d893.2023.js:1
+t @ bundle.366c08edb89603c8.2023.js:16
+(anonymous) @ bundle.366c08edb89603c8.2023.js:16
+(anonymous) @ webpack-runtime.fefe6cbb3a35d893.2023.js:1
+(anonymous) @ bundle.366c08edb89603c8.2023.js:16
+o @ webpack-runtime.fefe6cbb3a35d893.2023.js:3
+(anonymous) @ bundle.366c08edb89603c8.2023.js:1
+PendingScript
+loadScripts @ search?keyword=Laptop:58
+(anonymous) @ search?keyword=Laptop:58Understand this error
+2entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: image/gif for URL: /__t__
+content.js:71 [Avalon Harvester] Background response: {status: 'success', total_saved: 120}
+content.js:35 [Avalon Harvester] Processing page 1 - Scroll 4/5
+5entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /__t__
+5entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: image/gif for URL: /__t__
+content.js:35 [Avalon Harvester] Processing page 1 - Scroll 5/5
+3entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /__t__
+2entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: image/gif for URL: /__t__
+2entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /__t__
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: image/gif for URL: /__t__
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /__t__
+3entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: image/gif for URL: /__t__
+2entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: /__t__
+2entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: image/gif for URL: /__t__
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://ubt.tracking.shopee.co.id/v4/event_batch
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: image/gif for URL: https://ubt.tracking.shopee.co.id/v4/event_batch
+content.js:35 [Avalon Harvester] Processing page 1 - Waiting for data interception...
+0264878571020164.worker.js:1 Loading the script 'https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/309.0264878571020164.worker.js' violates the following Content Security Policy directive: "script-src 'self' translate.googleapis.com translate.google.com www.google-analytics.com static.mcc.miui.com connect.facebook.net shopee.sg images.uc.cn g.alicdn.com blob:". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The policy is report-only, so the violation has been logged but no further action has been taken.
+0264878571020164.worker.js:1 Loading the script 'https://deo.shopeemobile.com/shopee/shopee-pcmall-live-sg/assets/309.0264878571020164.worker.js' violates the following Content Security Policy directive: "script-src 'self' translate.googleapis.com translate.google.com www.google-analytics.com static.mcc.miui.com connect.facebook.net shopee.sg images.uc.cn g.alicdn.com blob:". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The policy is report-only, so the violation has been logged but no further action has been taken.
+2entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://ubta.tracking.shopee.co.id/v4/sac/event_batch
+2entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: image/gif for URL: https://ubta.tracking.shopee.co.id/v4/sac/event_batch
+content.js:35 [Avalon Harvester] Auto-sweep completed - No more pages available (1 pages processed)
+content.js:35 [Avalon Harvester] Auto-sweep stopped by user
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Intercepting fetch: https://ubt.tracking.shopee.co.id/v4/event_batch
+entry-modules.0e48ae7de7b4bcfe.2023.js:4 [Avalon Harvester] Response content-type: image/gif for URL: https://ubt.tracking.shopee.co.id/v4/event_batch
