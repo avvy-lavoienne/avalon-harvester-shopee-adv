@@ -84,23 +84,37 @@ AntiDetection.applyStickyHeadersRule();
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "START_SWEEP") {
-    // Generate Batch ID baru setiap kali mulai sweep
+    const keyword = message.keyword || "";
+    const projectId = message.project_id || "PRJ-UNASSIGNED";
+    const categoryGroup = message.category_group || "General";
     const newBatchId = "batch_" + Date.now();
+
     chrome.storage.local.set({
+      keyword,
+      project_id: projectId,
+      category_group: categoryGroup,
       isAutoSweep: true,
-      keyword: message.keyword,
+      currentTask: keyword,
       batch_id: newBatchId,
+    }, () => {
+      const url = "https://shopee.co.id/search?keyword=" + encodeURIComponent(keyword);
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs[0]) chrome.tabs.update(tabs[0].id, { url });
+        else chrome.tabs.create({ url });
+      });
+      sendResponse({ status: "started", keyword, project_id: projectId });
     });
 
-    const url =
-      "https://shopee.co.id/search?keyword=" +
-      encodeURIComponent(message.keyword);
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0]) chrome.tabs.update(tabs[0].id, { url });
-      else chrome.tabs.create({ url });
-    });
+    return true;
   } else if (message.action === "STOP_SWEEP") {
-    chrome.storage.local.set({ isAutoSweep: false });
+    chrome.storage.local.set({
+      isAutoSweep: false,
+      currentTask: null,
+    }, () => {
+      sendResponse({ status: "stopped" });
+    });
+
+    return true;
   } else if (message.action === "STORE_HARVESTED_DATA") {
     const products = message.products || [];
     const searchQuery = message.search_query || "unknown";
