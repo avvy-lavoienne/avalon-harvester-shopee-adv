@@ -239,24 +239,31 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
     const sendBatch = async (batch) => {
       try {
-        const res = await fetch(SUPABASE_API_ENDPOINT, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            Prefer: "resolution=merge-duplicates",
+        const res = await fetch(
+          `${SUPABASE_API_ENDPOINT}?on_conflict=item_id`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              apikey: SUPABASE_ANON_KEY,
+              Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+              Prefer: "resolution=merge-duplicates",
+            },
+            body: JSON.stringify(batch),
           },
-          body: JSON.stringify(batch),
-        });
+        );
 
         if (!res.ok) {
           const text = await res.text();
-          console.error(`[Avalon Harvester] Supabase batch error ${res.status}: ${text}`);
+          console.error(
+            `[Avalon Harvester] Supabase batch error ${res.status}: ${text}`,
+          );
           errorCount += batch.length;
         } else {
           savedCount += batch.length;
         }
+
+        await new Promise((r) => setTimeout(r, 300 + Math.random() * 400));
       } catch (e) {
         console.error("[Avalon Harvester] Supabase batch fetch failed:", e.message);
         errorCount += batch.length;
