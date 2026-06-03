@@ -7,6 +7,9 @@ console.log("[Avalon Harvester] Enterprise Background script loaded");
 const SUPABASE_URL = "https://fzomsxxbqdhgeafhygkp.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6b21zeHhicWRoZ2VhZmh5Z2twIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNjc4MTAsImV4cCI6MjA5NDk0MzgxMH0.1jgnNpGYavTM2zUbWZkKbhnXqTMUovcjUEtKEaP4zvk";
 const SUPABASE_API_ENDPOINT = `${SUPABASE_URL}/rest/v1/shopee_products`;
+const SUPABASE_KEYWORDS_ENDPOINT = `${SUPABASE_URL}/rest/v1/harvesting_keywords`;
+
+let currentTask = null; // Menyimpan keyword yang sedang aktif
 
 // Inisialisasi Worker ID permanen untuk profil Chrome ini
 chrome.runtime.onInstalled.addListener(() => {
@@ -135,40 +138,144 @@ const AntiDetection = {
 
 AntiDetection.applyStickyHeadersRule();
 
+// ====================== SUPABASE HELPER ======================
+async function getNextKeywordFromSupabase() {
+  try {
+    const now = new Date().toISOString();
+    
+    const res = await fetch(
+      `${SUPABASE_KEYWORDS_ENDPOINT}?or=(status.eq.pending,and(status.eq.done,next_scrape_at.lt.${now}))&order=priority.asc,created_at.asc&limit=1`,
+      {
+        headers: {
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!res.ok) {
+      console.error(`[Avalon] Supabase keywords fetch failed: ${res.status} ${res.statusText}`);
+      return null;
+    }
+    
+    const data = await res.json();
+    console.log(`[Avalon] Supabase keywords response: ${data.length} row(s)`);
+    return data.length > 0 ? data[0] : null;
+  } catch (error) {
+    console.error("Error fetching keyword from Supabase:", error);
+    return null;
+  }
+}
+
+async function updateKeywordStatus(keywordId, status, lastScrapedAt = null) {
+  try {
+    const payload = {
+      status: status,
+      last_scraped_at: lastScrapedAt || new Date().toISOString(),
+    };
+
+    if (status === "done") {
+      const nextDate = new Date();
+      nextDate.setDate(nextDate.getDate() + 14);
+      payload.next_scrape_at = nextDate.toISOString();
+    }
+
+    await fetch(`${SUPABASE_KEYWORDS_ENDPOINT}?id=eq.${keywordId}`, {
+      method: "PATCH",
+      headers: {
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal",
+      },
+      body: JSON.stringify(payload),
+    });
+  } catch (error) {
+    console.error("Error updating keyword status:", error);
+  }
+}
+
+// ====================== START HARVESTING ======================
+async function startHarvestingFromSupabase() {
+  if (currentTask) {
+    console.log("Already harvesting a keyword");
+    return;
+  }
+
+  const keywordData = await getNextKeywordFromSupabase();
+  
+  if (!keywordData) {
+    console.log("[Avalon] No pending keywords found in Supabase");
+    chrome.storage.local.set({ isAutoSweep: false });
+    return;
+  }
+
+  currentTask = keywordData;
+
+  chrome.storage.local.set({
+    keyword: keywordData.keyword,
+    project_id: keywordData.project_id,
+    category_group: keywordData.category_group,
+    currentKeywordId: keywordData.id,
+    currentPage: 0,
+    maxPages: 12,
+    isAutoSweep: true,
+  });
+
+  const url = `https://shopee.co.id/search?keyword=${encodeURIComponent(keywordData.keyword)}`;
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (tabs[0]) {
+      chrome.tabs.update(tabs[0].id, { url });
+    } else {
+      chrome.tabs.create({ url });
+    }
+  });
+
+  console.log(`Starting harvest for keyword: ${keywordData.keyword}`);
+}
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  
   if (message.action === "START_SWEEP") {
-    const keyword = message.keyword || "";
-    const projectId = message.project_id || "PRJ-UNASSIGNED";
-    const categoryGroup = message.category_group || "General";
-    const newBatchId = "batch_" + Date.now();
-
-    chrome.storage.local.set({
-      keyword,
-      project_id: projectId,
-      category_group: categoryGroup,
-      isAutoSweep: true,
-      currentTask: keyword,
-      batch_id: newBatchId,
-    }, () => {
-      const url = "https://shopee.co.id/search?keyword=" + encodeURIComponent(keyword);
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (tabs[0]) chrome.tabs.update(tabs[0].id, { url });
-        else chrome.tabs.create({ url });
+    if (message.keyword) {
+      chrome.storage.local.set({
+        keyword: message.keyword,
+        project_id: message.project_id || "PRJ-UNASSIGNED",
+        category_group: message.category_group || "General",
+        isAutoSweep: true,
+        currentPage: 0,
+        maxPages: 12,
       });
-      sendResponse({ status: "started", keyword, project_id: projectId });
-    });
-
+    } else {
+      startHarvestingFromSupabase();
+    }
+    sendResponse({ status: "started" });
     return true;
-  } else if (message.action === "STOP_SWEEP") {
-    chrome.storage.local.set({
-      isAutoSweep: false,
+  }
+
+  if (message.action === "STOP_SWEEP") {
+    currentTask = null;
+    chrome.storage.local.set({ 
+      isAutoSweep: false, 
       currentTask: null,
-    }, () => {
-      sendResponse({ status: "stopped" });
+      currentKeywordId: null 
     });
-
+    sendResponse({ status: "stopped" });
     return true;
-  } else if (message.action === "GET_CIRCUIT_BREAKER_STATUS") {
+  }
+
+  if (message.action === "KEYWORD_FINISHED") {
+    if (currentTask) {
+      updateKeywordStatus(currentTask.id, "done");
+      currentTask = null;
+    }
+    setTimeout(() => {
+      startHarvestingFromSupabase();
+    }, 2000);
+  }
+
+  if (message.action === "GET_CIRCUIT_BREAKER_STATUS") {
     const cb = AntiDetection.circuitBreaker;
     chrome.storage.local.get(["circuitBreakerUntil"], (data) => {
       const until = data.circuitBreakerUntil || 0;

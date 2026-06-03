@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const projectIdInput = document.getElementById("projectIdInput");
   const categoryGroupSelect = document.getElementById("categoryGroupSelect");
   const btnStart = document.getElementById("btnStart");
+  const btnAutoSupabase = document.getElementById("btnAutoSupabase");
   const btnStop = document.getElementById("btnStop");
   const status = document.getElementById("status");
   const errorMsg = document.getElementById("errorMsg");
@@ -19,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     projectIdInput.disabled = !enabled;
     categoryGroupSelect.disabled = !enabled;
     btnStart.disabled = !enabled;
+    btnAutoSupabase.disabled = !enabled;
     btnStop.disabled = enabled;
   }
 
@@ -26,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isActive) {
       const kw = keywordInput.value.trim() || "...";
       status.textContent = "Status: Sweeping [" + kw + "]";
-    } else if (status.textContent.startsWith("Status: Starting") || status.textContent.startsWith("Status: Stopping")) {
+    } else if (status.textContent.startsWith("Status: Starting") || status.textContent.startsWith("Status: Stopping") || status.textContent.startsWith("Status: Fetching") || status.textContent.startsWith("Status: Menunggu")) {
       // leave transitional messages untouched
     } else {
       status.textContent = "Status: Idle";
@@ -113,12 +115,45 @@ document.addEventListener("DOMContentLoaded", () => {
               showError("Failed to start: " + chrome.runtime.lastError.message);
               status.textContent = "Status: Error";
               btnStart.disabled = false;
-              btnStart.textContent = "Start Auto-Sweep";
+              btnStart.textContent = "Start Manual Sweep";
+              btnAutoSupabase.disabled = false;
+              btnAutoSupabase.textContent = "Auto dari Supabase";
             }
           },
         );
       },
     );
+  });
+
+  btnAutoSupabase.addEventListener("click", () => {
+    btnAutoSupabase.disabled = true;
+    btnAutoSupabase.textContent = "Fetching...";
+    btnStart.disabled = true;
+    status.textContent = "Status: Fetching from Supabase...";
+
+    chrome.runtime.sendMessage({ action: "START_SWEEP" }, (response) => {
+      if (chrome.runtime.lastError) {
+        showError("Failed: " + chrome.runtime.lastError.message);
+        status.textContent = "Status: Error";
+        btnAutoSupabase.disabled = false;
+        btnAutoSupabase.textContent = "Auto dari Supabase";
+        btnStart.disabled = false;
+      } else if (response && response.status === "started") {
+        status.textContent = "Status: Menunggu keyword dari Supabase...";
+      }
+    });
+
+    // Safety timeout: reset UI jika tidak ada perubahan storage dalam 15 detik
+    setTimeout(() => {
+      chrome.storage.local.get("isAutoSweep", (result) => {
+        if (!result.isAutoSweep) {
+          status.textContent = "Status: Idle (timeout)";
+          btnAutoSupabase.disabled = false;
+          btnAutoSupabase.textContent = "Auto dari Supabase";
+          btnStart.disabled = false;
+        }
+      });
+    }, 15000);
   });
 
   btnStop.addEventListener("click", () => {
@@ -132,6 +167,8 @@ document.addEventListener("DOMContentLoaded", () => {
           showError("Failed to stop: " + chrome.runtime.lastError.message);
         }
         btnStop.textContent = "Stop";
+        btnAutoSupabase.disabled = false;
+        btnAutoSupabase.textContent = "Auto dari Supabase";
       });
     });
   });
