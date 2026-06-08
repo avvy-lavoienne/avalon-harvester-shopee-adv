@@ -315,22 +315,28 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       const itemId = String(product.itemid);
       const shopId = String(product.shopid);
 
-      let discountPercentage = null;
-      if (product.discount) {
-        const cleaned = String(product.discount).replace('%', '').trim();
+      // discount_percentage: prefer dari inject.js (sudah dihitung dari harga),
+      // fallback ke product.discount string ("-30%")
+      let discountPercentage =
+        product.discount_percentage != null
+          ? product.discount_percentage
+          : null;
+      if (discountPercentage == null && product.discount) {
+        const cleaned = String(product.discount).replace("%", "").trim();
         const num = parseFloat(cleaned);
-        if (!isNaN(num)) {
-          discountPercentage = num;
-        }
+        if (!isNaN(num)) discountPercentage = num;
       }
 
       return {
         item_id: itemId,
         product_name: product.name || "Unknown Product",
+        name_raw: product.name_raw || null,
         brand: product.brand || null,
         model: product.model || null,
         price: product.price || 0,
         original_price: product.original_price || null,
+        price_min: product.price_min || null,
+        price_max: product.price_max || null,
         discount_percentage: discountPercentage,
         historical_sold: product.historical_sold || 0,
         sold: product.sold || product.historical_sold || 0,
@@ -347,7 +353,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         search_query: searchQuery,
         project_id: projectId,
         category_group: categoryGroup,
-        product_url: product.product_url || `https://shopee.co.id/product/${shopId}/${itemId}`,
+        product_url:
+          product.product_url ||
+          `https://shopee.co.id/product/${shopId}/${itemId}`,
         image_url: product.image || null,
         source_platform: "shopee",
         scraped_at: product.scraped_at || batchTimestamp,

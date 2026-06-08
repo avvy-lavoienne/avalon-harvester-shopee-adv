@@ -1,35 +1,309 @@
 (function () {
   "use strict";
 
+  // =========================================================================
+  // [Avalon Harvester] inject.js — Enhanced Extraction & Cleaning
+  // =========================================================================
+
   function getSearchQuery(url) {
     try {
       const match = url.match(/[?&]keyword=([^&]+)/);
-      return match ? decodeURIComponent(match[1]) : '';
+      return match ? decodeURIComponent(match[1]) : "";
     } catch (e) {
-      return '';
+      return "";
     }
   }
 
   function isShopApi(url) {
-    return url && (
-      url.includes('/api/v2/shop/get_shop_info') ||
-      url.includes('/api/v2/shop/get')
+    return (
+      url &&
+      (url.includes("/api/v2/shop/get_shop_info") ||
+        url.includes("/api/v2/shop/get"))
     );
   }
 
+  // =========================================================================
+  // 1. PRICE PARSER — Shopee selalu kirim harga dalam MICRO-UNIT (× 100000)
+  //    Tidak ada threshold heuristic, formula deterministik.
+  // =========================================================================
+  function parsePrice(raw) {
+    if (
+      raw == null ||
+      raw === "" ||
+      raw === 0 ||
+      raw === -1 ||
+      raw === "0" ||
+      raw === "-1"
+    ) {
+      return null;
+    }
+
+    const num =
+      typeof raw === "number"
+        ? raw
+        : parseFloat(String(raw).replace(/[^\d.-]/g, ""));
+
+    if (!isFinite(num) || num <= 0) return null;
+
+    // Shopee API standard: price stored as IDR × 100000
+    // Examples:
+    //   15000000000  -> Rp 150.000
+    //   350000000    -> Rp 3.500
+    //   1234500000   -> Rp 12.345
+    return Math.round(num / 100000);
+  }
+
+  // =========================================================================
+  // 2. PRICE EXTRACTION — handle varian, diskon, price_min/max
+  // =========================================================================
+  function extractPrices(obj) {
+    const priceRaw = parsePrice(obj.price);
+    const priceMin = parsePrice(obj.price_min);
+    const priceMax = parsePrice(obj.price_max);
+
+    // Untuk produk varian, obj.price kadang 0 → fallback ke price_min
+    let price = priceRaw || priceMin;
+
+    // Original price: coba 3 field secara berurutan
+    let originalPrice =
+      parsePrice(obj.price_before_discount) ||
+      parsePrice(obj.price_min_before_discount) ||
+      parsePrice(obj.price_max_before_discount);
+
+    // Sanity check: kalau original <= price, berarti tidak ada diskon nyata
+    if (originalPrice && price && originalPrice <= price) {
+      originalPrice = null;
+    }
+
+    // Hitung discount percentage
+    let discountPercentage = null;
+    if (originalPrice && price && originalPrice > price) {
+      discountPercentage = Math.round(
+        ((originalPrice - price) / originalPrice) * 100,
+      );
+    } else if (obj.raw_discount) {
+      const m = String(obj.raw_discount).match(/(\d+(?:\.\d+)?)/);
+      if (m) discountPercentage = parseFloat(m[1]);
+    } else if (obj.discount) {
+      const m = String(obj.discount).match(/(\d+(?:\.\d+)?)/);
+      if (m) discountPercentage = parseFloat(m[1]);
+    }
+
+    return {
+      price: price || 0,
+      original_price: originalPrice,
+      price_min: priceMin,
+      price_max: priceMax,
+      discount_percentage: discountPercentage,
+    };
+  }
+
+  // =========================================================================
+  // 3. NAME CLEANING — buang emoji, tag promo, karakter dekoratif, spam ALL CAPS
+  // =========================================================================
+  const SPAM_PREFIX_RE =
+    /^(PROMO|DISKON|MURAH|READY\s*STOCK|READY|FLASH\s*SALE|BIG\s*SALE|TERMURAH|BEST\s*SELLER|TERLARIS|COD|FREE\s*ONGKIR|BARANG\s*BARU|NEW|BARU|ORIGINAL|ORI|GARANSI\s*RESMI|GARANSI|GROSIR|HOT|VIRAL|TERBARU|LARIS|SALE|OBRAL|MEGA\s*SALE|SUPER\s*SALE|BONUS|GRATIS|FREE)\b[\s\-:,.!]*/i;
+
+  // Karakter dekoratif yang sering jadi spam (★✦▪●◆ dll)
+  const DECORATIVE_RE =
+    /[★✦✧✩✪✫✬✭✮✯✰⭐☆▪▫●○◆◇◈♥♡♦♢✨✿❀❁❂❃❄❅❆❇❈❉❊❋➤➥➦➧➨➩➪➫➬➭➮➯➰※‼❗❓❕❔➕➖]/g;
+
+  // Pattern diskon "DISKON 50%", "50%", "-30%" yang sering jadi prefix
+  const DISCOUNT_PREFIX_RE = /^\s*[-]?\d{1,3}\s*%\s*[-:]*\s*/;
+  // Trailing spam: "GARANSI RESMI", "READY STOCK", "BNIB", "BPOM" dll
+  const TRAILING_SPAM_RE =
+    /\s+(GARANSI\s*(RESMI|TOKO|DISTRIBUTOR|PABRIK)?(\s*\d+\s*(TAHUN|BULAN|HARI))?|READY(\s*STOCK)?|READYSTOCK|BNIB|NEW|ORI|ORIGINAL|BPOM|FREE\s*ONGKIR|FREE\s*ONGKIR|HALAL|MURAH|TERMURAH|BERGARANSI|RESMI|COD|FAST\s*RESPON?)\.?\s*$/i;
+
+  function cleanProductName(raw) {
+    if (!raw || typeof raw !== "string") return "";
+    let name = raw;
+
+    // 3a. Remove emoji (semua block emoji unicode)
+    name = name.replace(
+      /[\u{1F300}-\u{1FAFF}]|[\u{2600}-\u{27BF}]|[\u{1F000}-\u{1F02F}]|[\u{1F0A0}-\u{1F0FF}]|[\u{1F100}-\u{1F1FF}]|[\u{2300}-\u{23FF}]|[\u{2B00}-\u{2BFF}]/gu,
+      " ",
+    );
+
+    // 3b. Remove karakter dekoratif
+    name = name.replace(DECORATIVE_RE, " ");
+
+    // 3c. Remove tag promo dalam kurung siku/kurawal [COD] 【BISA COD】 〖PROMO〗
+    name = name.replace(/[\[【〖［][^\]】〗］]{0,60}[\]】〗］]/g, " ");
+
+    // 3d. Remove kurung biasa yang isinya promo (TAPI keep kalau spec produk)
+    name = name.replace(/[(（]([^)）]{1,60})[)）]/g, (match, inner) => {
+      const t = inner.trim();
+      // Keep spec teknis: "16GB", "i7", "1TB", "RTX 3060", "144Hz", "15.6 inch"
+      if (
+        /\d+\s*(GB|TB|MB|KB|GHz|MHz|inch|in|"|cm|mm|Hz|W|V|mAh|fps|px|p|K)\b/i.test(
+          t,
+        )
+      )
+        return match;
+      if (/\b(i[3579]|ryzen|core|amd|intel|nvidia|rtx|gtx|m[1-4])\b/i.test(t))
+        return match;
+      if (/^\d+(\.\d+)?\s*(inch|in|gb|tb)$/i.test(t)) return match;
+      // Promo wording → drop
+      if (
+        /^(cod|promo|garansi|gratis|free|ready|new|original|ori|bonus|diskon|murah|terlaris|laris|sale|obral)/i.test(
+          t,
+        )
+      )
+        return " ";
+      // Default: kalau pendek (<= 3 kata) & no spec keyword, drop
+      const wordCount = t.split(/\s+/).length;
+      if (wordCount <= 3) return " ";
+      return match;
+    });
+
+    // 3d'. Normalize tilde/underscore/pipe SEBELUM prefix-trailing strip
+    name = name.replace(/[~_]+/g, " ");
+    name = name.replace(/\|{2,}/g, " | ");
+
+    // 3d''. Strip leading/trailing dash, pipe, slash, dot
+    name = name.replace(/^[\s\-|/–—.,;:]+/, "").replace(/[\s\-|/–—.,;:]+$/, "");
+
+    // 3e. Remove spam ALL CAPS prefix berulang
+    let prev;
+    do {
+      prev = name;
+      name = name.replace(SPAM_PREFIX_RE, "").trimStart();
+      // Strip "50%", "-30%", "DISKON 50%" residual setelah spam prefix dibuang
+      name = name.replace(DISCOUNT_PREFIX_RE, "").trimStart();
+    } while (name !== prev && name.length > 0);
+
+    // 3e'. Remove trailing spam berulang ("GARANSI RESMI 1 TAHUN", "READY STOCK", "BNIB", dll)
+    do {
+      prev = name;
+      name = name.replace(TRAILING_SPAM_RE, "").trimEnd();
+    } while (name !== prev && name.length > 0);
+
+    // 3f. Normalize tanda baca berlebih
+    name = name.replace(/[!?]{2,}/g, "");
+    name = name.replace(/-{2,}/g, "-");
+    name = name.replace(/[\.,;:]{2,}/g, " ");
+
+    // 3g. Normalize whitespace
+    name = name.replace(/\s+/g, " ").trim();
+
+    // 3g'. Final strip leading/trailing dash residual setelah cleanup
+    name = name.replace(/^[\s\-|/–—.,;:]+/, "").replace(/[\s\-|/–—.,;:]+$/, "").trim();
+
+    // 3h. Capitalize jika seluruh nama ALL CAPS (susah dibaca)
+    if (name.length > 10 && name === name.toUpperCase() && /[A-Z]/.test(name)) {
+      name = name
+        .toLowerCase()
+        .replace(/\b\w/g, (c) => c.toUpperCase())
+        // tapi keep abbrev teknis tetap upper
+        .replace(
+          /\b(Ssd|Hdd|Ram|Cpu|Gpu|Usb|Hdmi|Lcd|Led|Oled|Tv|Pc|Gb|Tb|Mb|Kb|Ghz|Mhz|Hz|Mp|Hd|Uhd|Fhd|Qhd|4k|8k|Ai|Iot|Vr|Ar|Nfc|Bt|Wifi|Lte|5g|4g|3g)\b/gi,
+          (m) => m.toUpperCase(),
+        );
+    }
+
+    return name;
+  }
+
+  // =========================================================================
+  // 4. BRAND & MODEL EXTRACTION
+  // =========================================================================
+  const BRAND_LIST = [
+    // Laptop & Computing
+    "ASUS", "Acer", "Lenovo", "HP", "Dell", "MSI", "Apple", "Microsoft",
+    "Toshiba", "Fujitsu", "LG", "Razer", "Alienware", "Gigabyte", "Huawei",
+    "Honor", "Advan", "Axioo", "Zyrex", "Hyrican",
+    // Smartphone
+    "Samsung", "Xiaomi", "Realme", "Infinix", "Poco", "Oppo", "Vivo",
+    "OnePlus", "Tecno", "Itel", "Nokia", "Asus ROG", "iQOO",
+    // Audio
+    "JBL", "Bose", "Sennheiser", "Sonos", "Audio-Technica", "Marshall",
+    "Beats", "Anker", "Edifier", "Aukey", "Soundcore", "Skullcandy", "AKG",
+    // Camera
+    "Canon", "Nikon", "Fujifilm", "Panasonic", "GoPro", "DJI", "Sony",
+    "Olympus", "Leica", "Pentax", "Insta360",
+    // Home Appliance
+    "Philips", "Sharp", "Rinnai", "Polytron", "Miyako", "Cosmos", "Maspion",
+    "Modena", "Yong Ma", "Cuckoo", "Mitsubishi", "Daikin", "Electrolux",
+    "Aqua", "Sanken", "Denpoo",
+    // Fashion
+    "Nike", "Adidas", "Puma", "Reebok", "New Balance", "Converse", "Vans",
+    "Uniqlo", "Zara", "H&M", "Skechers", "Under Armour", "Fila", "Eiger",
+    "Consina", "Bodypack",
+    // PC Accessories
+    "Logitech", "Steelseries", "Corsair", "HyperX", "Kingston", "SanDisk",
+    "Seagate", "WD", "Western Digital", "Crucial", "Transcend", "Adata",
+    "TP-Link", "Tenda", "Mikrotik", "Cisco", "Ubiquiti", "D-Link", "Asus ROG",
+    "Rexus", "Fantech", "Robot", "Imperion",
+    // Watches & Wearable
+    "Rolex", "Casio", "Seiko", "Citizen", "Garmin", "Fitbit", "Mi Band",
+    "Amazfit",
+    // Beauty
+    "Wardah", "Maybelline", "L'Oreal", "Loreal", "Revlon", "MAC", "NYX",
+    "Make Over", "Emina", "Pixy", "Pond's", "Nivea", "Vaseline",
+  ];
+
+  // Pre-sort DESC supaya brand panjang (Western Digital) match dulu sebelum WD
+  const BRAND_LIST_SORTED = [...new Set(BRAND_LIST)].sort(
+    (a, b) => b.length - a.length,
+  );
+
+  function escapeRegex(s) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  function detectBrand(name) {
+    if (!name) return null;
+    for (const brand of BRAND_LIST_SORTED) {
+      const re = new RegExp(`\\b${escapeRegex(brand)}\\b`, "i");
+      if (re.test(name)) {
+        // Return brand dengan casing canonical dari list
+        return brand;
+      }
+    }
+    // Fallback: kata pertama yang ALL CAPS (>= 3 chars, alfanumerik)
+    const allCapsMatch = name.match(/^[\W_]*([A-Z][A-Z0-9]{2,})\b/);
+    if (allCapsMatch) return allCapsMatch[1];
+    // Fallback: kata pertama yang Title-case (mulai huruf kapital)
+    const titleMatch = name.match(/^[\W_]*([A-Z][a-zA-Z]{2,})\b/);
+    if (titleMatch) return titleMatch[1];
+    return null;
+  }
+
+  function extractModel(name, brand) {
+    if (!name) return null;
+    let remaining = name;
+    if (brand) {
+      remaining = remaining
+        .replace(new RegExp(`\\b${escapeRegex(brand)}\\b`, "i"), "")
+        .trim();
+    }
+    // Stop di separator " - ", " | ", " / "
+    const stopAt = remaining.search(/\s[-|/–—]\s/);
+    if (stopAt > 0) remaining = remaining.substring(0, stopAt);
+
+    const words = remaining.split(/\s+/).filter(Boolean).slice(0, 6);
+    let model = words.join(" ").trim().replace(/["""'']/g, "");
+    if (model.length > 80) model = model.substring(0, 80);
+    return model || null;
+  }
+
+  // =========================================================================
+  // 5. SHOP DATA EXTRACTION (unchanged logic, just cleaned)
+  // =========================================================================
   function extractShopData(data) {
     try {
       const seenShops = new Set();
       const shops = [];
       function traverse(obj) {
-        if (obj && typeof obj === 'object') {
+        if (obj && typeof obj === "object") {
           if (obj.shopid && !seenShops.has(obj.shopid)) {
             const hasRating = obj.rating_star != null;
             if (hasRating) {
               seenShops.add(obj.shopid);
-              const ratingCount = obj.rating_count && Array.isArray(obj.rating_count)
-                ? obj.rating_count.reduce((a, b) => a + b, 0)
-                : (obj.rating_count || 0);
+              const ratingCount =
+                obj.rating_count && Array.isArray(obj.rating_count)
+                  ? obj.rating_count.reduce((a, b) => a + b, 0)
+                  : obj.rating_count || 0;
               shops.push({
                 shopid: obj.shopid,
                 shop_name: obj.name || obj.shop_name || null,
@@ -43,85 +317,20 @@
               });
             }
           }
-          for (const key in obj) {
-            traverse(obj[key]);
-          }
+          for (const key in obj) traverse(obj[key]);
         }
       }
       traverse(data);
-      console.log('[Avalon Harvester] Extracted shop data:', shops.length);
       return shops;
     } catch (e) {
-      console.error('[Avalon Harvester] Error extracting shop data:', e);
+      console.error("[Avalon Harvester] Error extracting shop data:", e);
       return [];
     }
   }
 
-  function parsePrice(raw) {
-    if (raw == null || raw === 0 || raw === "" || raw === "0") return 0;
-
-    let str = String(raw).trim().replace(/[^0-9.,-]/g, '');
-    let num = parseFloat(str.replace(',', '.'));
-
-    if (isNaN(num) || num <= 0) return 0;
-
-    const original = num;
-    let final = num;
-
-    if (num > 200000000) {
-      final = Math.round(num / 10000);
-    } else if (num > 50000000) {
-      final = Math.round(num / 100);
-    } else if (num > 5000000) {
-      final = Math.round(num / 10);
-    }
-
-    // Safety net kuat
-    if (final > 45000000) {
-      final = Math.round(final / 10);
-    } else if (final > 25000000 && final % 1000 === 0) {
-      final = Math.round(final / 10);
-    } else if (final < 150000 && final > 10000) {
-      final = Math.round(final * 10);
-    }
-
-    console.log(`[Price Parser] Raw: ${original} \u2192 Final: ${final}`);
-    return final;
-  }
-
-  function extractBrandAndModel(productName) {
-    if (!productName || typeof productName !== 'string') {
-      return { brand: null, model: null };
-    }
-    let name = productName.trim();
-    let brand = null;
-    const brandList = ['ASUS', 'Acer', 'Lenovo', 'HP', 'Dell', 'MSI', 'Apple', 'Samsung', 'Xiaomi', 'Huawei', 'Advans', 'Axioo', 'Microsoft', 'Toshiba', 'Fujitsu', 'LG', 'Realme', 'Infinix', 'Poco'];
-    for (const b of brandList) {
-      if (name.toUpperCase().includes(b.toUpperCase())) {
-        brand = b;
-        break;
-      }
-    }
-    let model = null;
-    if (brand) {
-      let remaining = name.replace(new RegExp(brand, 'i'), '').trim();
-      let words = remaining.split(/\s+/);
-      let collected = [];
-      for (const w of words) {
-        if (/^[-–—\-]/.test(w)) break;
-        collected.push(w);
-        if (collected.length >= 8) break;
-      }
-      model = collected.join(' ').replace(/["""]/g, '').trim();
-    } else {
-      model = name.split(/\s+/).slice(0, 5).join(' ');
-    }
-    if (model && model.length > 80) {
-      model = model.substring(0, 80);
-    }
-    return { brand, model };
-  }
-
+  // =========================================================================
+  // 6. PRODUCT EXTRACTION — NO MORE laptop/notebook filter
+  // =========================================================================
   function extractProductsData(data) {
     try {
       const products = [];
@@ -129,73 +338,129 @@
       let invalidCount = 0;
 
       function traverse(obj) {
-        if (obj && typeof obj === 'object') {
+        if (obj && typeof obj === "object") {
           if (
             obj.itemid &&
             obj.shopid &&
             obj.name &&
-            typeof obj.name === 'string' &&
-            obj.name.trim() !== '' &&
+            typeof obj.name === "string" &&
+            obj.name.trim() !== "" &&
             !seen.has(obj.itemid)
           ) {
             seen.add(obj.itemid);
 
-            const nameLower = obj.name.toLowerCase();
-            if (!nameLower.includes('laptop') && !nameLower.includes('notebook')) {
+            const rawName = obj.name.trim();
+            const cleanName = cleanProductName(rawName);
+
+            // Skip kalau nama jadi kosong setelah cleaning
+            if (!cleanName || cleanName.length < 3) {
               invalidCount++;
               return;
             }
 
-            const ratingCount = obj.item_rating && Array.isArray(obj.item_rating.rating_count)
-              ? obj.item_rating.rating_count.reduce((a, b) => a + b, 0)
-              : (obj.rating_count || 0);
+            const ratingCount =
+              obj.item_rating && Array.isArray(obj.item_rating.rating_count)
+                ? obj.item_rating.rating_count.reduce((a, b) => a + b, 0)
+                : obj.rating_count || 0;
 
-            const { brand, model } = extractBrandAndModel(obj.name);
+            const brand = detectBrand(cleanName);
+            const model = extractModel(cleanName, brand);
+            const prices = extractPrices(obj);
+
+            // Skip kalau price tidak valid (0)
+            if (!prices.price || prices.price <= 0) {
+              invalidCount++;
+              return;
+            }
 
             products.push({
               itemid: obj.itemid,
               shopid: obj.shopid,
-              name: obj.name.trim(),
+              name: cleanName,
+              name_raw: rawName,
               brand: brand,
               model: model,
-              price: parsePrice(obj.price),
-              price_min: parsePrice(obj.price_min),
-              price_max: parsePrice(obj.price_max),
-              original_price: parsePrice(obj.price_before_discount),
+              price: prices.price,
+              original_price: prices.original_price,
+              price_min: prices.price_min,
+              price_max: prices.price_max,
+              discount_percentage: prices.discount_percentage,
               stock: obj.stock || 0,
-              product_url: 'https://shopee.co.id/product/' + obj.shopid + '/' + obj.itemid,
+              product_url:
+                "https://shopee.co.id/product/" +
+                obj.shopid +
+                "/" +
+                obj.itemid,
               historical_sold: obj.historical_sold || 0,
               sold: obj.sold || obj.historical_sold || 0,
-              rating_star: obj.item_rating ? (obj.item_rating.rating_star || 0) : 0,
+              rating_star: obj.item_rating
+                ? obj.item_rating.rating_star || 0
+                : 0,
               rating_count: ratingCount,
               shop_name: obj.shop_name || null,
               is_official_shop: obj.is_official_shop === true,
               location: obj.shop_location || obj.location || null,
-              discount: obj.discount || null,
               image: obj.image || null,
               scraped_at: new Date().toISOString(),
             });
           } else if (obj.itemid && obj.shopid && !obj.name) {
             invalidCount++;
           }
-
-          for (const key in obj) {
-            traverse(obj[key]);
-          }
+          for (const key in obj) traverse(obj[key]);
         }
       }
 
       traverse(data);
-
-      console.log(`[Avalon Harvester] Extracted ${products.length} valid products. Invalid skipped: ${invalidCount}`);
+      console.log(
+        `[Avalon Harvester] Extracted ${products.length} valid products. Skipped: ${invalidCount}`,
+      );
       return products;
-
     } catch (e) {
-      console.error('[Avalon Harvester] Error extracting product data:', e);
+      console.error("[Avalon Harvester] Error extracting product data:", e);
       return [];
     }
   }
 
+  // =========================================================================
+  // 7. FETCH & XHR INTERCEPTION (unchanged routing)
+  // =========================================================================
+  function isHarvestApi(url) {
+    return (
+      url &&
+      (url.includes("/api/v4/shop/get_shop_items") ||
+        url.includes("/api/v4/search/search_items") ||
+        url.includes("/api/v4/recommend/recommend"))
+    );
+  }
+
+  function handleProductData(parsedData, url) {
+    const products = extractProductsData(parsedData);
+    if (products.length > 0) {
+      const searchQuery = getSearchQuery(url);
+      document.dispatchEvent(
+        new CustomEvent("Avalon_Harvest_Data", {
+          detail: {
+            type: "harvest",
+            products: products,
+            search_query: searchQuery,
+          },
+        }),
+      );
+    }
+  }
+
+  function handleShopData(parsedData) {
+    const shops = extractShopData(parsedData);
+    if (shops.length > 0) {
+      document.dispatchEvent(
+        new CustomEvent("Avalon_Shop_Data", {
+          detail: { shops: shops },
+        }),
+      );
+    }
+  }
+
+  // ----- Fetch interception -----
   const OriginalFetch = window.fetch;
   window.fetch = new Proxy(OriginalFetch, {
     apply: function (target, thisArg, args) {
@@ -203,96 +468,47 @@
         args[0] && typeof args[0] === "object" && args[0].url
           ? args[0].url
           : args[0];
-      console.log("[Avalon Harvester] Intercepting fetch:", fetchUrl);
       const fetchPromise = Reflect.apply(target, thisArg, args);
       fetchPromise
         .then((response) => {
           try {
             const contentType = response.headers.get("content-type");
-            console.log(
-              "[Avalon Harvester] Response content-type:",
-              contentType,
-              "for URL:",
-              fetchUrl,
-            );
             if (contentType && contentType.includes("json")) {
-              console.log(
-                "[Avalon Harvester] Parsing JSON response from:",
-                fetchUrl,
-              );
               response
                 .clone()
                 .json()
                 .then((data) => {
                   try {
-                    const fetchUrl =
-                      args[0] && typeof args[0] === "object" && args[0].url
-                        ? args[0].url
-                        : args[0];
-                    console.log(
-                      "[Avalon Harvester] Parsed JSON data keys:",
-                      Object.keys(data),
-                      "from:",
-                      fetchUrl,
-                    );
-                    // New harvest logic
-                      if (
-                        fetchUrl &&
-                        (fetchUrl.includes("/api/v4/shop/get_shop_items") ||
-                          fetchUrl.includes("/api/v4/search/search_items") ||
-                          fetchUrl.includes("/api/v4/recommend/recommend"))
-                      ) {
-                        console.log('[Avalon Harvester] Extracting product data from:', fetchUrl);
-                        const products = extractProductsData(data);
-                        console.log('[Avalon Harvester] Extracted ' + products.length + ' products from API:', fetchUrl);
-                        if (products.length > 0) {
-                          const searchQuery = getSearchQuery(fetchUrl);
-                          console.log('[Avalon Harvester] Dispatching harvest event with', products.length, 'products, query:', searchQuery);
-                          document.dispatchEvent(
-                            new CustomEvent("Avalon_Harvest_Data", {
-                              detail: {
-                                type: "harvest",
-                                products: products,
-                                search_query: searchQuery,
-                              },
-                            }),
-                          );
-                        } else {
-                          console.log('[Avalon Harvester] No products extracted from:', fetchUrl);
-                        }
-                      } else if (isShopApi(fetchUrl)) {
-                        console.log('[Avalon Harvester] Extracting shop data from:', fetchUrl);
-                        const shops = extractShopData(data);
-                        if (shops.length > 0) {
-                          document.dispatchEvent(
-                            new CustomEvent("Avalon_Shop_Data", {
-                              detail: { shops: shops },
-                            }),
-                          );
-                        }
-                      } else {
-                        console.log('[Avalon Harvester] Skipping non-harvest API:', fetchUrl);
-                      }
-                  } catch (e) {}
+                    if (isHarvestApi(fetchUrl)) {
+                      handleProductData(data, fetchUrl);
+                    } else if (isShopApi(fetchUrl)) {
+                      handleShopData(data);
+                    }
+                  } catch (e) {
+                    /* swallow parser errors */
+                  }
                 })
-                .catch((e) => {});
+                .catch(() => {});
             }
-          } catch (e) {}
+          } catch (e) {
+            /* swallow header errors */
+          }
         })
-        .catch((e) => {});
+        .catch(() => {});
       return fetchPromise;
     },
   });
 
-  // Intercept XMLHttpRequest for APIs that use XHR instead of fetch
+  // ----- XHR interception -----
   const OriginalXHR = window.XMLHttpRequest;
   const OriginalOpen = OriginalXHR.prototype.open;
   OriginalXHR.prototype.open = new Proxy(OriginalOpen, {
     apply: function (target, thisArg, args) {
       try {
         thisArg._intercepted_url = args[1];
-        thisArg._intercepted_args = Array.from(args);
-      } catch (e) {}
+      } catch (e) {
+        /* swallow assignment errors */
+      }
       return Reflect.apply(target, thisArg, args);
     },
   });
@@ -304,57 +520,24 @@
         thisArg.addEventListener("load", function () {
           try {
             const contentType = this.getResponseHeader("content-type");
-            console.log('[Avalon Harvester] XHR response content-type:', contentType, 'for URL:', this._intercepted_url);
             if (contentType && contentType.includes("json")) {
-              console.log('[Avalon Harvester] Parsing XHR JSON response from:', this._intercepted_url);
               const parsedData = JSON.parse(this.responseText);
-              console.log('[Avalon Harvester] Parsed XHR JSON data keys:', Object.keys(parsedData), 'from:', this._intercepted_url);
-              // Check for harvest APIs
-              if (
-                this._intercepted_url &&
-                (this._intercepted_url.includes("/api/v4/shop/get_shop_items") ||
-                  this._intercepted_url.includes("/api/v4/search/search_items") ||
-                  this._intercepted_url.includes("/api/v4/recommend/recommend"))
-              ) {
-                console.log('[Avalon Harvester] Extracting product data from XHR:', this._intercepted_url);
-                const products = extractProductsData(parsedData);
-                console.log('[Avalon Harvester] Extracted ' + products.length + ' products from XHR API:', this._intercepted_url);
-                if (products.length > 0) {
-                  const searchQuery = getSearchQuery(this._intercepted_url);
-                  console.log('[Avalon Harvester] Dispatching harvest event from XHR with', products.length, 'products, query:', searchQuery);
-                  document.dispatchEvent(
-                    new CustomEvent("Avalon_Harvest_Data", {
-                      detail: {
-                        type: "harvest",
-                        products: products,
-                        search_query: searchQuery,
-                      },
-                    }),
-                  );
-                } else {
-                  console.log('[Avalon Harvester] No products extracted from XHR:', this._intercepted_url);
-                }
+              if (isHarvestApi(this._intercepted_url)) {
+                handleProductData(parsedData, this._intercepted_url);
               } else if (isShopApi(this._intercepted_url)) {
-                console.log('[Avalon Harvester] Extracting shop data from XHR:', this._intercepted_url);
-                const shops = extractShopData(parsedData);
-                if (shops.length > 0) {
-                  document.dispatchEvent(
-                    new CustomEvent("Avalon_Shop_Data", {
-                      detail: { shops: shops },
-                    }),
-                  );
-                }
-              } else {
-                console.log('[Avalon Harvester] Skipping non-harvest XHR API:', this._intercepted_url);
+                handleShopData(parsedData);
               }
             }
           } catch (e) {
-            console.error('[Avalon Harvester] Error in XHR interception:', e);
+            /* swallow xhr parse errors */
           }
         });
-      } catch (e) {}
+      } catch (e) {
+        /* swallow xhr listener errors */
+      }
       return Reflect.apply(target, thisArg, args);
     },
   });
 
+  console.log("[Avalon Harvester] inject.js v2 loaded — enhanced cleaning");
 })();
