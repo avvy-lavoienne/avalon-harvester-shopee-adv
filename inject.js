@@ -102,7 +102,7 @@
   // 3. NAME CLEANING — buang emoji, tag promo, karakter dekoratif, spam ALL CAPS
   // =========================================================================
   const SPAM_PREFIX_RE =
-    /^(PROMO|DISKON|MURAH|READY\s*STOCK|READY|FLASH\s*SALE|BIG\s*SALE|TERMURAH|BEST\s*SELLER|TERLARIS|COD|FREE\s*ONGKIR|BARANG\s*BARU|NEW|BARU|ORIGINAL|ORI|GARANSI\s*RESMI|GARANSI|GROSIR|HOT|VIRAL|TERBARU|LARIS|SALE|OBRAL|MEGA\s*SALE|SUPER\s*SALE|BONUS|GRATIS|FREE)\b[\s\-:,.!]*/i;
+    /^(PROMO|DISKON|MURAH|READY\s*STOCK|READY|FLASH\s*SALE|BIG\s*SALE|TERMURAH|BEST\s*SELLER|TERLARIS|COD|FREE\s*ONGKIR|BARANG\s*BARU|NEW\s*LAUNCH|NEW|BARU|ORIGINAL|ORI|GARANSI\s*RESMI|GARANSI|GROSIR|HOT|VIRAL|TERBARU|LARIS|SALE|OBRAL|MEGA\s*SALE|SUPER\s*SALE|BONUS|GRATIS|FREE|STOCK\s*TERBATAS|TERBATAS|LAUNCHING|UNIT\s*BARU|JUAL\s*MURAH|HARGA\s*MURAH|JAMINAN|BERKUALITAS|RECOMMENDED)\b[\s\-:,.!]*/i;
 
   // Karakter dekoratif yang sering jadi spam (★✦▪●◆ dll)
   const DECORATIVE_RE =
@@ -189,16 +189,46 @@
     // 3g'. Final strip leading/trailing dash residual setelah cleanup
     name = name.replace(/^[\s\-|/–—.,;:]+/, "").replace(/[\s\-|/–—.,;:]+$/, "").trim();
 
-    // 3h. Capitalize jika seluruh nama ALL CAPS (susah dibaca)
-    if (name.length > 10 && name === name.toUpperCase() && /[A-Z]/.test(name)) {
+    // 3h. Smart Title Case: hanya kalau seluruh nama ALL CAPS,
+    //     dan PRESERVE token alphanumeric (model code, SKU, chip code)
+    //     seperti FA506NCG, RTX3050, 7445HS, 14ARP10E, R735B1T
+    const isAllCaps =
+      name.length > 10 && name === name.toUpperCase() && /[A-Z]/.test(name);
+
+    if (isAllCaps) {
+      // Token alphanumeric (mengandung digit) → KEEP UPPERCASE
+      // Token alfabet murni → Title Case
+      // Token yang termasuk abbreviation list → ALL UPPERCASE
+      const ABBREV = new Set([
+        "SSD","HDD","RAM","ROM","CPU","GPU","USB","HDMI","LCD","LED","OLED",
+        "TV","PC","GB","TB","MB","KB","GHZ","MHZ","HZ","MP","HD","UHD","FHD",
+        "QHD","WUXGA","WQHD","WQXGA","SRGB","NTSC","IPS","VA","TN","RGB",
+        "NVME","SATA","PCIE","DDR","DDR4","DDR5","DDR3","LPDDR4","LPDDR5",
+        "WIFI","BT","NFC","LTE","5G","4G","3G","AI","VR","AR","IOT","NFC",
+        "RTX","GTX","DLSS","FSR","HDR","BL","BLIT","OHS","WIN","WIN11","WIN10",
+        "AMD","INTEL","NVIDIA","ASUS","MSI","HP","LG","JBL","DJI","KB",
+        "FHD+","FPS","API","SDK","SOC","NA","NPU","DPI","KBPS","MBPS","GBPS",
+      ]);
+
       name = name
-        .toLowerCase()
-        .replace(/\b\w/g, (c) => c.toUpperCase())
-        // tapi keep abbrev teknis tetap upper
-        .replace(
-          /\b(Ssd|Hdd|Ram|Cpu|Gpu|Usb|Hdmi|Lcd|Led|Oled|Tv|Pc|Gb|Tb|Mb|Kb|Ghz|Mhz|Hz|Mp|Hd|Uhd|Fhd|Qhd|4k|8k|Ai|Iot|Vr|Ar|Nfc|Bt|Wifi|Lte|5g|4g|3g)\b/gi,
-          (m) => m.toUpperCase(),
-        );
+        .split(/(\s+)/) // keep whitespace as separator
+        .map((tok) => {
+          if (/^\s+$/.test(tok)) return tok;
+          // Split out trailing/leading punctuation, process core
+          const m = tok.match(/^([^A-Za-z0-9]*)([A-Za-z0-9]+(?:[-/+][A-Za-z0-9]+)*)?(.*)$/);
+          if (!m || !m[2]) return tok;
+          const [, pre, core, post] = m;
+          const upperCore = core.toUpperCase();
+
+          // 1. Abbreviation? Keep all caps
+          if (ABBREV.has(upperCore)) return pre + upperCore + post;
+          // 2. Mengandung digit (model code / SKU)? Keep all caps
+          if (/\d/.test(core)) return pre + upperCore + post;
+          // 3. Alfabet murni → Title Case (huruf pertama capital)
+          const tc = core.charAt(0).toUpperCase() + core.slice(1).toLowerCase();
+          return pre + tc + post;
+        })
+        .join("");
     }
 
     return name;
@@ -211,7 +241,8 @@
     // Laptop & Computing
     "ASUS", "Acer", "Lenovo", "HP", "Dell", "MSI", "Apple", "Microsoft",
     "Toshiba", "Fujitsu", "LG", "Razer", "Alienware", "Gigabyte", "Huawei",
-    "Honor", "Advan", "Axioo", "Zyrex", "Hyrican",
+    "Honor", "Advan", "Axioo", "Zyrex", "Hyrican", "NEC", "VAIO", "Panasonic",
+    "Tecno", "AMOLI",
     // Smartphone
     "Samsung", "Xiaomi", "Realme", "Infinix", "Poco", "Oppo", "Vivo",
     "OnePlus", "Tecno", "Itel", "Nokia", "Asus ROG", "iQOO",
@@ -247,6 +278,20 @@
     (a, b) => b.length - a.length,
   );
 
+  // Blacklist untuk fallback brand: kata generik yang BUKAN brand
+  const BRAND_BLACKLIST = new Set([
+    "LAPTOP","GAMING","HEADPHONE","KEYBOARD","MOUSE","MOBILE","PHONE","SMARTPHONE",
+    "TABLET","CAMERA","KAMERA","SEPATU","SHOES","TAS","BAG","JAM","WATCH","BAJU",
+    "KAOS","CELANA","PANTS","DRESS","JAKET","JACKET","HOODIE","SANDAL","SLIPPER",
+    "PROMO","DISKON","MURAH","BARU","NEW","READY","STOCK","ORIGINAL","ORI",
+    "GARANSI","BONUS","GRATIS","FREE","BEST","HOT","TOP","SUPER","MEGA","FLASH",
+    "PROMOSI","SALE","OBRAL","BAGUS","TERBAIK","TERLARIS","TERMURAH","COD",
+    "PAKET","BUNDLE","SET","KIT","UNIT","FAST","INSTANT","ASLI","PREMIUM",
+    "NOTEBOOK","COMPUTER","PC","KOMPUTER","ELEKTRONIK","GADGET","ALAT","BARANG",
+    "PERLENGKAPAN","AKSESORIS","ACCESSORIES","FASHION","SPORT","OUTDOOR",
+    "KESEHATAN","KECANTIKAN","BEAUTY","SKINCARE","MAKEUP","PRODUK",
+  ]);
+
   function escapeRegex(s) {
     return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   }
@@ -261,11 +306,16 @@
       }
     }
     // Fallback: kata pertama yang ALL CAPS (>= 3 chars, alfanumerik)
+    // tapi SKIP kalau kata itu di blacklist (kata generik bukan brand)
     const allCapsMatch = name.match(/^[\W_]*([A-Z][A-Z0-9]{2,})\b/);
-    if (allCapsMatch) return allCapsMatch[1];
+    if (allCapsMatch && !BRAND_BLACKLIST.has(allCapsMatch[1].toUpperCase())) {
+      return allCapsMatch[1];
+    }
     // Fallback: kata pertama yang Title-case (mulai huruf kapital)
     const titleMatch = name.match(/^[\W_]*([A-Z][a-zA-Z]{2,})\b/);
-    if (titleMatch) return titleMatch[1];
+    if (titleMatch && !BRAND_BLACKLIST.has(titleMatch[1].toUpperCase())) {
+      return titleMatch[1];
+    }
     return null;
   }
 
@@ -277,12 +327,29 @@
         .replace(new RegExp(`\\b${escapeRegex(brand)}\\b`, "i"), "")
         .trim();
     }
-    // Stop di separator " - ", " | ", " / "
-    const stopAt = remaining.search(/\s[-|/–—]\s/);
-    if (stopAt > 0) remaining = remaining.substring(0, stopAt);
 
-    const words = remaining.split(/\s+/).filter(Boolean).slice(0, 6);
+    // Strip prefix generik yang bukan model: "Laptop", "Gaming", "Mobile" dll
+    const MODEL_PREFIX_NOISE =
+      /^(laptop|notebook|gaming|smartphone|mobile|phone|tablet|kamera|camera|headphone|earphone|earbuds|mouse|keyboard|monitor|tv|sepatu|shoes|tas|bag|baju|kaos|celana|jaket|jam|watch|charger|kabel|cable|adapter|stand|holder|case|cover|paket|bundle|set|kit|jual|murah|asli|original|new|baru|free|gratis|bonus|garansi|resmi|cod|ready|stock|untuk|for|with|dan|and|original|ori|baru|new)\s+/i;
+    let prev;
+    do {
+      prev = remaining;
+      remaining = remaining.replace(MODEL_PREFIX_NOISE, "").trim();
+    } while (remaining !== prev && remaining.length > 0);
+
+    // Stop di pertama kali ketemu spec keyword (Ram, SSD, Intel, AMD, Ryzen, Core, Gen, RTX, GTX, MX, dll)
+    const STOP_AT = /\b(ram|ssd|hdd|gpu|cpu|intel|amd|ryzen|core|gen|rtx|gtx|mx|nvidia|geforce|radeon|iris|vega|m1|m2|m3|m4|snapdragon|mediatek|exynos|kirin|dimensity|helio|apple|bionic|tensor|\d+gb|\d+tb|\d+mb|\d+inch|\d+\"|\d+hz|\d+mp|\d+mah|\d+w|\d+v|tahun|bulan|hari|second|bekas|mulus|berkualitas|win\s*\d+|windows|android|ios|chromeos|bnib|sein|tam|ibox|garansi|generasi|series|seri)\b/i;
+    const stopMatch = remaining.search(STOP_AT);
+    if (stopMatch > 0) remaining = remaining.substring(0, stopMatch);
+
+    // Stop di separator " - ", " | ", " / "
+    const sepAt = remaining.search(/\s[-|/–—]\s/);
+    if (sepAt > 0) remaining = remaining.substring(0, sepAt);
+
+    const words = remaining.split(/\s+/).filter(Boolean).slice(0, 5);
     let model = words.join(" ").trim().replace(/["""'']/g, "");
+    // Buang trailing dash/punct
+    model = model.replace(/[\s\-|/–—.,;:]+$/, "");
     if (model.length > 80) model = model.substring(0, 80);
     return model || null;
   }
