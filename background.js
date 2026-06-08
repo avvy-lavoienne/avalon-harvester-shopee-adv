@@ -1,5 +1,5 @@
 // [Avalon Harvester] Background script loaded - Enterprise Edition
-console.log("[Avalon Harvester] Enterprise Background script loaded");
+console.log("[Avalon Harvester] Background script loaded - Full Auto Mode");
 
 // =========================================================================
 // KONFIGURASI SUPABASE
@@ -19,6 +19,17 @@ chrome.runtime.onInstalled.addListener(() => {
         "avalon-node-" + Math.random().toString(36).substr(2, 6);
       chrome.storage.local.set({ worker_id: newWorkerId });
       console.log("[Avalon Harvester] New Worker ID generated:", newWorkerId);
+    }
+  });
+});
+
+// Bersihkan tab Shopee berlebih saat startup
+chrome.runtime.onStartup.addListener(() => {
+  chrome.tabs.query({ url: "*://*.shopee.co.id/*" }, (tabs) => {
+    if (tabs.length > 1) {
+      for (let i = 1; i < tabs.length; i++) {
+        chrome.tabs.remove(tabs[i].id);
+      }
     }
   });
 });
@@ -139,28 +150,31 @@ const AntiDetection = {
 AntiDetection.applyStickyHeadersRule();
 
 // ====================== SUPABASE HELPER ======================
-async function getNextKeywordFromSupabase() {
+async function getNextKeyword() {
   try {
     const now = new Date().toISOString();
-    
-    const res = await fetch(
-      `${SUPABASE_KEYWORDS_ENDPOINT}?or=(status.eq.pending,and(status.eq.done,next_scrape_at.lt.${now}))&order=priority.asc,created_at.asc&limit=1`,
-      {
-        headers: {
-          "apikey": SUPABASE_ANON_KEY,
-          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+
+    const query = `${SUPABASE_KEYWORDS_ENDPOINT}?select=*` +
+      `&or=(and(status.eq.pending),and(status.eq.done,next_scrape_at.lt.${now}))` +
+      `&order=priority.asc,last_scraped_at.asc` +
+      `&limit=1`;
+
+    const res = await fetch(query, {
+      headers: {
+        "apikey": SUPABASE_ANON_KEY,
+        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!res.ok) {
-      console.error(`[Avalon] Supabase keywords fetch failed: ${res.status} ${res.statusText}`);
+      console.error(`[Avalon] Supabase keywords fetch failed: ${res.status}`);
       return null;
     }
-    
+
     const data = await res.json();
-    console.log(`[Avalon] Supabase keywords response: ${data.length} row(s)`);
+    console.log(`[Avalon] Found next keyword: ${data.length > 0 ? data[0].keyword : 'NONE'}`);
+
     return data.length > 0 ? data[0] : null;
   } catch (error) {
     console.error("Error fetching keyword from Supabase:", error);
@@ -168,12 +182,9 @@ async function getNextKeywordFromSupabase() {
   }
 }
 
-async function updateKeywordStatus(keywordId, status, lastScrapedAt = null) {
+async function updateKeywordStatus(id, status) {
   try {
-    const payload = {
-      status: status,
-      last_scraped_at: lastScrapedAt || new Date().toISOString(),
-    };
+    const payload = { status, last_scraped_at: new Date().toISOString() };
 
     if (status === "done") {
       const nextDate = new Date();
@@ -181,7 +192,7 @@ async function updateKeywordStatus(keywordId, status, lastScrapedAt = null) {
       payload.next_scrape_at = nextDate.toISOString();
     }
 
-    await fetch(`${SUPABASE_KEYWORDS_ENDPOINT}?id=eq.${keywordId}`, {
+    await fetch(`${SUPABASE_KEYWORDS_ENDPOINT}?id=eq.${id}`, {
       method: "PATCH",
       headers: {
         "apikey": SUPABASE_ANON_KEY,
@@ -203,15 +214,27 @@ async function startHarvestingFromSupabase() {
     return;
   }
 
-  const keywordData = await getNextKeywordFromSupabase();
+  const keywordData = await getNextKeyword();
   
   if (!keywordData) {
-    console.log("[Avalon] No pending keywords found in Supabase");
+    console.log("[Avalon] No pending keywords found");
     chrome.storage.local.set({ isAutoSweep: false });
     return;
   }
 
   currentTask = keywordData;
+
+  const searchUrl = `https://shopee.co.id/search?keyword=${encodeURIComponent(keywordData.keyword)}`;
+
+  const tabs = await chrome.tabs.query({ url: "*://*.shopee.co.id/*" });
+
+  if (tabs.length > 0) {
+    await chrome.tabs.update(tabs[0].id, { url: searchUrl });
+    console.log(`[Avalon] Updated existing tab with new keyword: ${keywordData.keyword}`);
+  } else {
+    await chrome.tabs.create({ url: searchUrl });
+    console.log(`[Avalon] Created new tab for keyword: ${keywordData.keyword}`);
+  }
 
   chrome.storage.local.set({
     keyword: keywordData.keyword,
@@ -219,20 +242,11 @@ async function startHarvestingFromSupabase() {
     category_group: keywordData.category_group,
     currentKeywordId: keywordData.id,
     currentPage: 0,
-    maxPages: 12,
-    isAutoSweep: true,
+    maxPages: keywordData.max_pages || 12,
+    isAutoSweep: true
   });
 
-  const url = `https://shopee.co.id/search?keyword=${encodeURIComponent(keywordData.keyword)}`;
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (tabs[0]) {
-      chrome.tabs.update(tabs[0].id, { url });
-    } else {
-      chrome.tabs.create({ url });
-    }
-  });
-
-  console.log(`Starting harvest for keyword: ${keywordData.keyword}`);
+  console.log(`🔄 Starting harvest: "${keywordData.keyword}"`);
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -270,9 +284,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       updateKeywordStatus(currentTask.id, "done");
       currentTask = null;
     }
-    setTimeout(() => {
-      startHarvestingFromSupabase();
-    }, 2000);
+    setTimeout(startHarvestingFromSupabase, 3000);
   }
 
   if (message.action === "GET_CIRCUIT_BREAKER_STATUS") {
@@ -335,7 +347,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         search_query: searchQuery,
         project_id: projectId,
         category_group: categoryGroup,
-        product_url: product.product_url || 'https://shopee.co.id/product/' + shopId + '/' + itemId,
+        product_url: product.product_url || `https://shopee.co.id/product/${shopId}/${itemId}`,
         image_url: product.image || null,
         source_platform: "shopee",
         scraped_at: product.scraped_at || batchTimestamp,

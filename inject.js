@@ -58,12 +58,35 @@
   }
 
   function parsePrice(raw) {
-    if (raw == null || raw === 0) return 0;
-    const num = typeof raw === 'string' ? parseFloat(raw) : raw;
+    if (raw == null || raw === 0 || raw === "" || raw === "0") return 0;
+
+    let str = String(raw).trim().replace(/[^0-9.,-]/g, '');
+    let num = parseFloat(str.replace(',', '.'));
+
     if (isNaN(num) || num <= 0) return 0;
-    if (num > 100000000) return Math.round(num / 1000000);
-    if (num > 10000000) return Math.round(num / 100000);
-    return Math.round(num / 100);
+
+    const original = num;
+    let final = num;
+
+    if (num > 200000000) {
+      final = Math.round(num / 10000);
+    } else if (num > 50000000) {
+      final = Math.round(num / 100);
+    } else if (num > 5000000) {
+      final = Math.round(num / 10);
+    }
+
+    // Safety net kuat
+    if (final > 45000000) {
+      final = Math.round(final / 10);
+    } else if (final > 25000000 && final % 1000 === 0) {
+      final = Math.round(final / 10);
+    } else if (final < 150000 && final > 10000) {
+      final = Math.round(final * 10);
+    }
+
+    console.log(`[Price Parser] Raw: ${original} \u2192 Final: ${final}`);
+    return final;
   }
 
   function extractBrandAndModel(productName) {
@@ -107,7 +130,6 @@
 
       function traverse(obj) {
         if (obj && typeof obj === 'object') {
-          // Validasi wajib: harus punya itemid, shopid, dan name
           if (
             obj.itemid &&
             obj.shopid &&
@@ -118,7 +140,12 @@
           ) {
             seen.add(obj.itemid);
 
-            // Hitung total rating_count jika berbentuk array
+            const nameLower = obj.name.toLowerCase();
+            if (!nameLower.includes('laptop') && !nameLower.includes('notebook')) {
+              invalidCount++;
+              return;
+            }
+
             const ratingCount = obj.item_rating && Array.isArray(obj.item_rating.rating_count)
               ? obj.item_rating.rating_count.reduce((a, b) => a + b, 0)
               : (obj.rating_count || 0);
@@ -134,7 +161,7 @@
               price: parsePrice(obj.price),
               price_min: parsePrice(obj.price_min),
               price_max: parsePrice(obj.price_max),
-              original_price: obj.price_before_discount ? parsePrice(obj.price_before_discount) : null,
+              original_price: parsePrice(obj.price_before_discount),
               stock: obj.stock || 0,
               product_url: 'https://shopee.co.id/product/' + obj.shopid + '/' + obj.itemid,
               historical_sold: obj.historical_sold || 0,
@@ -149,7 +176,7 @@
               scraped_at: new Date().toISOString(),
             });
           } else if (obj.itemid && obj.shopid && !obj.name) {
-            invalidCount++; // Hitung produk yang tidak valid
+            invalidCount++;
           }
 
           for (const key in obj) {
