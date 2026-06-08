@@ -2,105 +2,90 @@
 
 ## 📋 Original Problem Statement
 User punya Chrome Extension untuk scrape produk Shopee → kirim ke Supabase. Issue awal:
-1. **Cleaning nama produk** kurang bersih
-2. **Logic ekstraksi price & original_price** salah (heuristic threshold)
-3. **Scalability untuk produk non-laptop** (saat ini terlalu laptop-centric)
+1. Cleaning nama produk kurang bersih
+2. Logic ekstraksi price salah (heuristic threshold)
+3. Scalability multi-kategori
+4. **Tokens DeepSeek wasted** karena per-product call → user usul: generate schema sekali per keyword, Python pakai schema itu (regex + rapidfuzz)
 
-Pertanyaan strategis user: butuh Python script atau DeepSeek LLM processing?
-Jawaban: **Hybrid (rule-based Python + DeepSeek fallback)** dengan arsitektur **category-agnostic**.
-
-## 🎯 Tech Stack
-- **Chrome Extension** (Manifest V3): `inject.js` intercept Shopee API → extract & basic clean → Supabase REST
-- **Python Worker** (asyncio): kategorisasi multi-kategori, ekstrak spec, DeepSeek fallback
-- **Supabase**: `shopee_products` table dengan kolom enriched (category, specs JSONB)
-- **DeepSeek LLM** (deepseek-chat, OpenAI-compatible): fallback ~5-10% kasus
-
-## 🏗 Architecture
+## 🎯 Final Architecture (v4)
 
 ```
-Chrome Extension (background.js + inject.js)
-    ↓ HTTP intercept (fetch + XHR) Shopee API
-    ↓ basic clean (price parser, name cleaner, brand detect, model extract)
+Chrome Extension (inject.js + background.js)
+    ↓ intercept Shopee API, basic clean (price, name, brand, model)
 Supabase shopee_products (cleaning_status='pending')
     ↓
-Python Worker (asyncio)
-    1. detect_category() — keyword match per kategori
-    2. parser.extract_specs() — regex per kategori
-    3. Fallback ke DeepSeek kalau category=generic ATAU specs<2
-    ↓ UPDATE row dengan category, specs (JSONB), cleaning_status='done'
-Supabase (enriched, analytics-ready)
+Python Worker (asyncio):
+  Per produk:
+    1. Lookup keyword_schemas[search_query]
+       HIT → apply (regex + rapidfuzz) → 0 token
+       MISS → DeepSeek generate schema (1×) → cache → apply
+    2. UPDATE row dengan category, specs JSONB, brand
+Supabase shopee_products (enriched)
 ```
+
+**Cost**: ~$0.001/keyword (one-time) × 50 keyword = $0.05 total untuk 10rb produk
+(vs $0.30 jika per-product LLM call → **40× lebih murah**)
 
 ## ✅ Implemented (Jan 2026)
 
-### v2 — Enhanced inject.js Extraction & Cleaning
-- **Price parser deterministik**: `Math.round(num / 100000)` (Shopee micro-unit)
-- **Price fallback chain**: `price → price_min`, `price_before_discount → price_min_before_discount → price_max_before_discount`
-- **Auto discount %** dari selisih harga
-- **price_min, price_max** untuk produk varian
-- **Name cleaning multi-step**: emoji, dekoratif, tag promo, parens-with-promo (preserve specs), spam prefix/trailing, discount residual, ALL CAPS smart Title Case (preserve model code FA506NCG/RTX3050/7445HS)
-- **Brand list 100+** + canonical casing + blacklist generic words ("LAPTOP"/"GAMING")
-- **Model extraction**: stop at spec keywords (Intel/AMD/Ryzen/Ram/SSD/GPU)
-- **Hapus filter laptop/notebook** hardcoded
+### v2 — Chrome Extension Enhanced
+- Price parser deterministik (Shopee micro-unit: `num / 100000`)
+- Price fallback chain (price_min, price_max, price_before_discount variants)
+- Auto discount %, sanity check
+- Name cleaning 9-step (emoji, decorative, tag promo, parens-with-spec-preserve, spam prefix/trailing, smart Title Case preserve model code, leading/trailing dash)
+- Brand list 100+ + blacklist generic words
+- Model extraction stops at spec keywords
+- File: `inject.js`, `background.js`, `supabase_migration.sql`
 
-### v3 — Python Worker Multi-Category + DeepSeek Hybrid
-- **Category-agnostic architecture**: `/app/worker/categories/` registry
-- **Parser per kategori** (rule-based regex):
-  - `laptop.py`: CPU/GPU/RAM/storage/screen/refresh/OS
-  - `smartphone.py`: RAM/storage/chipset/camera/battery/network
-  - `audio.py`: type/connection/BT version/ANC/battery/driver/IPX
-  - `tv.py`: size/resolution/panel/Hz/platform
-  - `fashion.py`: type/size/colors/gender
-  - `generic.py`: fallback numeric measurements
-- **Category detector**: keyword scoring + boost dari search_query
-- **DeepSeek client**: OpenAI-compatible (AsyncOpenAI), JSON mode, retry with exponential backoff
-- **Pipeline**: rule-first, LLM fallback hanya kalau perlu (~5-10% kasus)
-- **Async batching**: BATCH_SIZE=30, MAX_CONCURRENT_LLM=4, semaphore
-- **Cost**: ~300 tokens/produk × $0.42/1M ≈ $0.0001/produk
+### v3 — Python Worker (Per-product LLM, deprecated)
+- 6 kategori built-in (laptop, smartphone, audio, tv, fashion, generic)
+- DeepSeek fallback per produk → REPLACED by v4
 
-### Test Results (offline)
-Category accuracy: **11/11** (laptop/smartphone/audio/tv/fashion/generic)
-DeepSeek LLM live test: ✅ ROG Ally (brand+model+storage+os), Tas Eiger (brand+size+color)
+### v4 — Schema-Per-Keyword (CURRENT, OPTIMIZED)
+- **`schema_generator.py`**: DeepSeek 1× per keyword, generate regex+brand+fuzzy JSON
+- **`schema_engine.py`**: apply schema dengan multi-match + sanity validation + TB→GB conversion + rapidfuzz brand
+- **`schema_cache.py`**: Supabase `keyword_schemas` table ops (upsert, fetch, counter)
+- **`pipeline.py`**: pakai cached schema (memoized in-process + Supabase persistent)
+- **Per-keyword lock**: race-safe (5 concurrent products → 1 LLM call)
+- **Built-in fallback** ke `categories/*.py` rule-based kalau schema gagal
+- Test: schema gen 2569 tokens (~$0.001), apply ke produk lain perfect (CPU/GPU/RAM/Storage TB-converted/OS/model_family)
 
 ## 📁 Files
 
-### Chrome Extension (root /app)
-- `inject.js` — extractor & cleaner (REWRITTEN v3)
-- `background.js` — Supabase relay (mapPayload v3 with new fields)
-- `content.js`, `popup.js`, `popup.html`, `manifest.json`, `rules.json`, `content.css`
-- `supabase_migration.sql` — v2: name_raw, price_min, price_max
-- `supabase_migration_v3.sql` — v3: category, specs JSONB, cleaning_status, trigger auto-set pending
-- `CHANGES.md` — v2 changelog
+### Chrome Extension (/app)
+- `inject.js`, `background.js`, `content.js`, `popup.js`, `popup.html`, `manifest.json`, `rules.json`, `content.css`
+- `supabase_migration.sql` (v2)
+- `supabase_migration_v3.sql` (v3: category, specs JSONB, cleaning_status)
+- `supabase_migration_v4.sql` (v4: keyword_schemas table)
+- `CHANGES.md`
 
 ### Python Worker (/app/worker)
 - `requirements.txt`, `.env.example`, `README.md`
-- `config.py` — env loader
-- `main.py` — entry point (loop + signal handler)
-- `pipeline.py` — process_product (detect → parse → LLM fallback)
-- `category_detector.py` — keyword scoring
-- `deepseek_client.py` — OpenAI-compatible client w/ retry
-- `supabase_client.py` — async wrapper around sync supabase-py
-- `categories/` — base + 6 kategori
-- `test_offline.py`, `test_llm.py` — verification scripts
+- `config.py`, `main.py` — entry
+- `pipeline.py` — schema-first
+- `schema_generator.py` — DeepSeek call
+- `schema_engine.py` — regex+rapidfuzz apply
+- `schema_cache.py` — Supabase ops
+- `supabase_client.py` — generic ops
+- `category_detector.py`, `categories/` — fallback built-in parsers
+- `deepseek_client.py` — legacy per-product (kept for emergency fallback)
+- `test_offline.py`, `test_llm.py`, `test_e2e_schema.py`
 
 ## 🔑 Credentials
-- Supabase URL: `https://fzomsxxbqdhgeafhygkp.supabase.co` (hardcoded di background.js)
-- Anon Key: in background.js (untuk extension write)
-- **Service Role Key**: BELUM diberikan user — perlu untuk Python worker. User isi di `/app/worker/.env`
-- DeepSeek API Key: `sk-e33da053521b4811a9633b3127ebfc8e` (provided by user, in .env.example)
+- Supabase URL: `https://fzomsxxbqdhgeafhygkp.supabase.co` (in background.js)
+- DeepSeek API Key: `sk-e33da053521b4811a9633b3127ebfc8e` (in .env.example, provided by user)
+- **Supabase Service Role Key: PENDING** — user perlu isi di `/app/worker/.env`
 
 ## 📝 Next Action Items
-- [ ] **P0 (USER)**: Run `/app/supabase_migration.sql` lalu `/app/supabase_migration_v3.sql` di Supabase
-- [ ] **P0 (USER)**: Get Supabase Service Role Key → masukkan ke `/app/worker/.env`
-- [ ] **P0 (USER)**: Reload Chrome extension → harvest beberapa produk variasi (HP/audio/TV/fashion)
-- [ ] **P0 (USER)**: Run `cd /app && python -m worker.main` → cek log + Supabase `category`+`specs` terisi
-- [ ] **P1**: Tambah kategori sesuai kebutuhan klien (smartwatch, kamera, kosmetik, makanan, dll)
-- [ ] **P2**: Dashboard analytics (FastAPI + React) untuk visualisasi data
-- [ ] **P2**: Price history table + trigger → alert price drop via Telegram/Discord
-- [ ] **P3**: Move Supabase keys & DeepSeek key ke vault/secret manager untuk production
+- [ ] **P0 (USER)**: Run SQL migrations urut: `supabase_migration.sql`, `_v3.sql`, `_v4.sql` di Supabase
+- [ ] **P0 (USER)**: Service Role Key → `/app/worker/.env`
+- [ ] **P0 (USER)**: `cd /app && pip install -r worker/requirements.txt`
+- [ ] **P0 (USER)**: Reload extension + harvest beberapa keyword berbeda
+- [ ] **P0 (USER)**: `python -m worker.main` → cek log + verify `keyword_schemas` table terisi + `specs` di shopee_products terisi
+- [ ] **P2**: Dashboard (FastAPI + React) untuk schema quality monitoring (miss_rate per keyword)
+- [ ] **P2**: Auto-regenerate schema kalau miss_rate > 30% (currently manual via DELETE)
 
 ## 💡 Enhancement Ideas
-- **Price-drop alert**: history table → notif >X% turun dari avg 30 hari
-- **Spec-based price intelligence**: "Rp/GB RAM" benchmark per kategori
-- **Multi-tenant**: kasih klien akses Supabase view filtered by project_id mereka → jual dashboard subscription
-- **Auto-categorize Shopee URL**: berdasar URL `/cat-` segment, prefill category sebelum scrape
+- Multi-tenant dashboard subscription (price intelligence, brand share)
+- Price-drop alert via Telegram (history table + trigger)
+- Auto-suggest harvesting keywords berdasar trending Shopee category
