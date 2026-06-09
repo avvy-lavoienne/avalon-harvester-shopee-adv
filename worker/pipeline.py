@@ -7,7 +7,7 @@ Workflow:
    - MISS → generate schema via DeepSeek 1×, cache, lalu apply
 
 Hasil: 1 LLM call per UNIQUE keyword, bukan per produk.
-Harga: price_range dihitung empiris dari sample (P5-P95), tanpa LLM.
+Harga: price_range (P10 lower-bound) filter produk terlalu murah, tanpa upper bound.
 """
 from __future__ import annotations
 import asyncio
@@ -29,14 +29,15 @@ _GLOBAL_LOCK = asyncio.Lock()
 
 
 def _calc_price_range(samples: list[dict]) -> dict[str, int] | None:
-    """Hitung P5 dan P95 dari sample prices."""
+    """Hitung minimum price (P10) dari sample.
+    Hanya lower bound — tidak ada upper bound agar produk mahal tidak kena filter.
+    """
     prices = [s["price"] for s in samples if isinstance(s.get("price"), (int, float)) and s["price"] > 0]
-    if len(prices) < 3:
+    if len(prices) < 5:
         return None
     prices.sort()
-    p5 = prices[max(0, int(len(prices) * 0.05))]
-    p95 = prices[min(len(prices) - 1, int(len(prices) * 0.95))]
-    return {"min": p5, "max": p95}
+    p10 = prices[max(0, int(len(prices) * 0.10))]
+    return {"min": p10}
 
 
 async def _get_or_generate_schema(keyword: str) -> dict[str, Any] | None:
@@ -121,7 +122,7 @@ async def process_product(row: dict[str, Any]) -> dict[str, Any]:
             price_range = _PRICE_RANGE_MEMO.get(search_query)
             product_price = row.get("price")
             if price_range and isinstance(product_price, (int, float)) and product_price > 0:
-                if product_price < price_range["min"] or product_price > price_range["max"]:
+                if product_price < price_range["min"]:
                     cleaning_method = "schema (price_outlier)"
                     category = "outlier"
         else:
