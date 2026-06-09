@@ -193,7 +193,7 @@
     //     dan PRESERVE token alphanumeric (model code, SKU, chip code)
     //     seperti FA506NCG, RTX3050, 7445HS, 14ARP10E, R735B1T
     const isAllCaps =
-      name.length > 10 && name === name.toUpperCase() && /[A-Z]/.test(name);
+      name.length > 3 && name === name.toUpperCase() && /[A-Z]/.test(name);
 
     if (isAllCaps) {
       // Token alphanumeric (mengandung digit) → KEEP UPPERCASE
@@ -290,6 +290,9 @@
     "NOTEBOOK","COMPUTER","PC","KOMPUTER","ELEKTRONIK","GADGET","ALAT","BARANG",
     "PERLENGKAPAN","AKSESORIS","ACCESSORIES","FASHION","SPORT","OUTDOOR",
     "KESEHATAN","KECANTIKAN","BEAUTY","SKINCARE","MAKEUP","PRODUK",
+    "STAND","COOLING","HEADSET","KABEL","WEBCAM","MEJA","KANTOR","PORTABLE",
+    "HOLDER","DUDUKAN","DESK","LED","COOLINGPAD","SPEAKER","CHARGER","CABLE",
+    "ADAPTER","STAND",
   ]);
 
   function escapeRegex(s) {
