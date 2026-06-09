@@ -155,6 +155,11 @@ def apply_schema(
     brand_map = schema.get("brands", {}) or {}
     brand = detect_brand_fuzzy(name, brand_map)
 
+    # 1b. Filter brand terhadap keyword-specific blacklist
+    brand_blacklist = schema.get("brand_blacklist", []) or []
+    if brand and brand.upper() in [b.upper() for b in brand_blacklist]:
+        brand = None
+
     # 2. Spec extraction via regex patterns
     patterns = schema.get("spec_patterns", {}) or {}
     value_types = schema.get("spec_value_types", {}) or {}

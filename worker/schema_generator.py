@@ -21,6 +21,7 @@ Output WAJIB JSON valid:
 {
   "category": "<laptop|smartphone|audio|tv|fashion|kitchen|kosmetik|generic|...>",
   "brands": { "BrandCanonical": ["alias", "typo"], ... },
+  "brand_blacklist": ["KABEL", "CHARGER", "CASE", "STAND", ...],
   "model_families": ["TUF", "ROG", ...],
   "spec_patterns": {
     "cpu":           "regex Python — capture VALUE di group 1",
@@ -31,6 +32,7 @@ Output WAJIB JSON valid:
   "spec_value_types": { "cpu": "str", "ram_gb": "int", ... }
 }
 
+brand_blacklist: daftar kata UPPERCASE yang SERING muncul di nama produk keyword ini tapi BUKAN brand. Contoh untuk keyword "laptop": ["KABEL","CHARGER","CASE","STAND","COOLING","HEADSET","WEBCAM","MEJA","HOLDER","DUDUKAN","ADAPTER","SPEAKER"]. Jangan masukkan brand asli.
 ATURAN KRITIS regex Python:
 1. WAJIB capture group 1 dengan `()` (BUKAN `(?:)`). Group 1 = nilai yang mau diambil.
 2. WAJIB pakai `\\b` di awal/akhir pattern supaya tidak salah match angka random.
