@@ -19,6 +19,7 @@ from .schema_cache import get_schema, save_schema, fetch_samples, increment_coun
 from .schema_generator import generate_schema
 from .categories import get_parser
 from .category_detector import detect_category
+from .known_brands import is_laptop_brand
 
 logger = logging.getLogger(__name__)
 
@@ -133,6 +134,18 @@ async def process_product(row: dict[str, Any]) -> dict[str, Any]:
         category, _ = detect_category(name)
         specs = get_parser(category).extract_specs(name)
         cleaning_method = "rule (no_query)"
+
+    # Filter brand: untuk keyword laptop, hanya brand dalam whitelist yang lolos
+    final_brand = detected_brand or row.get("brand")
+    is_laptop_query = any(kw in search_query.lower() for kw in ["laptop", "notebook", "gaming"])
+    if is_laptop_query and final_brand and not is_laptop_brand(final_brand):
+        cleaning_method = cleaning_method + " (brand_outlier)"
+        category = "outlier"
+        detected_brand = None
+    elif is_laptop_query and not final_brand:
+        # Tidak terdeteksi brand sama sekali → kemungkinan aksesoris
+        cleaning_method = cleaning_method + " (no_brand)"
+        category = "outlier"
 
     payload: dict[str, Any] = {
         "category": category,
