@@ -495,8 +495,7 @@
     return (
       url &&
       (url.includes("/api/v4/shop/get_shop_items") ||
-        url.includes("/api/v4/search/search_items") ||
-        url.includes("/api/v4/recommend/recommend"))
+        url.includes("/api/v4/search/search_items"))
     );
   }
 

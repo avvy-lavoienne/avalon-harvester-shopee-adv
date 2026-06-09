@@ -5,3 +5,10 @@ credentials.json
 *.pem
 *.key
 .credentials
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/

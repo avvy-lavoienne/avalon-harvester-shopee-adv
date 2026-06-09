@@ -84,11 +84,15 @@ document.addEventListener("Avalon_Harvest_Data", (event) => {
 const startSweep = async () => {
   if (isSweeping) return;
   isSweeping = true;
-  currentPage = 0;
 
-  chrome.storage.local.get(["maxPages"], (result) => {
-    maxPages = result.maxPages || 12;
-  });
+  const urlParams = new URLSearchParams(location.search);
+  const urlPage = parseInt(urlParams.get("page"));
+  currentPage = (urlPage && !isNaN(urlPage)) ? urlPage - 1 : 0;
+
+  const storage = await new Promise((resolve) =>
+    chrome.storage.local.get(["maxPages"], resolve)
+  );
+  maxPages = storage.maxPages || 12;
 
   while (isSweeping && currentPage < maxPages) {
     currentPage++;
@@ -140,19 +144,20 @@ const startSweep = async () => {
     const nextBtn = findNextButton();
 
     if (!nextBtn || currentPage >= maxPages) {
-      updateStatus(`Keyword selesai. Total ${currentPage} halaman.`);
+      const completed = currentPage >= maxPages;
+      updateStatus(
+        completed
+          ? `Keyword selesai. ${currentPage} halaman tercapai.`
+          : `Keyword terhenti. Hanya ${currentPage}/${maxPages} halaman (tanpa tombol next).`
+      );
       chrome.storage.local.set({ isAutoSweep: false });
-      chrome.runtime.sendMessage({ action: "KEYWORD_FINISHED" });
+      chrome.runtime.sendMessage({ action: "KEYWORD_FINISHED", completed, currentPage, maxPages });
       isSweeping = false;
-      break;
+      return;
     }
 
     nextBtn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     await new Promise((r) => setTimeout(r, randomDelay(4000, 6000)));
-  }
-
-  if (currentPage >= maxPages) {
-    chrome.runtime.sendMessage({ action: "KEYWORD_FINISHED" });
   }
 
   isSweeping = false;

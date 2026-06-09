@@ -46,7 +46,6 @@ def _save_schema_sync(
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "refreshed_at": datetime.now(timezone.utc).isoformat(),
     }
-    # Upsert by keyword
     supabase.table(SCHEMA_TABLE).upsert(payload, on_conflict="keyword").execute()
 
 
@@ -64,7 +63,6 @@ async def save_schema(
 
 
 def _increment_counter_sync(keyword: str, miss: bool = False) -> None:
-    # Atomic increment via RPC bisa, tapi cukup pakai update +1 sederhana
     col = "miss_count" if miss else "product_count"
     try:
         resp = supabase.table(SCHEMA_TABLE).select(col).eq("keyword", keyword).limit(1).execute()
@@ -80,22 +78,22 @@ async def increment_counter(keyword: str, miss: bool = False) -> None:
     await asyncio.to_thread(_increment_counter_sync, keyword, miss)
 
 
-def _fetch_samples_sync(keyword: str, limit: int = 12) -> list[str]:
-    """Ambil sample nama produk dari keyword tertentu untuk schema generation."""
+def _fetch_samples_sync(keyword: str, limit: int = 12) -> list[dict]:
+    """Ambil sample nama + harga produk dari keyword tertentu."""
     resp = (
         supabase.table("shopee_products")
-        .select("product_name, name_raw")
+        .select("product_name, name_raw, price")
         .eq("search_query", keyword)
         .limit(limit)
         .execute()
     )
-    names = []
+    result = []
     for r in resp.data or []:
         n = r.get("name_raw") or r.get("product_name")
         if n:
-            names.append(n)
-    return names
+            result.append({"name": n, "price": r.get("price")})
+    return result
 
 
-async def fetch_samples(keyword: str, limit: int = 12) -> list[str]:
+async def fetch_samples(keyword: str, limit: int = 12) -> list[dict]:
     return await asyncio.to_thread(_fetch_samples_sync, keyword, limit)

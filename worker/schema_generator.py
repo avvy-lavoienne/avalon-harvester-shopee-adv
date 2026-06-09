@@ -59,8 +59,16 @@ ATURAN LAIN:
 """.strip()
 
 
-def build_user_prompt(keyword: str, samples: list[str]) -> str:
-    sample_block = "\n".join(f"- {s}" for s in samples[:15])
+def build_user_prompt(keyword: str, samples: list[dict]) -> str:
+    sample_lines = []
+    for s in samples[:15]:
+        name = s.get("name", "")
+        price = s.get("price")
+        if price:
+            sample_lines.append(f"- {name}  (Rp {price:,})")
+        else:
+            sample_lines.append(f"- {name}")
+    sample_block = "\n".join(sample_lines)
     return (
         f"Keyword: {keyword}\n\n"
         f"Contoh nama produk dari Shopee (search hasil keyword ini):\n{sample_block}\n\n"
@@ -69,13 +77,8 @@ def build_user_prompt(keyword: str, samples: list[str]) -> str:
 
 
 async def generate_schema(
-    keyword: str, sample_names: list[str]
+    keyword: str, sample_names: list[dict]
 ) -> dict[str, Any]:
-    """Call DeepSeek to generate comprehensive schema for a keyword.
-
-    Returns: {"schema": {...}, "category": str, "usage": dict, "model": str}
-    Raises: Exception kalau gagal setelah retry.
-    """
     user_msg = build_user_prompt(keyword, sample_names)
 
     max_retries = 3
@@ -97,7 +100,6 @@ async def generate_schema(
             content = response.choices[0].message.content or "{}"
             data = json.loads(content)
 
-            # Validation: must have category + spec_patterns
             if "category" not in data:
                 raise ValueError("Schema missing 'category' field")
             if "spec_patterns" not in data or not isinstance(

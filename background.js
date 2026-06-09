@@ -9,7 +9,9 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const SUPABASE_API_ENDPOINT = `${SUPABASE_URL}/rest/v1/shopee_products`;
 const SUPABASE_KEYWORDS_ENDPOINT = `${SUPABASE_URL}/rest/v1/harvesting_keywords`;
 
-let currentTask = null; // Menyimpan keyword yang sedang aktif
+let currentTask = null;
+const completedKeywordIds = new Set();
+let currentProductCount = 0;
 
 // Inisialisasi Worker ID permanen untuk profil Chrome ini
 chrome.runtime.onInstalled.addListener(() => {
@@ -54,7 +56,6 @@ const AntiDetection = {
   _lastHeaderRefresh: 0,
   _headerRefreshInterval: 25 * 60 * 1000,
 
-  // ==================== CIRCUIT BREAKER ====================
   circuitBreaker: {
     failureCount: 0,
     lastFailureTime: 0,
@@ -149,80 +150,139 @@ const AntiDetection = {
 
 AntiDetection.applyStickyHeadersRule();
 
-// ====================== SUPABASE HELPER ======================
-async function getNextKeyword() {
+// ====================== SUPABASE HELPERS ======================
+
+function supabaseHeaders() {
+  return {
+    "apikey": SUPABASE_ANON_KEY,
+    "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+    "Content-Type": "application/json",
+  };
+}
+
+async function claimNextKeyword(username) {
   try {
     const now = new Date().toISOString();
+    const escUser = encodeURIComponent(username);
 
-    const query = `${SUPABASE_KEYWORDS_ENDPOINT}?select=*` +
-      `&or=(and(status.eq.pending),and(status.eq.done,next_scrape_at.lt.${now}))` +
-      `&order=priority.asc,last_scraped_at.asc` +
-      `&limit=1`;
-
-    const res = await fetch(query, {
-      headers: {
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!res.ok) {
-      console.error(`[Avalon] Supabase keywords fetch failed: ${res.status}`);
+    // Step 1: SELECT 1 id yang available
+    const filter = `or=(and(status.eq.pending,or(assigned_to.is.null,assigned_to.eq.${escUser})),and(status.eq.done,next_scrape_at.lt.${now},assigned_to.is.null))`;
+    const selUrl = `${SUPABASE_KEYWORDS_ENDPOINT}?select=id&${filter}&order=priority.asc,last_scraped_at.asc&limit=1`;
+    const selRes = await fetch(selUrl, { headers: supabaseHeaders() });
+    if (!selRes.ok) return null;
+    const candidates = await selRes.json();
+    if (!candidates || candidates.length === 0) {
+      console.log("[Avalon] No available keywords to claim");
       return null;
     }
 
-    const data = await res.json();
-    console.log(`[Avalon] Found next keyword: ${data.length > 0 ? data[0].keyword : 'NONE'}`);
+    const candidateId = candidates[0].id;
 
-    return data.length > 0 ? data[0] : null;
+    // Step 2: Atomic claim via PATCH by id (hanya jika masih null / milik kita)
+    const patchUrl = `${SUPABASE_KEYWORDS_ENDPOINT}?id=eq.${candidateId}&or=(assigned_to.is.null,assigned_to.eq.${escUser})`;
+    const patchRes = await fetch(patchUrl, {
+      method: "PATCH",
+      headers: {
+        ...supabaseHeaders(),
+        "Prefer": "return=representation",
+      },
+      body: JSON.stringify({ assigned_to: username, last_scraped_at: now }),
+    });
+
+    if (!patchRes.ok) return null;
+    const data = await patchRes.json();
+    if (!Array.isArray(data) || data.length === 0) {
+      console.log("[Avalon] Claim race — retrying...");
+      return claimNextKeyword(username);
+    }
+
+    console.log(`[Avalon] Claimed: "${data[0].keyword}" (${data[0].id})`);
+    return data[0];
   } catch (error) {
-    console.error("Error fetching keyword from Supabase:", error);
+    console.error("[Avalon] Error claiming keyword:", error);
     return null;
   }
 }
 
 async function updateKeywordStatus(id, status) {
   try {
-    const payload = { status, last_scraped_at: new Date().toISOString() };
+    const payload = {
+      status,
+      last_scraped_at: new Date().toISOString(),
+    };
 
     if (status === "done") {
       const nextDate = new Date();
       nextDate.setDate(nextDate.getDate() + 14);
       payload.next_scrape_at = nextDate.toISOString();
+      payload.assigned_to = null;
+      payload.total_products = currentProductCount;
     }
 
-    await fetch(`${SUPABASE_KEYWORDS_ENDPOINT}?id=eq.${id}`, {
+    const res = await fetch(`${SUPABASE_KEYWORDS_ENDPOINT}?id=eq.${id}`, {
       method: "PATCH",
       headers: {
-        "apikey": SUPABASE_ANON_KEY,
-        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-        "Content-Type": "application/json",
+        ...supabaseHeaders(),
         "Prefer": "return=minimal",
       },
       body: JSON.stringify(payload),
     });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => "");
+      console.error(`[Avalon] Keyword status update failed: ${res.status} ${errText}`);
+    } else {
+      console.log(`[Avalon] Keyword ${id} status updated to ${status}`);
+    }
   } catch (error) {
-    console.error("Error updating keyword status:", error);
+    console.error("[Avalon] Error updating keyword status:", error);
   }
 }
 
 // ====================== START HARVESTING ======================
-async function startHarvestingFromSupabase() {
+async function startHarvestingFromSupabase(retryCount = 0) {
+  if (retryCount > 10) {
+    console.log("[Avalon] Too many skips, stopping harvester");
+    chrome.storage.local.set({ isAutoSweep: false });
+    return;
+  }
+
   if (currentTask) {
     console.log("Already harvesting a keyword");
     return;
   }
 
-  const keywordData = await getNextKeyword();
-  
+  const { harvester_username } = await chrome.storage.local.get(["harvester_username"]);
+  if (!harvester_username) {
+    console.log("[Avalon] Harvester username not set");
+    chrome.storage.local.set({ isAutoSweep: false });
+    return;
+  }
+
+  const keywordData = await claimNextKeyword(harvester_username);
+
   if (!keywordData) {
     console.log("[Avalon] No pending keywords found");
     chrome.storage.local.set({ isAutoSweep: false });
     return;
   }
 
+  if (completedKeywordIds.has(keywordData.id)) {
+    console.log(`[Avalon] Skipping "${keywordData.keyword}" — already completed in this session`);
+    return startHarvestingFromSupabase(retryCount + 1);
+  }
+
+  const storageFlag = await new Promise(resolve =>
+    chrome.storage.local.get([`_done_${keywordData.id}`], resolve)
+  );
+  if (storageFlag[`_done_${keywordData.id}`]) {
+    console.log(`[Avalon] Skipping "${keywordData.keyword}" — already completed (storage flag)`);
+    completedKeywordIds.add(keywordData.id);
+    return startHarvestingFromSupabase(retryCount + 1);
+  }
+
   currentTask = keywordData;
+  currentProductCount = 0;
 
   const searchUrl = `https://shopee.co.id/search?keyword=${encodeURIComponent(keywordData.keyword)}`;
 
@@ -243,14 +303,15 @@ async function startHarvestingFromSupabase() {
     currentKeywordId: keywordData.id,
     currentPage: 0,
     maxPages: keywordData.max_pages || 12,
-    isAutoSweep: true
+    isAutoSweep: true,
+    harvester_username: harvester_username,
   });
 
-  console.log(`🔄 Starting harvest: "${keywordData.keyword}"`);
+  console.log(`[Avalon] Starting harvest: "${keywordData.keyword}" by ${harvester_username}`);
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  
+
   if (message.action === "START_SWEEP") {
     if (message.keyword) {
       chrome.storage.local.set({
@@ -270,21 +331,45 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message.action === "STOP_SWEEP") {
     currentTask = null;
-    chrome.storage.local.set({ 
-      isAutoSweep: false, 
+    chrome.storage.local.set({
+      isAutoSweep: false,
       currentTask: null,
-      currentKeywordId: null 
+      currentKeywordId: null
     });
     sendResponse({ status: "stopped" });
     return true;
   }
 
   if (message.action === "KEYWORD_FINISHED") {
-    if (currentTask) {
-      updateKeywordStatus(currentTask.id, "done");
-      currentTask = null;
-    }
-    setTimeout(startHarvestingFromSupabase, 3000);
+    (async () => {
+      let taskId, taskName;
+      if (currentTask) {
+        taskId = currentTask.id;
+        taskName = currentTask.keyword;
+      } else {
+        const stored = await chrome.storage.local.get(["currentKeywordId", "keyword"]);
+        taskId = stored.currentKeywordId;
+        taskName = stored.keyword || "unknown";
+      }
+      if (taskId) {
+        if (message.completed) {
+          completedKeywordIds.add(taskId);
+          await chrome.storage.local.set({ [`_done_${taskId}`]: true });
+          await updateKeywordStatus(taskId, "done");
+          console.log(`[Avalon] Keyword "${taskName}" selesai (${message.currentPage}/${message.maxPages}), status -> done`);
+          currentTask = null;
+          await chrome.storage.local.remove(["currentKeywordId", "currentPage"]);
+          setTimeout(startHarvestingFromSupabase, 3000);
+        } else {
+          console.log(`[Avalon] Keyword "${taskName}" tidak selesai (${message.currentPage}/${message.maxPages}), status tetap pending`);
+          currentTask = null;
+          await chrome.storage.local.remove(["currentKeywordId", "currentPage"]);
+        }
+      } else {
+        setTimeout(startHarvestingFromSupabase, 3000);
+      }
+    })();
+    return;
   }
 
   if (message.action === "GET_CIRCUIT_BREAKER_STATUS") {
@@ -315,8 +400,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       const itemId = String(product.itemid);
       const shopId = String(product.shopid);
 
-      // discount_percentage: prefer dari inject.js (sudah dihitung dari harga),
-      // fallback ke product.discount string ("-30%")
       let discountPercentage =
         product.discount_percentage != null
           ? product.discount_percentage
@@ -420,6 +503,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       console.log(
         `[Avalon Harvester] Batch done: ${savedCount} saved, ${errorCount} errors, ${skipped} skipped (no item_id/price) of ${products.length} total`,
       );
+      currentProductCount += savedCount;
       sendResponse({ status: "success", total_saved: savedCount, total_errors: errorCount });
     };
 
