@@ -2,6 +2,7 @@
 from __future__ import annotations
 import asyncio
 import logging
+import time
 from typing import Any
 from supabase import create_client, Client
 
@@ -15,9 +16,17 @@ logger = logging.getLogger(__name__)
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
+try:
+    import httpx
+    _RETRYABLE = (httpx.ReadError, httpx.TimeoutException, httpx.ConnectError)
+except ImportError:
+    _RETRYABLE = ()
+
+MAX_RETRIES = 3
+RETRY_DELAY = 1.0
+
 
 def _fetch_pending_sync(limit: int) -> list[dict[str, Any]]:
-    """Fetch baris yang belum di-clean (cleaning_status IS NULL atau 'pending')."""
     resp = (
         supabase.table(SUPABASE_TABLE)
         .select("id, item_id, product_name, name_raw, brand, search_query, cleaning_status")
@@ -33,7 +42,18 @@ async def fetch_pending(limit: int) -> list[dict[str, Any]]:
 
 
 def _update_row_sync(row_id: str, payload: dict[str, Any]) -> None:
-    supabase.table(SUPABASE_TABLE).update(payload).eq("id", row_id).execute()
+    last_exc: Exception | None = None
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            supabase.table(SUPABASE_TABLE).update(payload).eq("id", row_id).execute()
+            return
+        except _RETRYABLE as e:
+            last_exc = e
+            logger.warning("Update row retry %d/%d for %s: %s", attempt, MAX_RETRIES, row_id, e)
+            if attempt < MAX_RETRIES:
+                time.sleep(RETRY_DELAY * attempt)
+    if last_exc:
+        raise last_exc
 
 
 async def update_row(row_id: str, payload: dict[str, Any]) -> None:
