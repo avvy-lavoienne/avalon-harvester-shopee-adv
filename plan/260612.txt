@@ -1,0 +1,437 @@
+╔══════════════════════════════════════════════════════════════╗
+║         AVALON HARVESTER — QA AUDIT REPORT                  ║
+║         Date: 2026-06-12                                    ║
+║         Auditor: DeepSeek QA                                ║
+╚══════════════════════════════════════════════════════════════╝
+
+======================================================================
+                           RINGKASAN
+======================================================================
+
+  Severitas      Count
+  ─────────      ─────
+  🔴 Critical      6
+  🟠 High          9
+  🟡 Medium        8
+  🔵 Low           5
+                  ─────
+  Total           28
+
+======================================================================
+                    🔴 CRITICAL ISSUES
+======================================================================
+
+──────────────────────────────────────────────────────────────────────
+C1. Inject.js timing — fetch proxy belum siap pas API call pertama
+──────────────────────────────────────────────────────────────────────
+  File      : inject.js:557-595
+  Type      : Race Condition
+  Risk      : Produk halaman pertama tidak ter-harvest
+  
+  Deskripsi:
+  content.js di-inject di document_idle (default Chrome). Shopee React
+  app bisa panggil search API (/api/v4/search/search_items) SEBELUM
+  inject.js sempat patch window.fetch. Proxy tidak intercept response,
+  produk hilang.
+  
+  Akar masalah:
+  - content_scripts di manifest.json tanpa "run_at" → default "document_idle"
+  - Inject.js di-load via <script> tag yang async → timing tidak deterministic
+  
+  Fix:
+  1. Set "run_at": "document_end" di manifest.json
+  2. Split content.js: buat minimal inject.js loader di file terpisah
+     dengan "run_at": "document_start"
+  
+  File affected: manifest.json, content.js
+
+──────────────────────────────────────────────────────────────────────
+C2. Fetch proxy try-catch brace corruption
+──────────────────────────────────────────────────────────────────────
+  File      : inject.js:574-584
+  Type      : Syntax Error
+  Risk      : Extension crash saat intercept API response
+  
+  Deskripsi:
+  Struktur try-catch rusak akibat edit berulang. Kode saat ini:
+    try {
+      if (...) { ... }
+      /* swallow parser errors */
+      } catch (e) {       ← brace nutup try sebelum catch
+    }
+  
+  Akar masalah:
+  Brace } di line 583 nutup try block, lalu catch(e) { line 583 juga.
+  Ini membuat catch tidak terikat ke try mana pun.
+  
+  Fix:
+  Hapus extra } di baris 583. Struktur yang benar:
+    try {
+      if (...) { ... }
+    } catch (e) {
+      /* swallow parser errors */
+    }
+  
+  File affected: inject.js
+
+──────────────────────────────────────────────────────────────────────
+C3. currentPage display inconsistency (0 vs 1)
+──────────────────────────────────────────────────────────────────────
+  Files     : background.js:727, popup.js:63-65
+  Type      : Off-by-one
+  Risk      : User melihat "Page 0/12" terus-menerus
+  
+  Deskripsi:
+  background.js set currentPage: 0 di storage.
+  content.js increment currentPage++ SEBELUM scroll → page 1.
+  Tapi popup polling GET_STATUS yang baca storage → currentPage masih 0
+  karena content.js belum update storage.
+  
+  Flow:
+  1. background set storage { currentPage: 0 }
+  2. Tab navigate → content.js startSweep()
+  3. startSweep: if (currentPage < maxPages) → 0 < 12 = true
+  4. currentPage++ → 1
+  5. Scroll + harvest page 1
+  6. Click Next → currentPage++ → 2
+  Tapi GET_STATUS baca dari storage yang diset background, bukan dari
+  memory content.js.
+  
+  Fix:
+  Mulai currentPage: 1 di storage agar popup nampilin "Page 1/12".
+  Atau content.js harus update storage setiap page increment.
+  
+  File affected: background.js
+
+──────────────────────────────────────────────────────────────────────
+C4. KEYWORD_FINISHED — missing currentPage/maxPages params
+──────────────────────────────────────────────────────────────────────
+  File      : content.js:150-160
+  Type      : Missing Parameter
+  Risk      : background.js pake message.currentPage yang undefined
+  
+  Deskripsi:
+  Saat tombol Next tidak ditemukan dan currentPage >= maxPages,
+  content.js kirim KEYWORD_FINISHED tanpa currentPage dan maxPages:
+  
+    chrome.runtime.sendMessage({
+      action: "KEYWORD_FINISHED",
+      completed,
+      currentPage,
+      maxPages
+    });
+  
+  TAPI di path lain (stopSweep atau isSweeping=false), tidak ada
+  KEYWORD_FINISHED sama sekali. Task tidak pernah di-update.
+  
+  Juga, message.currentPage di background.js:814 pakai value untuk
+  log message — kalau undefined, log nampilin "undefined/undefined".
+  
+  Fix:
+  1. Pastikan KEYWORD_FINISHED selalu dikirim dengan currentPage dan maxPages
+  2. Di stopSweep, kirim KEYWORD_FINISHED dengan completed=false
+  
+  File affected: content.js
+
+──────────────────────────────────────────────────────────────────────
+C5. Hardcoded shopee.co.id di discoverSubCategories
+──────────────────────────────────────────────────────────────────────
+  File      : background.js:552,559
+  Type      : Hardcoded Domain
+  Risk      : Gagal di Shopee Thailand/Malaysia
+  
+  Deskripsi:
+  discoverSubCategories buat tab dengan URL hardcoded:
+    const tab = await chrome.tabs.create({ url: 'https://shopee.co.id/' });
+    const catUrl = cat.url || `https://shopee.co.id/search?facet=${cat.catid}`;
+  
+  Tidak support shopee.co.th, shopee.com.my, dll.
+  
+  Fix:
+  Deteksi domain dari task (task.domain) atau dari tab yang sudah ada.
+  
+  File affected: background.js
+
+──────────────────────────────────────────────────────────────────────
+C6. host_permissions terbatas ke co.id
+──────────────────────────────────────────────────────────────────────
+  File      : manifest.json:13
+  Type      : Permission Gap
+  Risk      : Fetch ke Shopee Thailand/Malaysia di-block Chrome
+  
+  Deskripsi:
+  host_permissions cuma "*://*.shopee.co.id/*".
+  Web_accessible_resources juga terbatas.
+  Background fetch ke shopee.co.th atau shopee.com.my kena CORS/block.
+  
+  Fix:
+  host_permissions: "*://*.shopee.*/*"
+  web_accessible_resources: tambah pattern untuk .co.th, .com.my, dll
+  
+  File affected: manifest.json
+
+
+======================================================================
+                     🟠 HIGH ISSUES
+======================================================================
+
+──────────────────────────────────────────────────────────────────────
+H1. Duplikat priority: 5, di CREATE_FACET_TASK
+──────────────────────────────────────────────────────────────────────
+  File      : background.js:894-895
+  Type      : Duplicate
+  Risk      : Supabase error (column ambiguous) atau silent ignore
+  
+  Kode saat ini:
+    priority: 5,
+    priority: 5,
+  
+  Fix: Hapus baris 895.
+
+──────────────────────────────────────────────────────────────────────
+H2. currentProductCount persistence race condition
+──────────────────────────────────────────────────────────────────────
+  File      : background.js:48-49
+  Type      : Race Condition
+  Risk      : Product count reset ke 0 setelah SW restart
+  
+  chrome.storage.local.get callback async. Jika SW restart di tengah
+  harvest, currentProductCount restore ke nilai lama. Tapi persistProductCount()
+  fire-and-forget tanpa await → data mungkin belum tersimpan.
+  
+  Fix: Gunakan promise untuk menunggu storage write selesai.
+
+──────────────────────────────────────────────────────────────────────
+H3. Circuit breaker — recordSuccess() tidak pernah dipanggil
+──────────────────────────────────────────────────────────────────────
+  File      : background.js:114-127
+  Type      : Dead Logic
+  Risk      : Circuit breaker tidak auto-reset setelah cooldown
+  
+  recordFailure() set isOpen = true.
+  shouldAllowRequest() cek cooldown — return true jika lewat.
+  TAPI isOpen tetap true sampe recordSuccess() dipanggil, yang TIDAK
+  PERNAH dipanggil oleh kode mana pun.
+  
+  Fix: Di shouldAllowRequest(), set isOpen = false jika cooldown lewat.
+
+──────────────────────────────────────────────────────────────────────
+H4. buildSearchUrl page inconsistency
+──────────────────────────────────────────────────────────────────────
+  File      : background.js:634-635
+  Type      : Logic Error
+  
+  page = 1-indexed, shopeePage = page - 1 (0-indexed).
+  TAPI content.js startSweep() increment dari currentPage=0 ke 1
+  sebelum scroll. buildSearchUrl cuma dipanggil sekali (page=1).
+  Pagination selanjutnya via klik tombol Next.
+  
+  Konsisten: fungsi terima 1-indexed, output 0-indexed untuk URL.
+  (Sudah diperbaiki di iterasi terakhir)
+
+──────────────────────────────────────────────────────────────────────
+H5. extractCategoriesFromDom — parent kategori tidak ke-capture
+──────────────────────────────────────────────────────────────────────
+  File      : content.js:226-243
+  Type      : Missing Data
+  Risk      : Tree view cuma nampilin 3 kategori (current + parent minimal)
+  
+  URL parsing cuma tambah kategori saat ini (Laptop → catid=11044440).
+  Parent (Komputer & Aksesoris → catid=11044364) hanya ke-capture
+  kalau ada di data-catid atau <a> link. Kalau React render pake <div>,
+  parent tidak ke-capture.
+  
+  Fix: Setelah URL parsing, juga tambah parent category via URL pattern.
+
+──────────────────────────────────────────────────────────────────────
+H6. Avalon_Shop_Data — dead event
+──────────────────────────────────────────────────────────────────────
+  File      : inject.js:545-553, content.js
+  Type      : Dead Code
+  Risk      : Data toko terbuang
+  
+  inject.js dispatch CustomEvent("Avalon_Shop_Data") dengan data toko.
+  TAPI content.js tidak punya event listener untuk ini.
+  Data toko dari API Shopee (shop_info, shop_rating) tidak pernah
+  dikirim ke background.
+  
+  Fix: Tambah listener di content.js untuk Avalon_Shop_Data.
+
+──────────────────────────────────────────────────────────────────────
+H7. rules.json tidak di-register di manifest
+──────────────────────────────────────────────────────────────────────
+  File      : manifest.json, rules.json
+  Type      : Dead File
+  Risk      : File orphan, membingungkan developer
+  
+  rules.json ada di root project tapi tidak di-refer di manifest.
+  Hanya dynamic rule (ID 999) yang aktif via declarativeNetRequest.
+  
+  Fix: Hapus rules.json dari project atau register di manifest.
+
+──────────────────────────────────────────────────────────────────────
+H8. randomDelay — edge case negative/NaN
+──────────────────────────────────────────────────────────────────────
+  File      : content.js:64-76
+  Type      : Edge Case
+  Risk      : setTimeout(NaN) → delay 0 → deteksi anti-bot trigger
+  
+  Math.min(8000, max*0.6) - Math.max(3000, min*0.6) bisa negative
+  kalau min > max (misal randomDelay(5000, 3000)). Math.floor(neg) = NaN.
+  
+  Fix: Guard return Math.max(500, value).
+
+──────────────────────────────────────────────────────────────────────
+H9. startSweep page parsing — off-by-one untuk page ke-2
+──────────────────────────────────────────────────────────────────────
+  File      : content.js:98-100
+  Type      : Logic Error
+  
+  currentPage = (urlPage && !isNaN(urlPage)) ? urlPage - 1 : 0;
+  
+  Untuk URL ?page=1 (halaman ke-2 Shopee, 0-indexed):
+  urlPage = 1, !isNaN(1) = true
+  currentPage = 1 - 1 = 0 → loop mulai dari page 1 (0+1) → SCROLL HALAMAN 1 LAGI!
+  
+  Halaman 2 tidak pernah di-scroll karena loop di-reset ke halaman 1.
+  
+  Fix: Gunakan urlPage langsung tanpa -1, karena shopee 0-indexed.
+
+
+======================================================================
+                     🟡 MEDIUM ISSUES
+======================================================================
+
+M1. STOP_SWEEP cleanup tidak lengkap
+    File: background.js:777-791
+    Fix: Tambah cleanup harvester_username, category_group
+
+M2. persistProductCount fire-and-forget
+    File: background.js:52-54
+    Fix: Gunakan Promise untuk await write
+
+M3. max_pages dihapus dari CREATE_FACET_TASK
+    File: background.js:888-898
+    Fix: Tambah migration + kembalikan ke payload
+
+M4. catContainer scroll position hilang pas tree rebuild
+    File: popup.js:190-214
+    Fix: requestAnimationFrame(() => catContainer.scrollTop = scrollTop)
+
+M5. escapeHtml tidak handle single quote
+    File: popup.js:321-325
+    Fix: replace /'/g, "&#39;"
+
+M6. tryFetchDirect URL hardcoded co.id
+    File: background.js:337
+    Fix: Deteksi domain dari tab
+
+M7. Inject self-fetch silent catch
+    File: inject.js:641-650
+    Fix: Tambah console.error di catch
+
+M8. get_category_tree response 304 empty body
+    File: inject.js:8-25, content.js:277-306
+    Fix: Self-fetch (already added, but timing uncertain)
+
+
+======================================================================
+                      🔵 LOW ISSUES
+======================================================================
+
+L1. parseInt tanpa radix
+    Files: content.js:99,100, popup.js:220,233
+    Fix: parseInt(x, 10)
+
+L2. document.body null reference
+    File: content.js:22
+    Fix: Guard if(document.body)... else wait DOMContentLoaded
+
+L3. Accept-Encoding br tanpa decompress (info only)
+    File: background.js:162
+    Status: No-op (Chrome handle internal)
+
+L4. console.log credentials ter-expose
+    File: background.js:79-91
+    Fix: Guard logging di production
+
+L5. inject.js line 25: extra blank line (cosmetic)
+    File: inject.js:25
+    Fix: Remove extra line
+
+
+======================================================================
+                 CROSS-FILE DATA FLOW MAP
+======================================================================
+
+Popup → Background → Content → Inject → Shopee API → Inject → Content → Background → Supabase
+
+  1. popup.js       → START_SWEEP          → background.js
+  2. background.js  → claimNextKeyword()    → Supabase (SELECT+PATCH)
+  3. background.js  → buildSearchUrl()      → URL
+  4. background.js  → chrome.tabs.update()  → Tab navigate
+  5. content.js     → startSweep()          → Scroll + Click Next
+  6. inject.js      → fetch Proxy           → Intercept /api/v4/search/search_items
+  7. inject.js      → extractProductsData() → Parse response
+  8. inject.js      → CustomEvent           → dispatch "Avalon_Harvest_Data"
+  9. content.js     → chrome.runtime.sendMessage("STORE_HARVESTED_DATA")
+  10. background.js → batch insert          → Supabase shopee_products
+  11. content.js    → KEYWORD_FINISHED      → background.js
+  12. background.js → updateKeywordStatus   → Supabase (done)
+
+CRITICAL GAP: Step 5-6 timing — Shopae API call mungkin terjadi
+SEBELUM inject.js patch window.fetch (C1).
+
+
+======================================================================
+              SHOPEE API COMPATIBILITY RISKS
+======================================================================
+
+Risk                     Impact                      Mitigation
+────                     ──────                      ─────────
+API v4 → v5 migration    Interception mati total     Inject.js butuh fallback
+                                                    / feature detection
+DOM pagination selector   Stopper di page 1         Tambah selector pool lebih
+berubah                                             luas di findNextButton()
+Price micro-unit          Semua harga ×100000       Sanity check (harga > Rp
+multiplier berubah        atau ÷100000 salah         1jt → curiga)
+Category API endpoint     Category Discovery gagal   Fallback via content.js
+auth berubah                                         atau self-fetch
+reCAPTCHA / WAF           Silent failure             Circuit breaker + notifikasi
+
+
+======================================================================
+                    FIX PRIORITY ROADMAP
+======================================================================
+
+Phase 1 (NOW):
+  └ C1 → manifest.json run_at
+  └ C2 → inject.js try-catch
+  └ C3 → currentPage display
+  └ C4 → KEYWORD_FINISHED params
+  └ C5 → dynamic domain
+  └ C6 → host_permissions
+  └ H1 → duplicate priority
+
+Phase 2 (NEXT):
+  └ H3 → circuit breaker reset
+  └ H4 → buildSearchUrl page consistency
+  └ H5 → DOM extraction parent fix
+  └ H6 → Shop_Data event
+  └ H8 → randomDelay NaN guard
+  └ H9 → startSweep page parsing
+
+Phase 3 (SOON):
+  └ M1 → STOP_SWEEP cleanup
+  └ M2 → productCount persistence
+  └ M3 → max_pages migration
+  └ M4 → scroll position
+  └ M5 → escapeHtml quote
+  └ M6 → tryFetchDirect domain
+
+Phase 4 (BACKLOG):
+  └ M7 → inject self-fetch logging
+  └ M8 → 304 handling
+  └ L1 → parseInt radix
+  └ L2 → document.body guard
+  └ L5 → cosmetic cleanup

@@ -97,3 +97,44 @@ def _fetch_samples_sync(keyword: str, limit: int = 12) -> list[dict]:
 
 async def fetch_samples(keyword: str, limit: int = 12) -> list[dict]:
     return await asyncio.to_thread(_fetch_samples_sync, keyword, limit)
+
+
+# ── Brand taxonomy ──────────────────────────────────────────────────────
+
+TAXONOMY_TABLE = "brand_taxonomy"
+
+
+def _upsert_brands_taxonomy_sync(
+    category: str, brands: list[str], source_keyword: str
+) -> None:
+    now = datetime.now(timezone.utc).isoformat()
+    rows = [
+        {
+            "category": category,
+            "brand": brand,
+            "source_keyword": source_keyword,
+            "first_seen_at": now,
+            "updated_at": now,
+        }
+        for brand in brands
+    ]
+    supabase.table(TAXONOMY_TABLE).upsert(rows, on_conflict="category,brand").execute()
+
+
+async def upsert_brands_taxonomy(category: str, brands: list[str], source_keyword: str) -> None:
+    await asyncio.to_thread(_upsert_brands_taxonomy_sync, category, brands, source_keyword)
+
+
+def _load_all_taxonomy_sync() -> dict[str, set[str]]:
+    resp = supabase.table(TAXONOMY_TABLE).select("category", "brand").execute()
+    result: dict[str, set[str]] = {}
+    for row in resp.data or []:
+        cat = row.get("category", "")
+        brand = row.get("brand", "")
+        if cat and brand:
+            result.setdefault(cat, set()).add(brand.upper())
+    return result
+
+
+async def load_all_taxonomy() -> dict[str, set[str]]:
+    return await asyncio.to_thread(_load_all_taxonomy_sync)

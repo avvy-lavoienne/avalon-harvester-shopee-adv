@@ -27,9 +27,16 @@ RETRY_DELAY = 1.0
 
 
 def _fetch_pending_sync(limit: int) -> list[dict[str, Any]]:
+    try:
+        resp = supabase.rpc("claim_pending_rows", {"batch_size": limit}).execute()
+        if resp.data:
+            return resp.data
+    except Exception as exc:
+        logger.warning("RPC claim_pending_rows failed, falling back to SELECT: %s", exc)
+
     resp = (
         supabase.table(SUPABASE_TABLE)
-        .select("id, item_id, product_name, name_raw, brand, search_query, cleaning_status")
+        .select("id, item_id, product_name, name_raw, brand, price, search_query, cleaning_status")
         .or_("cleaning_status.is.null,cleaning_status.eq.pending")
         .limit(limit)
         .execute()

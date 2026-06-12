@@ -10,7 +10,7 @@ class GenericParser(BaseCategoryParser):
     DETECT_KEYWORDS: list[str] = []  # never auto-detected; only fallback
 
     UNIT_RE = re.compile(
-        r"\b(\d{1,4}(?:[.,]\d{1,2})?)\s*"
+        r"\b(\d{1,6}(?:[.,]\d{1,2})?)\s*"
         r"(gb|tb|mb|kb|ghz|mhz|hz|w|v|mah|ml|liter|l|gram|gr|g|kg|cm|mm|inch|in)\b",
         re.IGNORECASE,
     )

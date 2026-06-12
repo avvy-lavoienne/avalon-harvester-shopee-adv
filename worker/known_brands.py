@@ -49,10 +49,5 @@ LAPTOP_BRANDS = {
     "IDEAPAD GAMING", "LEGION PRO", "LOQ",
 }
 
-_LAPTOP_BRANDS_LOWER = {b.lower() for b in LAPTOP_BRANDS}
-
-
-def is_laptop_brand(brand: str | None) -> bool:
-    if not brand:
-        return False
-    return brand.strip().lower() in _LAPTOP_BRANDS_LOWER
+# Pipeline menggunakan brand_taxonomy dari schema_cache + seed data ini.
+# Lihat pipeline.py:_ensure_taxonomy_loaded() untuk mekanisme runtime.

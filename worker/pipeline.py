@@ -15,11 +15,11 @@ import logging
 from typing import Any
 
 from .schema_engine import apply_schema
-from .schema_cache import get_schema, save_schema, fetch_samples, increment_counter
+from .schema_cache import get_schema, save_schema, fetch_samples, increment_counter, upsert_brands_taxonomy, load_all_taxonomy
 from .schema_generator import generate_schema
 from .categories import get_parser
 from .category_detector import detect_category
-from .known_brands import is_laptop_brand
+from .known_brands import LAPTOP_BRANDS
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +27,55 @@ _SCHEMA_MEMO: dict[str, dict[str, Any]] = {}
 _PRICE_RANGE_MEMO: dict[str, dict[str, int] | None] = {}
 _GENERATING: dict[str, asyncio.Lock] = {}
 _GLOBAL_LOCK = asyncio.Lock()
+
+_TAXONOMY: dict[str, set[str]] = {}
+_TAXONOMY_LOCK = asyncio.Lock()
+_TAXONOMY_INIT_DONE = False
+
+
+async def _ensure_taxonomy_loaded():
+    global _TAXONOMY, _TAXONOMY_INIT_DONE
+    if _TAXONOMY_INIT_DONE:
+        return
+    async with _TAXONOMY_LOCK:
+        if _TAXONOMY_INIT_DONE:
+            return
+        try:
+            _TAXONOMY = await load_all_taxonomy()
+            logger.info("Brand taxonomy loaded: %d categories", len(_TAXONOMY))
+        except Exception as e:
+            logger.warning("Failed to load brand taxonomy from DB: %s", e)
+            _TAXONOMY = {}
+        if "laptop" not in _TAXONOMY or not _TAXONOMY["laptop"]:
+            _TAXONOMY["laptop"] = {b.upper() for b in LAPTOP_BRANDS}
+            logger.info(
+                "Seeded laptop taxonomy from known_brands.py (%d brands)",
+                len(_TAXONOMY["laptop"]),
+            )
+            try:
+                await upsert_brands_taxonomy("laptop", list(LAPTOP_BRANDS), "__seed__")
+                logger.info("Laptop taxonomy seed persisted to DB")
+            except Exception as e:
+                logger.warning("Laptop taxonomy seed DB persist failed: %s", e)
+        _TAXONOMY_INIT_DONE = True
+
+
+async def _extract_and_upsert_brands(category: str, schema: dict, keyword: str):
+    global _TAXONOMY
+    brands_map = schema.get("brands", {}) or {}
+    brand_names = list(brands_map.keys())
+    if not brand_names:
+        return
+    brand_upper = {b.upper() for b in brand_names}
+    if category not in _TAXONOMY:
+        _TAXONOMY[category] = set()
+    before = len(_TAXONOMY[category])
+    _TAXONOMY[category].update(brand_upper)
+    if len(_TAXONOMY[category]) > before:
+        try:
+            await upsert_brands_taxonomy(category, brand_names, keyword)
+        except Exception as e:
+            logger.debug("Brand taxonomy upsert failed: %s", e)
 
 
 def _calc_price_range(samples: list[dict]) -> dict[str, int] | None:
@@ -41,9 +90,9 @@ def _calc_price_range(samples: list[dict]) -> dict[str, int] | None:
     return {"min": p10}
 
 
-async def _get_or_generate_schema(keyword: str) -> dict[str, Any] | None:
+async def _get_or_generate_schema(keyword: str) -> tuple[dict[str, Any] | None, bool]:
     if keyword in _SCHEMA_MEMO:
-        return _SCHEMA_MEMO[keyword]
+        return _SCHEMA_MEMO[keyword], False
 
     async with _GLOBAL_LOCK:
         if keyword not in _GENERATING:
@@ -52,7 +101,7 @@ async def _get_or_generate_schema(keyword: str) -> dict[str, Any] | None:
 
     async with keyword_lock:
         if keyword in _SCHEMA_MEMO:
-            return _SCHEMA_MEMO[keyword]
+            return _SCHEMA_MEMO[keyword], False
 
         # 1. Check Supabase cache
         cached = await get_schema(keyword)
@@ -63,14 +112,14 @@ async def _get_or_generate_schema(keyword: str) -> dict[str, Any] | None:
             # Hitung price_range dari sample terkini
             samples = await fetch_samples(keyword, limit=30)
             _PRICE_RANGE_MEMO[keyword] = _calc_price_range(samples)
-            return schema
+            return schema, False
 
         # 2. Cache miss → generate via DeepSeek
         logger.info("Schema cache MISS, generating for: %s", keyword)
         samples = await fetch_samples(keyword, limit=12)
         if not samples:
             logger.warning("No sample products for keyword=%s, skip generate", keyword)
-            return None
+            return None, False
 
         try:
             result = await generate_schema(keyword, samples)
@@ -95,10 +144,10 @@ async def _get_or_generate_schema(keyword: str) -> dict[str, Any] | None:
             )
             _SCHEMA_MEMO[keyword] = schema
             _PRICE_RANGE_MEMO[keyword] = _calc_price_range(samples)
-            return schema
+            return schema, True
         except Exception as e:
             logger.exception("Schema generation failed for %s: %s", keyword, e)
-            return None
+            return None, False
 
 
 async def process_product(row: dict[str, Any]) -> dict[str, Any]:
@@ -111,13 +160,20 @@ async def process_product(row: dict[str, Any]) -> dict[str, Any]:
     llm_used = False
     detected_brand: str | None = None
 
+    await _ensure_taxonomy_loaded()
+
     if search_query:
-        schema = await _get_or_generate_schema(search_query)
+        schema, schema_was_generated = await _get_or_generate_schema(search_query)
         if schema:
             category = schema.get("category", "generic")
             detected_brand, specs = apply_schema(name, schema)
+            if schema_was_generated:
+                llm_used = True
             cleaning_method = "schema"
             await increment_counter(search_query, miss=(len(specs) == 0))
+
+            # Extract brand keys from schema into taxonomy
+            await _extract_and_upsert_brands(category, schema, search_query)
 
             # Filter harga: jika price di luar range keyword, tandai
             price_range = _PRICE_RANGE_MEMO.get(search_query)
@@ -135,17 +191,19 @@ async def process_product(row: dict[str, Any]) -> dict[str, Any]:
         specs = get_parser(category).extract_specs(name)
         cleaning_method = "rule (no_query)"
 
-    # Filter brand: untuk keyword laptop, hanya brand dalam whitelist yang lolos
+    # Filter brand: validasi terhadap taxonomy per-kategori
     final_brand = detected_brand or row.get("brand")
-    is_laptop_query = any(kw in search_query.lower() for kw in ["laptop", "notebook", "gaming"])
-    if is_laptop_query and final_brand and not is_laptop_brand(final_brand):
-        cleaning_method = cleaning_method + " (brand_outlier)"
-        category = "outlier"
-        detected_brand = None
-    elif is_laptop_query and not final_brand:
-        # Tidak terdeteksi brand sama sekali → kemungkinan aksesoris
-        cleaning_method = cleaning_method + " (no_brand)"
-        category = "outlier"
+    if final_brand and category not in ("generic", "outlier"):
+        cat_brands = _TAXONOMY.get(category)
+        if cat_brands is not None and final_brand.upper() not in cat_brands:
+            cleaning_method = cleaning_method + " (brand_outlier)"
+            category = "outlier"
+            detected_brand = None
+    elif not final_brand and category not in ("generic", "outlier"):
+        cat_brands = _TAXONOMY.get(category)
+        if cat_brands is not None:
+            cleaning_method = cleaning_method + " (no_brand)"
+            category = "outlier"
 
     payload: dict[str, Any] = {
         "category": category,
