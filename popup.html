@@ -12,7 +12,7 @@
       margin: 0;
       padding: 20px;
       width: 320px;
-      min-height: 380px;
+      min-height: 420px;
     }
     h2 { text-align: center; margin: 0 0 16px 0; color: #22c55e; font-size: 18px; }
     .field-row {
@@ -88,6 +88,165 @@
       font-size: 13px;
       text-align: center;
     }
+
+    .section-divider {
+      border: none;
+      border-top: 1px solid #3f3f46;
+      margin: 16px 0;
+    }
+
+    /* Task Info Panel */
+    #taskInfo {
+      display: none;
+      background: #1a1a2e;
+      border: 1px solid #2d2d44;
+      border-radius: 6px;
+      padding: 10px 12px;
+      margin: 8px 0;
+      font-size: 12px;
+    }
+    .task-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 2px 0;
+    }
+    .task-label { color: #71717a; }
+    .task-value { color: #d4d4d8; font-weight: 600; }
+    .task-mode-facet { color: #818cf8; }
+    .task-mode-keyword { color: #22c55e; }
+    .cb-ok { color: #22c55e; }
+    .cb-open { color: #ef4444; }
+
+    /* Category Discovery */
+    #btnDiscover {
+      background-color: #6366f1;
+      color: white;
+      padding: 10px;
+      font-size: 13px;
+      margin: 4px 0;
+    }
+    #btnDiscover:hover { background-color: #818cf8; }
+    #btnDiscover:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    #categoryContainer {
+      display: none;
+      margin-top: 8px;
+      max-height: 260px;
+      overflow-y: auto;
+      background: #27272a;
+      border-radius: 6px;
+      padding: 4px 0;
+    }
+    #categoryContainer::-webkit-scrollbar { width: 4px; }
+    #categoryContainer::-webkit-scrollbar-thumb { background: #52525b; border-radius: 2px; }
+
+    .cat-node {
+      display: flex;
+      align-items: center;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .cat-node:hover { background: #3f3f46; }
+    .cat-arrow {
+      display: inline-block;
+      width: 14px;
+      flex-shrink: 0;
+      text-align: center;
+      color: #a1a1aa;
+      font-size: 10px;
+    }
+    .cat-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-left: 4px;
+      flex: 1;
+    }
+    .cat-level-1 { padding-left: 10px; }
+    .cat-level-2 { padding-left: 28px; }
+    .cat-level-3 { padding-left: 46px; }
+    .cat-level-4 { padding-left: 64px; }
+
+    .cat-badge {
+      font-size: 9px;
+      background: #3f3f46;
+      color: #a1a1aa;
+      border-radius: 3px;
+      padding: 1px 5px;
+      margin-left: 6px;
+      flex-shrink: 0;
+    }
+    .cat-add-btn {
+      font-size: 14px;
+      color: #6366f1;
+      cursor: pointer;
+      flex-shrink: 0;
+      padding: 0 4px;
+      margin-left: 4px;
+      border-radius: 3px;
+      line-height: 1;
+    }
+    .cat-add-btn:hover { background: #52525b; color: #818cf8; }
+
+    #catLoading {
+      display: none;
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+      color: #a1a1aa;
+    }
+    .spinner {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #52525b;
+      border-top-color: #6366f1;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .cat-error {
+      text-align: center;
+      padding: 16px;
+      font-size: 12px;
+      color: #fca5a5;
+    }
+    .cat-empty {
+      text-align: center;
+      padding: 16px;
+      font-size: 12px;
+      color: #71717a;
+    }
+    .cat-count {
+      font-size: 11px;
+      color: #71717a;
+      text-align: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #3f3f46;
+      margin-bottom: 2px;
+    }
+
+    .toast {
+      display: none;
+      position: fixed;
+      bottom: 12px;
+      left: 20px;
+      right: 20px;
+      background: #22c55e;
+      color: black;
+      text-align: center;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      z-index: 999;
+    }
+    .toast-error { background: #ef4444; color: white; }
   </style>
 </head>
 <body>
@@ -102,9 +261,42 @@
   <button id="btnStart">🚀 START AUTO HARVEST</button>
   <button id="btnStop">⛔ STOP HARVESTING</button>
 
+  <div id="taskInfo">
+    <div class="task-row">
+      <span class="task-label">Mode:</span>
+      <span class="task-value" id="taskMode">-</span>
+    </div>
+    <div class="task-row">
+      <span class="task-label">Task:</span>
+      <span class="task-value" id="taskName">-</span>
+    </div>
+    <div class="task-row">
+      <span class="task-label">Progress:</span>
+      <span class="task-value" id="taskProgress">-</span>
+    </div>
+    <div class="task-row">
+      <span class="task-label">Products:</span>
+      <span class="task-value" id="taskProducts">0</span>
+    </div>
+    <div class="task-row" id="cbStatus">
+      <span class="task-label">Circuit:</span>
+      <span class="task-value cb-ok" id="cbText">OK</span>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <button id="btnDiscover">📂 Discover Categories</button>
+  <button id="btnDiscoverSub">🔍 Discover Sub Categories</button>
+  <div id="subDiscoverProgress" style="display:none;text-align:center;padding:6px;font-size:12px;color:#a1a1aa;"></div>
+  <div id="catLoading"><span class="spinner"></span>Fetching categories...</div>
+  <div id="categoryContainer"></div>
+
   <div id="status">Status: Idle</div>
   <div id="errorMsg"></div>
+  <div id="toast" class="toast"></div>
 
   <script src="popup.js"></script>
 </body>
 </html>
+

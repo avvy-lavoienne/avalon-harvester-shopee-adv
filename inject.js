@@ -1,14 +1,37 @@
 (function () {
-  "use strict";
 
-  // =========================================================================
-  // [Avalon Harvester] inject.js — Enhanced Extraction & Cleaning
+  function isCategoryApi(url) {
+    return url && url.includes("/api/v4/pages/get_category_tree");
+  }
+
+  function handleCategoryData(parsedData, url) {
+    try {
+      const rawList = parsedData?.data?.category_tree || parsedData?.data?.category_list || parsedData?.category_tree || parsedData?.data?.categories || parsedData?.categories || parsedData?.data || [];
+      if (!Array.isArray(rawList) || rawList.length === 0) return;
+      const categories = rawList.filter(c => (c.level || 0) >= 1).map(c => ({
+        catid: c.catid,
+        name: c.display_name || c.cat_name || c.brief_name || c.simple_name || c.name || "",
+        parent_catid: c.parent_catid || 0,
+        level: c.level || 1,
+        no_sub: c.no_sub === true,
+        url: c.url || null,
+      }));
+      if (categories.length > 0) {
+        window.__avalon_categories__ = categories;
+        console.log("[Avalon] Category tree cached:", categories.length, "categories");
+      }
+    } catch (e) { /* swallow */ }
+  }
+
   // =========================================================================
 
   function getSearchQuery(url) {
     try {
       const match = url.match(/[?&]keyword=([^&]+)/);
-      return match ? decodeURIComponent(match[1]) : "";
+      if (match) return decodeURIComponent(match[1]);
+      const facetMatch = url.match(/[?&]facet=(\d+)/);
+      if (facetMatch) return `facet:${facetMatch[1]}`;
+      return "";
     } catch (e) {
       return "";
     }
@@ -552,6 +575,8 @@
                       handleProductData(data, fetchUrl);
                     } else if (isShopApi(fetchUrl)) {
                       handleShopData(data);
+                    } else if (isCategoryApi(fetchUrl)) {
+                      handleCategoryData(data, fetchUrl);
                     }
                   } catch (e) {
                     /* swallow parser errors */
@@ -582,6 +607,7 @@
     },
   });
 
+
   const OriginalSend = OriginalXHR.prototype.send;
   OriginalXHR.prototype.send = new Proxy(OriginalSend, {
     apply: function (target, thisArg, args) {
@@ -595,6 +621,8 @@
                 handleProductData(parsedData, this._intercepted_url);
               } else if (isShopApi(this._intercepted_url)) {
                 handleShopData(parsedData);
+              } else if (isCategoryApi(this._intercepted_url)) {
+                handleCategoryData(parsedData, this._intercepted_url);
               }
             }
           } catch (e) {
@@ -608,5 +636,16 @@
     },
   });
 
-  console.log("[Avalon Harvester] inject.js v2 loaded — enhanced cleaning");
+  console.log("[Avalon Harvester] inject.js v2 loaded - enhanced cleaning");
+
+  // Self-fetch category tree setelah SDK siap (tunggu 3 detik)
+  setTimeout(() => {
+    if (window.__avalon_categories__) return; // sudah ada dari intercept
+    fetch('https://shopee.co.id/api/v4/pages/get_category_tree', {
+      headers: { 'Accept': 'application/json', 'x-requested-with': 'XMLHttpRequest', 'x-api-source': 'pc', 'x-shopee-language': 'id' },
+    })
+      .then(r => r.json())
+      .then(data => handleCategoryData(data, ""))
+      .catch((err) => console.error("[Avalon] Self-fetch category tree failed:", err));
+  }, 3000);
 })();

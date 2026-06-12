@@ -10,25 +10,31 @@
     "declarativeNetRequest"
   ],
   "host_permissions": [
-    "*://*.shopee.co.id/*",
-    "https://sgp.cloud.appwrite.io/*"
+    "*://*.shopee.*/*"
   ],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": ["*://shopee.co.id/*"],
-      "js": ["content.js"]
+      "matches": ["*://shopee.co.id/*", "*://*.shopee.co.id/*", "*://shopee.co.th/*", "*://*.shopee.co.th/*", "*://shopee.com.my/*", "*://*.shopee.com.my/*", "*://shopee.sg/*", "*://*.shopee.sg/*", "*://shopee.ph/*", "*://*.shopee.ph/*"],
+      "js": ["inject-loader.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["*://shopee.co.id/*", "*://*.shopee.co.id/*", "*://shopee.co.th/*", "*://*.shopee.co.th/*", "*://shopee.com.my/*", "*://*.shopee.com.my/*", "*://shopee.sg/*", "*://*.shopee.sg/*", "*://shopee.ph/*", "*://*.shopee.ph/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
     }
   ],
   "web_accessible_resources": [
     {
       "resources": ["inject.js", "content.css"],
-      "matches": ["<all_urls>"]
+      "matches": ["*://shopee.co.id/*", "*://*.shopee.co.id/*", "*://shopee.co.th/*", "*://*.shopee.co.th/*", "*://shopee.com.my/*", "*://*.shopee.com.my/*", "*://shopee.sg/*", "*://*.shopee.sg/*", "*://shopee.ph/*", "*://*.shopee.ph/*"]
     }
   ],
   "action": {
     "default_popup": "popup.html"
   }
 }
+
